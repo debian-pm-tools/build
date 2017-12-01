@@ -5,11 +5,23 @@ if ! [ -d packages ]; then
     mkdir packages
 fi
 
+# Check if list is supplied as argument
+if [ "$#" -lt 1 ]; then
+    echo "Required argument: packages list name"
+    exit 1
+fi
+
 cd packages
 
-# Set default packages list
-export list=../"$1".list
+# Set package list from command line argument (if exists)
+if [ -e ../"$1".list ]; then
+    export list=../"$1".list
+else
+    echo "Package list $1 does not exist!"
+    exit 1
+fi
 
+# Main functions
 function init() {
     echo "I: Initializing packages"
 
