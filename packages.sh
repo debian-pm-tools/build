@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Start up repository server
-sudo  busybox httpd -h repo
-
 # Everything important happens in the packages folder
 if ! [ -d packages ]; then
     mkdir packages
@@ -11,6 +8,9 @@ fi
 if ! [ -d repo ]; then
     mkdir -p repo
 fi
+
+# Start up repository server
+sudo  busybox httpd -h repo
 
 cd packages
 
@@ -123,10 +123,11 @@ function build() {
             export PKG_VERSION_UPSTREAM_REVISION=$(echo ${PKG_VERSION} | sed -e 's/^[0-9]*://')
             cd ..
 
+            scanpackages
+
             sudo pbuilder update --basetgz ../buster.tar.gz
             sudo pbuilder build --basetgz ../buster.tar.gz --buildresult ../repo ${PKG_NAME}_${PKG_VERSION_UPSTREAM_REVISION}.dsc
         fi
-        scanpackages
     done
 }
 
