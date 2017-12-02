@@ -108,12 +108,20 @@ function gendsc() {
 
 function setup_pbuilder() {
     sudo pbuilder create --basetgz ../buster-amd64.tar.gz --mirror http://deb.debian.org/debian --architecture amd64 --distribution buster
-    sudo pbuilder exec --basetgz ../buster-amd64.tar.gz -- ../pbuilder-setup.sh
+    sudo pbuilder execute --save-after-login --save-after-exec --basetgz ../buster-amd64.tar.gz -- ../pbuilder-setup.sh
 }
 
 function build() {
-    for dsc in *.dsc; do
-        sudo pbuilder build --basetgz ../buster-amd64.tar.gz --buildresult ../repo $dsc
+    for name in $(cat ${list}); do
+        if [ -d $name ]; then
+            cd $name
+            export PKG_VERSION=$(dpkg-parsechangelog -SVersion)
+            export PKG_NAME=$(dpkg-parsechangelog -SSource)
+            export PKG_VERSION_UPSTREAM_REVISION=$(echo ${PKG_VERSION} | sed -e 's/^[0-9]*://')
+            cd ..
+
+            sudo pbuilder build --basetgz ../buster-amd64.tar.gz --buildresult ../repo ${PKG_NAME}_${PKG_VERSION_UPSTREAM_REVISION}.dsc
+        fi
         scanpackages
     done
 }
@@ -123,6 +131,7 @@ function scanpackages() {
 
     echo "I: Indexing built packages"
     dpkg-scanpackages ./ | xz > Packages.xz
+    apt-ftparchive release . > Release
 
     cd ../packages
 }
@@ -131,7 +140,7 @@ init
 sync
 gendsc
 
-if ! [ -f buster-amd64.tar.gz ]; then
+if ! [ -f ../buster-amd64.tar.gz ]; then
     setup_pbuilder
 fi
 
