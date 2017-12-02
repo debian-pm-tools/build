@@ -1,17 +1,24 @@
 #!/bin/bash
 
+# Start up repository server
+sudo  busybox httpd -h repo
+
 # Everything important happens in the packages folder
 if ! [ -d packages ]; then
     mkdir packages
 fi
+
+if ! [ -d repo ]; then
+    mkdir -p repo
+fi
+
+cd packages
 
 # Check if list is supplied as argument
 if [ "$#" -lt 1 ]; then
     echo "Required argument: packages list name"
     exit 1
 fi
-
-cd packages
 
 # Set package list from command line argument (if exists)
 if [ -e ../"$1".list ]; then
@@ -77,7 +84,7 @@ function sync() {
 
         cd ..
     done
-    
+
     echo
 }
 
@@ -95,11 +102,37 @@ function gendsc() {
             cd ..
         fi
     done
-    
+
     echo
 }
 
+function setup_pbuilder() {
+    sudo pbuilder create --basetgz ../buster-amd64.tar.gz --mirror http://deb.debian.org/debian --architecture amd64 --distribution buster
+    sudo pbuilder exec --basetgz ../buster-amd64.tar.gz -- ../pbuilder-setup.sh
+}
+
+function build() {
+    for dsc in *.dsc; do
+        sudo pbuilder build --basetgz ../buster-amd64.tar.gz --buildresult ../repo $dsc
+        scanpackages
+    done
+}
+
+function scanpackages() {
+    cd ../repo
+
+    echo "I: Indexing built packages"
+    dpkg-scanpackages ./ | xz > Packages.xz
+
+    cd ../packages
+}
 
 init
 sync
 gendsc
+
+if ! [ -f buster-amd64.tar.gz ]; then
+    setup_pbuilder
+fi
+
+build
