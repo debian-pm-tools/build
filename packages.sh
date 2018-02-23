@@ -36,10 +36,10 @@ function init() {
         if ! [ -d ${name} ]; then
             git clone https://github.com/debian-pm/${name}-packaging ${name} >/dev/null 2>&1
         fi
-        
+
         echo " [Done]"
     done
-    
+
     echo
 }
 
@@ -74,8 +74,8 @@ function sync() {
             # Download not-yet existing tarballs
             if ! [ -f ${PKG_SOURCE_NAME}_${PKG_VERSION_UPSTREAM}.orig.tar.xz ]; then
                 wget --continue \
-                -O ../${PKG_SOURCE_NAME}_${PKG_VERSION_UPSTREAM}.orig.tar.xz \
-                https://raw.githubusercontent.com/debian-pm-tools/orig-tar-xzs/master/${PKG_SOURCE_NAME}_${PKG_VERSION_UPSTREAM}.orig.tar.xz >/dev/null 2>&1
+                    -O ../${PKG_SOURCE_NAME}_${PKG_VERSION_UPSTREAM}.orig.tar.xz \
+                    https://raw.githubusercontent.com/debian-pm-tools/orig-tar-xzs/master/${PKG_SOURCE_NAME}_${PKG_VERSION_UPSTREAM}.orig.tar.xz
             fi
 
             if [ -f ../${PKG_SOURCE_NAME}_${PKG_VERSION_UPSTREAM}.orig.tar.xz ]; then
@@ -100,7 +100,7 @@ function gendsc() {
 
             echo -n $name
             dpkg-buildpackage -S -d --force-sign >/dev/null 2>&1
-            
+
             echo " [DSC]"
             cd ..
         fi
