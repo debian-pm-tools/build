@@ -79,7 +79,7 @@ function sync() {
             fi
 
             if [ -f ../${PKG_SOURCE_NAME}_${PKG_VERSION_UPSTREAM}.orig.tar.xz ]; then
-                tar -xf ../${PKG_SOURCE_NAME}_${PKG_VERSION_UPSTREAM}.orig.tar.xz
+                origtargz --tar-only
             fi
         fi
 
