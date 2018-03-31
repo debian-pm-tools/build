@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BUILD_ROOT="$(dirname "$(readlink -f "${0}")")"
+
 # Everything important happens in the packages folder
 if ! [ -d packages ]; then
     mkdir packages
@@ -44,11 +46,14 @@ function init() {
 }
 
 function sync() {
-    echo "I: Syncing up packages"
+    echo "I: Syncing packages"
+
+    echo "* Updating tarball submodule ..."
+    git submodule update --recursive --remote --init --checkout | sed "s/^/* /"
 
     for name in $(cat ${list}); do
         # Print status
-        echo -n $name
+        echo $name
 
         # Look if folders exist
         if ! [ -d $name ]; then
@@ -57,10 +62,11 @@ function sync() {
         fi
 
         cd ${name}
+
+        echo "* Fetching packaging ..."
+
         git fetch origin >/dev/null 2>&1
         git pull origin >/dev/null 2>&1
-
-        echo -n " [Packaging]"
 
         # Find out upstream version and download correct tarball
         export PKG_SOURCE_NAME=$(dpkg-parsechangelog -SSource)
@@ -71,19 +77,9 @@ function sync() {
 
         # Check if we need a tarball
         if grep quilt debian/source/format >/dev/null 2>&1; then
-            # Download not-yet existing tarballs
-            if ! [ -f ${PKG_SOURCE_NAME}_${PKG_VERSION_UPSTREAM}.orig.tar.xz ]; then
-                wget --continue \
-                    -O ../${PKG_SOURCE_NAME}_${PKG_VERSION_UPSTREAM}.orig.tar.xz \
-                    https://raw.githubusercontent.com/debian-pm-tools/orig-tar-xzs/master/${PKG_SOURCE_NAME}_${PKG_VERSION_UPSTREAM}.orig.tar.xz
-            fi
-
-            if [ -f ../${PKG_SOURCE_NAME}_${PKG_VERSION_UPSTREAM}.orig.tar.xz ]; then
-                origtargz --tar-only
-            fi
+            # Unpack tarball
+            origtargz --tar-only --path $BUILD_ROOT/sources/ | sed "s/^/* /"
         fi
-
-        echo " [Tarball]"
 
         cd ..
     done

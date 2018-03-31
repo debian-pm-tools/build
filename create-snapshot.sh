@@ -8,6 +8,11 @@ usage() {
 	exit 1
 }
 
+error_namenotset() {
+	echo "ERROR: The \$NAME and \$EMAIL variables need to be set to create a new changelog entry"
+	exit 1
+}
+
 # Command line opts
 PACKAGE=$1
 GIT_REPO=$2
@@ -19,13 +24,13 @@ GIT_BRANCH=$3
 
 # Check if packaging is in place
 ! [ -d $BUILD_ROOT/packages/${PACKAGE} ] &&
-	echo "ERROR: packaging doesn't exist. Did you forget to run 'make packagelist'?"
+	echo "ERROR: packaging doesn't exist. Did you forget to run 'make packagelist'?" &&
 	exit 1
 
 # Extract version information
 DATE=$(date +%Y%m%d)
 PKG_VERSION=$(dpkg-parsechangelog -SVersion -l $BUILD_ROOT/packages/$PACKAGE/debian/changelog | cut -f1 -d"+" | sed "s/[-].*//")
-PKG_GIT_VERSION="$PKG_VERSION+git$DATE-1"
+PKG_GIT_VERSION="$PKG_VERSION+git$DATE"
 
 # Check if snapshot does already exists
 [ -f $BUILD_ROOT/packages/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz ] &&
@@ -55,7 +60,15 @@ git -C "$BUILD_ROOT/sources/$PACKAGE" archive $GIT_BRANCH \
 	--prefix $PACKAGE-$PKG_VERSION/ \
 	--format=tar | xz >"$BUILD_ROOT/sources/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz"
 
-# Link new snapshot into packaging folder
-ln \
-	"$BUILD_ROOT/sources/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz" \
-	"$BUILD_ROOT/packages/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz"
+# Check if the variables for dch are set
+[ -z $NAME ] && error_namenotset
+[ -z $EMAIL ] && error_namenotset
+
+# Create new changelog entry and unpack tarball
+(
+	cd $BUILD_ROOT/packages/${PACKAGE}
+
+	dch -v $PKG_GIT_VERSION-1
+
+	origtargz --tar-only --path $BUILD_ROOT/sources/
+)
