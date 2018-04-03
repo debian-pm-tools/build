@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: debian:testing
+    dependencies:
+      pre:
+        - sudo apt update; apt install devscripts make
+    steps:
+      - checkout
+      - run:
+          name: test package setup
+          command: make plasma-mobile mainline halium
