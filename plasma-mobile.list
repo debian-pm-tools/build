@@ -6,3 +6,6 @@ plasma-settings
 plasma-phone-settings
 kpeoplevcard
 simplelogin
+libqofono
+ofono-qt
+telepathy-ofono
