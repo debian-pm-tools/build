@@ -61,8 +61,8 @@ git -C "$BUILD_ROOT/sources/$PACKAGE" archive $GIT_BRANCH \
 	--format=tar | xz >"$BUILD_ROOT/sources/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz"
 
 # Check if the variables for dch are set
-[ -z $NAME ] && error_namenotset
-[ -z $EMAIL ] && error_namenotset
+[ -z "$NAME" ] && error_namenotset
+[ -z "$EMAIL" ] && error_namenotset
 
 # Create new changelog entry and unpack tarball
 (
