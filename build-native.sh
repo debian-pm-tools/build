@@ -25,7 +25,10 @@ for name in $(cat ${list}); do
 
 	cd packages/$name/
 
-	sudo apt build-dep . || error "E: Could not install the build dependencies"
+	sudo apt build-dep . -a $ARCH -y || error "E: Could not install the build dependencies"
+
+	origtargz --clean
+	origtargz
 
 	dpkg-buildpackage --host-arch $ARCH || error "E: Building the package failed"
 
