@@ -1,28 +1,29 @@
 #!/bin/bash
 
 LIST=$1
+if ! [ -z $2 ]; then
+	ARCH=$2
+else
+	ARCH=$(dpkg-architecture -qDEB_HOST_ARCH)
+fi
+
 BUILD_ROOT="$(dirname "$(readlink -f "${0}")")"
-APT_CACHE_DIR="$BUILD_ROOT/apt_cache"
+CONTAINER="debian-pm/build:$ARCH"
 
 if [ -z $LIST ]; then
 	echo "Please supply a package list as argument"
 	exit 0
 fi
 
-if [ ! -d $APT_CACHE_DIR ]; then
-	mkdir $APT_CACHE_DIR -p
-fi
-
 PREFIX="/build/"
-CONTAINER="debian-pm:build"
 
 function run_docker() {
-	docker run -v $APT_CACHE_DIR:/var/cache/apt/ -v $BUILD_ROOT:$PREFIX $@
+	docker run --rm -u $(whoami) -v $BUILD_ROOT:$PREFIX $@
 }
 
 # Check if container exists, if not build it
 if [ "$(docker images -q $CONTAINER 2>/dev/null)" == "" ]; then
-	docker build -t $CONTAINER docker
+	docker build -t $CONTAINER docker/$ARCH
 fi
 
 run_docker $CONTAINER "apt update"
