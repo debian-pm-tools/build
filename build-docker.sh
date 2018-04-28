@@ -17,16 +17,21 @@ fi
 
 PREFIX="/build/"
 
-function run_docker() {
-	docker run --rm -u $(whoami) -v $BUILD_ROOT:$PREFIX $@
+function run_docker_root() {
+	docker run --rm -v $BUILD_ROOT:$PREFIX $@
 }
+
+function run_docker_user() {
+        docker run --rm -u "$(id -u)" -v $BUILD_ROOT:$PREFIX $@
+}
+
 
 # Check if container exists, if not build it
 if [ "$(docker images -q $CONTAINER 2>/dev/null)" == "" ]; then
 	docker build -t $CONTAINER docker/$ARCH
 fi
 
-run_docker $CONTAINER "apt update"
-run_docker $CONTAINER "apt -y full-upgrade"
-run_docker $CONTAINER $PREFIX/packages.sh $LIST
-run_docker $CONTAINER $PREFIX/build-native.sh $LIST
+run_docker_root $CONTAINER "apt update"
+run_docker_root $CONTAINER "apt -y full-upgrade"
+run_docker_user $CONTAINER $PREFIX/packages.sh $LIST
+run_docker_root $CONTAINER $PREFIX/build-native.sh $LIST
