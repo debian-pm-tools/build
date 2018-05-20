@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Add sourceline
+echo "deb https://debian-pm-tools.github.io/apt-repo buster main" >> /etc/apt/sources.list
+
+# Install dependencies for installing the keyring
+apt install wget ca-certificates -y --force-yes
+
+# Download packaged keyring
+wget  \
+	https://github.com/debian-pm-tools/apt-repo/raw/master/pool/main/d/debian-pm-keyring/debian-pm-archive-keyring_20180408_all.deb \
+	 -O /tmp/d-pm-k.deb
+
+# Install
+dpkg -i /tmp/d-pm-k.deb
+
+# Update package lists
+apt update

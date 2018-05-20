@@ -1,0 +1,4 @@
+HOOKDIR="hook.d"
+DISTRIBUTION="testing"
+MIRRORSITE="http://ftp.de.debian.org/debian"
+BASEPATH="/var/cache/pbuilder/$DISTRIBUTION-$ARCHITECTURE/base.cow/"
