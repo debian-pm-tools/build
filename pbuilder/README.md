@@ -7,10 +7,10 @@ sudo mkdir /var/cache/pbuilder/testing-$ARCH
 
 Then create the build environment using the custom pbuilderrc:
 ```
-sudo ARCHITECTURE=armhf cowbuilder create --basepath /var/cache/pbuilder/testing-$ARCH/base.cow --configfile pbuilderrc --architecture $ARCH
+sudo ARCH=armhf cowbuilder create --configfile pbuilderrc
 ```
 
 You can now build a package in the newly created environment:
 ```
-sudo ARCHITECTURE=armhf cowbuilder build --configfile pbuilderrc --architecture armhf ../packages/package_0.1-1.dsc
+sudo ARCH=armhf cowbuilder build --configfile pbuilderrc ../packages/package_0.1-1.dsc
 ```
