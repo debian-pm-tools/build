@@ -2,3 +2,10 @@
 	path = sources
 	url = https://github.com/debian-pm-tools/orig-tar-xzs
 	shallow = true
+[submodule "repo"]
+	path = repo
+	url = https://github.com/debian-pm-tools/apt-repo
+	shallow = true
+[submodule "repo-conf"]
+	path = repo-conf
+	url = https://github.com/debian-pm-tools/apt-repo-conf
