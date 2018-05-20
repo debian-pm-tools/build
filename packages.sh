@@ -78,6 +78,7 @@ function sync() {
         # Check if we need a tarball
         if grep quilt debian/source/format >/dev/null 2>&1; then
             # Unpack tarball
+            origtargz --clean
             origtargz --tar-only --path $BUILD_ROOT/sources/ | sed "s/^/* /"
         fi
 
