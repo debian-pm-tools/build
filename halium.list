@@ -2,6 +2,7 @@ android-headers
 libhybris
 lxc-android
 hybris-usb
+pulseaudio
 pulseaudio-modules-droid
 audioflingerglue
 pulseaudio-modules-droid-glue
