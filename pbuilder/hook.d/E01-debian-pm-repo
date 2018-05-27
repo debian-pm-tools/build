@@ -7,13 +7,11 @@ if ! grep debian-pm /etc/apt/sources.list; then
 	# Install dependencies for installing the keyring
 	apt install wget ca-certificates -y --force-yes
 
-	# Download packaged keyring
-	wget  \
-		https://github.com/debian-pm-tools/apt-repo/raw/master/pool/main/d/debian-pm-keyring/debian-pm-archive-keyring_20180408_all.deb \
-		 -O /tmp/d-pm-k.deb
-
-	# Install
-	dpkg -i /tmp/d-pm-k.deb
+	# Download and install packaged keyring
+	TEMP_DEB="$(mktemp)" &&
+	wget -O "$TEMP_DEB" 'https://github.com/debian-pm-tools/apt-repo/raw/master/pool/main/d/debian-pm-keyring/debian-pm-archive-keyring_20180408_all.deb' &&
+	dpkg -i "$TEMP_DEB"
+	rm -f "$TEMP_DEB"
 
 	# Update package lists
 	apt update
