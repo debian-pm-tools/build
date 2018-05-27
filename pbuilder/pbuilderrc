@@ -3,3 +3,6 @@ DISTRIBUTION="testing"
 MIRRORSITE="http://ftp.de.debian.org/debian"
 BASEPATH="/var/cache/pbuilder/$DISTRIBUTION-$ARCH/base.cow/"
 BUILDRESULT="../repo-conf/incoming/"
+CCACHEDIR=/var/cache/pbuilder/ccache
+EXTRAPACKAGES="eatmydata wget ca-certificates"
+EATMYDATA=yes
