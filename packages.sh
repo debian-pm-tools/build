@@ -1,17 +1,16 @@
 #!/bin/bash
 
 BUILD_ROOT="$(dirname "$(readlink -f "${0}")")"
+PACKAGES_ROOT="$BUILD_ROOT/packages/"
 
 # Everything important happens in the packages folder
-if ! [ -d packages ]; then
-    mkdir packages
+if ! [ -d $PACKAGES_ROOT ]; then
+    mkdir $PACKAGES_ROOT
 fi
 
-if ! [ -d repo ]; then
-    mkdir -p repo
+if ! [ -d "$BUILD_ROOT/repo" ]; then
+    mkdir -p "$BUILD_ROOT/repo"
 fi
-
-cd packages
 
 # Check if list is supplied as argument
 if [ "$#" -lt 1 ]; then
@@ -20,8 +19,8 @@ if [ "$#" -lt 1 ]; then
 fi
 
 # Set package list from command line argument (if exists)
-if [ -e ../"$1".list ]; then
-    export list=../"$1".list
+if [ -e "$BUILD_ROOT/$1".list ]; then
+    export list="$BUILD_ROOT/$1".list
 else
     echo "Package list $1 does not exist!"
     exit 1
@@ -36,7 +35,7 @@ function init() {
         echo -n $name
 
         if ! [ -d ${name} ]; then
-            git clone https://gitlab.com/debian-pm/${name}-packaging ${name} >/dev/null 2>&1
+            git clone https://gitlab.com/debian-pm/${name}-packaging "$PACKAGES_ROOT/${name}" >/dev/null 2>&1
         fi
 
         echo " [Done]"
@@ -56,12 +55,12 @@ function sync() {
         echo $name
 
         # Look if folders exist
-        if ! [ -d $name ]; then
+        if ! [ -d "$PACKAGES_ROOT/$name" ]; then
             echo "WARN: The packages folder is not yet initialized!"
             break
         fi
 
-        cd ${name}
+        cd "$PACKAGES_ROOT/${name}"
 
         echo "* Fetching packaging ..."
 
@@ -81,8 +80,6 @@ function sync() {
             origtargz --clean
             origtargz --tar-only --path $BUILD_ROOT/sources/ | sed "s/^/* /"
         fi
-
-        cd ..
     done
 
     echo
@@ -92,14 +89,13 @@ function gendsc() {
     echo "I: Generating debian source packages"
 
     for name in $(cat ${list}); do
-        if [ -d $name ]; then
-            cd $name
+        if [ -d "$PACKAGES_ROOT/$name" ]; then
+            cd "$PACKAGES_ROOT/$name"
 
             echo -n $name
             dpkg-buildpackage -S -d --force-sign >/dev/null 2>&1
 
             echo " [DSC]"
-            cd ..
         fi
     done
 
