@@ -35,7 +35,7 @@ function init() {
         echo -n $name
 
         if ! [ -d ${name} ]; then
-            git clone https://gitlab.com/debian-pm/${name}-packaging "$PACKAGES_ROOT/${name}" >/dev/null 2>&1
+            git clone https://gitlab.com/debian-pm/${name}.git "$PACKAGES_ROOT/${name}" >/dev/null 2>&1
         fi
 
         echo " [Done]"
