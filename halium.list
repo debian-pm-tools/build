@@ -6,3 +6,9 @@ pulseaudio
 pulseaudio-modules-droid
 audioflingerglue
 pulseaudio-modules-droid-glue
+drihybris
+glamor-hybris
+xserver-xorg-video-hwcomposer
+droidmedia
+nemo-gst-interfaces
+gst-droid
