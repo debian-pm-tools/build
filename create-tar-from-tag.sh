@@ -52,9 +52,12 @@ fi
 git -C "$BUILD_ROOT/sources/$PACKAGE" checkout tags/$GIT_TAG
 
 # Export repository into tar
-git -C "$BUILD_ROOT/sources/$PACKAGE" archive $GIT_TAG \
+(
+cd "$BUILD_ROOT/sources/$PACKAGE"
+bash "$BUILD_ROOT/git-archive-all.sh" \
 	--prefix $PACKAGE-$PKG_VERSION/ \
-	--format=tar | xz >"$BUILD_ROOT/sources/${PACKAGE}_$PKG_VERSION.orig.tar.xz"
+	--format tar -- - | xz >"$BUILD_ROOT/sources/${PACKAGE}_$PKG_VERSION.orig.tar.xz"
+)
 
 # Unpack new tarball
 (
