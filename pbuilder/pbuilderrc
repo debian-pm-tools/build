@@ -1,11 +1,17 @@
+# Mirror and release
 HOOKDIR="hook.d"
 DISTRIBUTION="testing"
-MIRRORSITE="http://192.168.178.20:3142/debian"
+MIRRORSITE="https://deb.debian.org/debian"
 
-BASEPATH="/var/cache/pbuilder/$DISTRIBUTION-$ARCH/base.cow/"
+# Names and pathes
 NAME="$DISTRIBUTION-$ARCH"
+BASEPATH="/var/cache/pbuilder/$NAME/base.cow/"
 BUILDRESULT="/var/cache/pbuilder/$NAME/result/"
-# BUILDRESULT="../repo-conf/incoming/"
+
+# Speed optimization
+CCACHEDIR=/var/cache/pbuilder/ccache
+EXTRAPACKAGES="eatmydata wget ca-certificates lsb-release apt-utils"
+EATMYDATA=yes
 
 # local apt repository
 BINDMOUNTS="$BUILDRESULT"
@@ -16,17 +22,17 @@ ALLOWUNTRUSTED=yes
 
 # create local repository if it doesn't already exist,
 # such as during initial 'pbuilder create'
-if [ ! -d $BUILDRESULT ] ; then
-        mkdir -p $BUILDRESULT
-        # set permissions so I can delete files
-        chgrp admin $BUILDRESULT
-        chmod g+rwx $BUILDRESULT
+if [ ! -d $BUILDRESULT ]; then
+	mkdir -p $BUILDRESULT
+	# set permissions so I can delete files
+	chgrp admin $BUILDRESULT
+	chmod g+rwx $BUILDRESULT
 fi
-if [ ! -e $BUILDRESULT/Packages ] ; then
-        touch $BUILDRESULT/Packages
+if [ ! -e $BUILDRESULT/Packages ]; then
+	touch $BUILDRESULT/Packages
 fi
-if [ ! -e $BUILDRESULT/Release ] ; then
-        cat << EOF > $BUILDRESULT/Release
+if [ ! -e $BUILDRESULT/Release ]; then
+	cat <<EOF >$BUILDRESULT/Release
 Archive: $DISTRIBUTION
 Component: main
 Origin: pbuilder
@@ -34,8 +40,3 @@ Label: pbuilder
 Architecture: $ARCH
 EOF
 fi
-
-# Speed optimization
-CCACHEDIR=/var/cache/pbuilder/ccache
-EXTRAPACKAGES="eatmydata wget ca-certificates lsb-release apt-utils"
-EATMYDATA=yes
