@@ -1,11 +1,8 @@
 #!/bin/sh
 
 if ! grep debian-pm /etc/apt/sources.list; then
-	# Add sourceline
-	echo "deb https://debian-pm-tools.github.io/apt-repo buster main" >> /etc/apt/sources.list
-
-	# Install dependencies for installing the keyring
-	apt install wget ca-certificates -y --force-yes
+        # Add sourceline
+        echo "deb https://debian-pm-tools.github.io/apt-repo buster main" >> /etc/apt/sources.list
 
 	# Download and install packaged keyring
 	TEMP_DEB="$(mktemp)" &&
@@ -14,5 +11,5 @@ if ! grep debian-pm /etc/apt/sources.list; then
 	rm -f "$TEMP_DEB"
 
 	# Update package lists
-	apt update
+	apt update --allow-unauthenticated
 fi
