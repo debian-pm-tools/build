@@ -32,7 +32,7 @@ DATE=$(date +%Y%m%d)
 PKG_VERSION=$(dpkg-parsechangelog -SVersion -l $BUILD_ROOT/packages/$PACKAGE/debian/changelog | cut -f1 -d"+" | sed "s/[-].*//")
 PKG_GIT_VERSION="$PKG_VERSION+git$DATE"
 
-# Check if snapshot does already exists
+# Check if snapshot already exists
 [ -f $BUILD_ROOT/packages/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz ] &&
 	echo "ERROR: $BUILD_ROOT/packages/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz already exists" &&
 	exit 1
