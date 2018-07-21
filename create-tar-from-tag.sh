@@ -45,9 +45,9 @@ echo "I: git tag: $GIT_TAG"
 if [ -d "$BUILD_ROOT/sources/$PACKAGE" ]; then
 	echo "I: fetching from git repository ..."
 
-	git -C "$BUILD_ROOT/sources/$PACKAGE" fetch
+	git -C "$BUILD_ROOT/sources/$PACKAGE" fetch --tags
 else
-	git clone --depth 1 $GIT_REPO "$BUILD_ROOT/sources/$PACKAGE" --recursive
+	git clone --depth 1 $GIT_REPO "$BUILD_ROOT/sources/$PACKAGE" --recursive --tags
 fi
 git -C "$BUILD_ROOT/sources/$PACKAGE" checkout tags/$GIT_TAG
 
