@@ -1,0 +1,45 @@
+# Mirror and release
+HOOKDIR="hook.d"
+DISTRIBUTION="testing"
+MIRRORSITE="http://deb.debian.org/debian"
+
+# CAF
+DEBBUILDOPTS='--build-profiles="caf"'
+
+# Names and pathes
+NAME="$DISTRIBUTION-$ARCH-caf"
+BASEPATH="/var/cache/pbuilder/$NAME/base.cow/"
+BUILDRESULT="/var/cache/pbuilder/$NAME/result/"
+
+# Speed optimization
+CCACHEDIR=/var/cache/pbuilder/ccache
+EXTRAPACKAGES="eatmydata wget ca-certificates lsb-release apt-utils"
+EATMYDATA=yes
+
+# local apt repository
+BINDMOUNTS="$BUILDRESULT"
+OTHERMIRROR="
+deb [trusted=yes] file:$BUILDRESULT ./
+deb [trusted=yes] https://debian-pm-tools.github.io/apt-repo buster main"
+ALLOWUNTRUSTED=yes
+
+# create local repository if it doesn't already exist,
+# such as during initial 'pbuilder create'
+if [ ! -d $BUILDRESULT ]; then
+	mkdir -p $BUILDRESULT
+	# set permissions so I can delete files
+	chgrp admin $BUILDRESULT
+	chmod g+rwx $BUILDRESULT
+fi
+if [ ! -e $BUILDRESULT/Packages ]; then
+	touch $BUILDRESULT/Packages
+fi
+if [ ! -e $BUILDRESULT/Release ]; then
+	cat <<EOF >$BUILDRESULT/Release
+Archive: $DISTRIBUTION
+Component: main
+Origin: pbuilder
+Label: pbuilder
+Architecture: $ARCH
+EOF
+fi
