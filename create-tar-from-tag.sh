@@ -28,7 +28,7 @@ GIT_TAG=$3
 	exit 1
 
 # Extract version information
-PKG_VERSION=$(dpkg-parsechangelog -SVersion -l $BUILD_ROOT/packages/$PACKAGE/debian/changelog | cut -f1 -d"+" | sed "s/[-].*//")
+PKG_VERSION=$(dpkg-parsechangelog -SVersion -l $BUILD_ROOT/packages/$PACKAGE/debian/changelog | sed "s/[-].*//")
 
 # Check if snapshot does already exists
 [ -f $BUILD_ROOT/packages/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz ] &&
@@ -45,9 +45,9 @@ echo "I: git tag: $GIT_TAG"
 if [ -d "$BUILD_ROOT/sources/$PACKAGE" ]; then
 	echo "I: fetching from git repository ..."
 
-	git -C "$BUILD_ROOT/sources/$PACKAGE" fetch
+	git -C "$BUILD_ROOT/sources/$PACKAGE" fetch --tags
 else
-	git clone --depth 1 $GIT_REPO "$BUILD_ROOT/sources/$PACKAGE" --recursive
+	git clone --depth 1 $GIT_REPO "$BUILD_ROOT/sources/$PACKAGE" --recursive --tags
 fi
 git -C "$BUILD_ROOT/sources/$PACKAGE" checkout tags/$GIT_TAG
 
