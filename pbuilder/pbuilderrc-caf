@@ -12,7 +12,7 @@ BUILDRESULT="/var/cache/pbuilder/$NAME/result/"
 DEB_BUILD_PROFILES="caf"
 APTCACHE="/var/cache/pbuilder/$NAME/aptcache/"
 
-DEBBUILDOPTS="--build=binary"
+DEBBUILDOPTS="--build=binary --build-profiles=caf"
 BIN_NMU="yes"
 BINNMU_VERSION="caf1"
 BINNMU_MAINTAINER="Jonah Brüchert <jbb@kaidan.im>"
