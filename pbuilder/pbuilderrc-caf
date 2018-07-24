@@ -1,26 +1,33 @@
 # Mirror and release
-HOOKDIR="hook.d"
+HOOKDIR="hook.d.caf"
 DISTRIBUTION="testing"
 MIRRORSITE="http://deb.debian.org/debian"
-
-# CAF
-DEBBUILDOPTS='--build-profiles="caf"'
 
 # Names and pathes
 NAME="$DISTRIBUTION-$ARCH-caf"
 BASEPATH="/var/cache/pbuilder/$NAME/base.cow/"
 BUILDRESULT="/var/cache/pbuilder/$NAME/result/"
 
+# CAF
+DEB_BUILD_PROFILES="caf"
+APTCACHE="/var/cache/pbuilder/$NAME/aptcache/"
+
+DEBBUILDOPTS="--build=binary"
+BIN_NMU="yes"
+BINNMU_VERSION="caf1"
+BINNMU_MAINTAINER="Jonah Brüchert <jbb@kaidan.im>"
+BINNMU_MESSAGE="Rebuild for caf repo"
+
 # Speed optimization
 CCACHEDIR=/var/cache/pbuilder/ccache
-EXTRAPACKAGES="eatmydata wget ca-certificates lsb-release apt-utils"
+EXTRAPACKAGES="devscripts eatmydata wget ca-certificates lsb-release apt-utils"
 EATMYDATA=yes
 
 # local apt repository
 BINDMOUNTS="$BUILDRESULT"
 OTHERMIRROR="
 deb [trusted=yes] file:$BUILDRESULT ./
-deb [trusted=yes] https://debian-pm-tools.github.io/apt-repo buster main"
+#deb [trusted=yes] https://debian-pm-tools.github.io/apt-repo buster main"
 ALLOWUNTRUSTED=yes
 
 # create local repository if it doesn't already exist,
