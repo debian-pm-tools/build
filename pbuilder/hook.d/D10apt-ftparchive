@@ -4,7 +4,7 @@
 
 echo Calling $0
 
-: ${DIST:=$(lsb_release --short --codename)}
+: ${DISTRIBUTION:=$(lsb_release --short --codename)}
 : ${ARCH:=$(dpkg --print-architecture)}
 NAME="$DISTRIBUTION-$ARCH"
 BUILDRESULT="/var/cache/pbuilder/$NAME/result/"
