@@ -6,7 +6,7 @@ echo Calling $0
 
 : ${DISTRIBUTION:=$(lsb_release --short --codename)}
 : ${ARCH:=$(dpkg --print-architecture)}
-NAME="$DISTRIBUTION-$ARCH"
+NAME="$DISTRIBUTION-$ARCH-caf"
 BUILDRESULT="/var/cache/pbuilder/$NAME/result/"
 
 # create apt archive of previously built packages
