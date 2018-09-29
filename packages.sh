@@ -34,9 +34,11 @@ function init() {
         # Print status
         echo -n $name
 
-        if ! [ -d ${name} ]; then
+        if ! [ -d "${PACKAGES_ROOT}/${name}" ]; then
             git clone https://gitlab.com/debian-pm/${name}.git "$PACKAGES_ROOT/${name}" >/dev/null 2>&1
-        fi
+        elif [ -d "${PACKAGES_ROOT}/${name}" ]; then
+            git -C "${PACKAGES_ROOT}/${name}" remote set-url origin https://gitlab.com/debian-pm/${name}.git
+	fi
 
         echo " [Done]"
     done
@@ -60,19 +62,12 @@ function sync() {
             break
         fi
 
-        cd "$PACKAGES_ROOT/${name}"
-
         echo "* Fetching packaging ..."
 
-        git fetch origin >/dev/null 2>&1
-        git pull origin >/dev/null 2>&1
+        git -C "${PACKAGES_ROOT}/${name}" fetch origin >/dev/null 2>&1
+        git -C "${PACKAGES_ROOT}/${name}" pull origin >/dev/null 2>&1
 
-        # Find out upstream version and download correct tarball
-        export PKG_SOURCE_NAME=$(dpkg-parsechangelog -SSource)
-        export PKG_VERSION=$(dpkg-parsechangelog -SVersion)
-        export PKG_VERSION_EPOCH_UPSTREAM=$(echo ${PKG_VERSION} | sed -e 's/-[^-]*$$//')
-        export PKG_VERSION_UPSTREAM_REVISION=$(echo ${PKG_VERSION} | sed -e 's/^[0-9]*://')
-        export PKG_VERSION_UPSTREAM=${PKG_VERSION_UPSTREAM_REVISION%%-*}
+        cd "${PACKAGES_ROOT}/${name}"
 
         # Check if we need a tarball
         if grep quilt debian/source/format >/dev/null 2>&1; then
@@ -80,6 +75,8 @@ function sync() {
             origtargz --clean
             origtargz --tar-only --path $BUILD_ROOT/sources/ | sed "s/^/* /"
         fi
+
+	cd ${BUILD_ROOT}
     done
 
     echo
@@ -93,9 +90,11 @@ function gendsc() {
             cd "$PACKAGES_ROOT/$name"
 
             echo -n $name
-            dpkg-buildpackage -S -d --force-sign >/dev/null 2>&1
+            dpkg-buildpackage -S -d --no-sign >/dev/null 2>&1 && \
+		echo " [DSC]" || \
+		echo " [FAILED]"
 
-            echo " [DSC]"
+            cd ${BUILD_ROOT}
         fi
     done
 
