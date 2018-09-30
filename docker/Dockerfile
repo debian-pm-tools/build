@@ -1,9 +1,5 @@
-FROM arm64v8/debian:testing-slim
+FROM debian:testing
 MAINTAINER Jonah Brüchert <jbb@kaidan.im>
-
-# Update Container
-RUN apt update && \
-        apt full-upgrade -y
 
 # Initial build essentials
 RUN apt install -y \
@@ -14,7 +10,7 @@ RUN apt install -y \
         debhelper \
         sudo \
         software-properties-common \
-        curl \
+        wget \
         gnupg \
         git \
         quilt
@@ -22,7 +18,6 @@ RUN apt install -y \
 # Add debian-pm repository
 RUN     echo "deb https://debian-pm-tools.github.io/apt-repo buster main" > /etc/apt/sources.list.d/debian-pm.list && \
         echo "deb-src https://debian-pm-tools.github.io/apt-repo buster main" >> /etc/apt/sources.list.d/debian-pm.list && \
-        echo "deb-src https://deb.debian.org/debian testing main" >> /etc/apt/sources.list && \
         curl https://raw.githubusercontent.com/JBBgameich/debian-mobile/master/key.pub | apt-key add - && \
         apt update
 
