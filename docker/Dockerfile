@@ -21,5 +21,3 @@ RUN     echo "deb https://debian-pm-tools.github.io/apt-repo buster main" > /etc
         curl https://raw.githubusercontent.com/JBBgameich/debian-mobile/master/key.pub | apt-key add - && \
         apt update
 
-WORKDIR /build/
-
