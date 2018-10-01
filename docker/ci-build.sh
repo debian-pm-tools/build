@@ -1,4 +1,4 @@
-#/usr/bin/env bash
+#/usr/bin/env bash -e
 
 SOURCE_BASE_URL="https://raw.githubusercontent.com/debian-pm-tools/orig-tar-xzs/master"
 
@@ -43,7 +43,8 @@ get_source() {
 
 	# Try to download source
 	wget --continue -O "../${ORIG_TAR_NAME}" "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}" || \
-		echo "Package is not included in the sources repository, skipping download"
+		echo "Package is not included in the sources repository, skipping download";
+		rm "../${ORIG_TAR_NAME}"
 
 	origtargz --tar-only
 }
