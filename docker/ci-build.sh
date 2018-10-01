@@ -55,3 +55,7 @@ install_build_deps() {
 build_binary() {
 	dpkg-buildpackage
 }
+
+get_source
+install_build_deps
+build_binary
