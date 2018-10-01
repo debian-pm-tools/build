@@ -17,8 +17,9 @@ RUN apt update && \
         quilt
 
 # Add debian-pm repository
-RUN     echo "deb https://debian-pm-tools.github.io/apt-repo buster main" > /etc/apt/sources.list.d/debian-pm.list && \
-        echo "deb-src https://debian-pm-tools.github.io/apt-repo buster main" >> /etc/apt/sources.list.d/debian-pm.list && \
-        curl https://raw.githubusercontent.com/JBBgameich/debian-mobile/master/key.pub | apt-key add - && \
-        apt update
+RUN echo "deb https://debian-pm-tools.github.io/apt-repo buster main" > /etc/apt/sources.list.d/debian-pm.list && \
+    echo "deb-src https://debian-pm-tools.github.io/apt-repo buster main" >> /etc/apt/sources.list.d/debian-pm.list && \
+    wget -qO - https://raw.githubusercontent.com/JBBgameich/debian-mobile/master/key.pub | apt-key add - && \
+    apt update
 
+COPY ci-build.sh /usr/bin/ci-build
