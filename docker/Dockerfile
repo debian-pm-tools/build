@@ -2,7 +2,8 @@ FROM debian:testing
 MAINTAINER Jonah Brüchert <jbb@kaidan.im>
 
 # Initial build essentials
-RUN apt install -y \
+RUN apt update && \
+    apt install -y \
         --no-install-recommends \
         ca-certificates \
         devscripts \
