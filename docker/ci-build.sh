@@ -43,7 +43,6 @@ get_source() {
 
 	# Try to download source
 	wget --continue -O "../${ORIG_TAR_NAME}" "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}" || \
-		echo "Package is not included in the sources repository, skipping download" && \
 		rm "../${ORIG_TAR_NAME}"
 
 	origtargz --clean
