@@ -19,7 +19,7 @@ RUN apt update && \
 # Add debian-pm repository
 RUN echo "deb https://debian-pm-tools.github.io/apt-repo buster main" > /etc/apt/sources.list.d/debian-pm.list && \
     echo "deb-src https://debian-pm-tools.github.io/apt-repo buster main" >> /etc/apt/sources.list.d/debian-pm.list && \
-    wget -qO - https://raw.githubusercontent.com/JBBgameich/debian-mobile/master/key.pub | apt-key add - && \
+    wget -qO - https://gitlab.com/debian-pm/debian-pm-keyring/raw/master/jbb.asc | apt-key add - && \
     apt update
 
 COPY ci-build.sh /usr/bin/ci-build
