@@ -46,6 +46,7 @@ get_source() {
 		echo "Package is not included in the sources repository, skipping download";
 		rm "../${ORIG_TAR_NAME}"
 
+	origtargz --clean
 	origtargz --tar-only
 }
 
