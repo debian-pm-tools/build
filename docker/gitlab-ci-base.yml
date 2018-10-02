@@ -1,0 +1,15 @@
+# To use this in a package, use
+# include: 'https://gitlab.com/debian-pm/tools/build/raw/master/docker/.gitlab-ci-base.yml'
+
+before_script:
+  - apt update
+
+build:amd64:
+  stage: build
+  script: /usr/bin/ci-build
+  image: jbbgameich/build
+  artifacts:
+    paths:
+      - ../*.orig.*
+      - ../*.debian.*
+      - ../*.deb
