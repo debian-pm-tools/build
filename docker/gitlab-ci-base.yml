@@ -1,5 +1,5 @@
 # To use this in a package, use
-# include: 'https://gitlab.com/debian-pm/tools/build/raw/master/docker/.gitlab-ci-base.yml'
+# include: 'https://gitlab.com/debian-pm/tools/build/raw/master/docker/gitlab-ci-base.yml'
 
 before_script:
   - apt update
