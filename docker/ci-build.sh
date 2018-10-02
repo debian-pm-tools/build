@@ -57,6 +57,12 @@ build_binary() {
 	dpkg-buildpackage
 }
 
+copy_artifacts() {
+	mkdir -p debian/result/
+	mv ../*.orig.* ../*.debian.* ../*.deb ../*.changes ../*.buildinfo debian/result/
+}
+
 get_source
 install_build_deps
 build_binary
+copy_artifacts

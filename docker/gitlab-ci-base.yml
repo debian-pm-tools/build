@@ -10,6 +10,4 @@ build:amd64:
   image: jbbgameich/build
   artifacts:
     paths:
-      - ../*.orig.*
-      - ../*.debian.*
-      - ../*.deb
+      - debian/result/
