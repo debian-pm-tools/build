@@ -1,4 +1,4 @@
-#/usr/bin/env bash -e
+#/usr/bin/bash -e
 
 SOURCE_BASE_URL="https://raw.githubusercontent.com/debian-pm-tools/orig-tar-xzs/master"
 
