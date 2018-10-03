@@ -67,13 +67,18 @@ add_to_repository() {
 		update
 
 	# Checks
-	REPO_VERSION=$(reprepro list buster ${DEB_SOURCE} | grep ${DEB_BUILD_ARCH} | sed 's/^.*\ //')
+	REPO_VERSION=$(reprepro \
+			--outdir $PWD/incoming-apt-repo \
+			--confdir $PWD/incoming-apt-repo/conf \
+			list buster ${DEB_SOURCE} | grep ${DEB_BUILD_ARCH} | sed 's/^.*\ //')
 
-	if [ ${REPO_VERSION} == ${DEB_VERSION} ]; then
+	if [[ ${REPO_VERSION} == ${DEB_VERSION} ]]; then
+		echo "##########################################"
 		echo "The version of this package in the repository (${REPO_VERSION})"
 		echo "matches the version of this build."
 		echo "To release a new build, create a new changelog entry."
 		echo "Warning: Will not deploy this build!"
+		echo "#########################################"
 	else
 		reprepro \
 			--ignore=wrongdistribution \
