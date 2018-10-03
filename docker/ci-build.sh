@@ -54,15 +54,34 @@ install_build_deps() {
 }
 
 build_binary() {
-	dpkg-buildpackage
+	dpkg-buildpackage -sa
 }
 
-copy_artifacts() {
-	mkdir -p debian/result/
-	mv ../*.orig.* ../*.debian.* ../*.deb ../*.changes ../*.buildinfo debian/result/
+add_to_repository() {
+	REPO_URL=github.com/debian-pm-tools/incoming-apt-repo
+
+	git clone https://${REPO_URL}
+        reprepro \
+                --outdir $PWD/incoming-apt-repo \
+                --confdir $PWD/incoming-apt-repo/conf \
+		update
+
+        reprepro \
+                --ignore=wrongdistribution \
+                --outdir $PWD/incoming-apt-repo \
+                --confdir $PWD/incoming-apt-repo/conf \
+                include buster \
+                ../${DEB_SOURCE}_${DEB_VERSION}_${DEB_BUILD_ARCH}.changes
+
+	git config --global user.email "debian-pm-tools@users.noreply.github.com"
+	git config --global user.name "CI builder"
+
+	git -C incoming-apt-repo add dists pool
+	git -C incoming-apt-repo commit -m "Add automated CI build of ${DEB_SOURCE}_${DEB_VERSION}"
+	git -C incoming-apt-repo push https://JBBgameich:${GITHUB_TOKEN}@${REPO_URL}
 }
 
 get_source
 install_build_deps
 build_binary
-copy_artifacts
+add_to_repository
