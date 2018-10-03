@@ -8,10 +8,3 @@ build:amd64:
   stage: build
   script: /usr/bin/ci-build
   image: jbbgameich/build
-  artifacts:
-    paths:
-      - debian/result/*.orig.*
-      - debian/result/*.debian.*
-      - debian/result/*.deb
-      - debian/result/*.changes
-      - debian/result/*.buildinfo
