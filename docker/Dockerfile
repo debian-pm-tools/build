@@ -14,7 +14,8 @@ RUN apt update && \
         wget \
         gnupg \
         git \
-        quilt
+        quilt \
+	reprepro
 
 # Add debian-pm repository
 RUN echo "deb https://debian-pm-tools.github.io/apt-repo buster main" > /etc/apt/sources.list.d/debian-pm.list && \
