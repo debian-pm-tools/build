@@ -1,4 +1,4 @@
-#/usr/bin/bash -e
+#!/bin/bash -e
 
 SOURCE_BASE_URL="https://raw.githubusercontent.com/debian-pm-tools/orig-tar-xzs/master"
 
@@ -39,7 +39,7 @@ urlencode() {
 
 get_source() {
 	ORIG_TAR_NAME="${DEB_SOURCE}_${DEB_VERSION_UPSTREAM}.orig.tar.xz"
-	ORIG_TAR_NAME_ENCODED=$( urlencode "${ORIG_TAR_NAME}" )
+	ORIG_TAR_NAME_ENCODED=$(urlencode "${ORIG_TAR_NAME}")
 
 	# Try to download source
 	wget --continue -O "../${ORIG_TAR_NAME}" "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}" || \
@@ -84,8 +84,8 @@ add_to_repository() {
 get_source
 install_build_deps
 build_binary
-if [ ${CI_COMMIT_REF_NAME} == master ] || \
-	[ ${CI_COMMIT_REF_NAME} == Netrunner/mobile ] || \
-	[ ${CI_COMMIT_REF_NAME} == debian ]; then
+if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
+	[[ ${CI_COMMIT_REF_NAME} == "Netrunner/mobile" ]] || \
+	[[ ${CI_COMMIT_REF_NAME} == "debian" ]]; then
 	add_to_repository
 fi
