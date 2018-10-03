@@ -62,23 +62,33 @@ add_to_repository() {
 
 	git clone https://${REPO_URL}
         reprepro \
-                --outdir $PWD/incoming-apt-repo \
-                --confdir $PWD/incoming-apt-repo/conf \
+		--outdir $PWD/incoming-apt-repo \
+		--confdir $PWD/incoming-apt-repo/conf \
 		update
 
-        reprepro \
-                --ignore=wrongdistribution \
-                --outdir $PWD/incoming-apt-repo \
-                --confdir $PWD/incoming-apt-repo/conf \
-                include buster \
-                ../${DEB_SOURCE}_${DEB_VERSION}_${DEB_BUILD_ARCH}.changes
+	# Checks
+	REPO_VERSION=$(reprepro list buster ${DEB_SOURCE} | grep ${DEB_BUILD_ARCH} | sed 's/^.*\ //')
 
-	git config --global user.email "debian-pm-tools@users.noreply.github.com"
-	git config --global user.name "CI builder"
+	if [ ${REPO_VERSION} == ${DEB_VERSION} ]; then
+		echo "The version of this package in the repository (${REPO_VERSION})"
+		echo "matches the version of this build."
+		echo "To release a new build, create a new changelog entry."
+		echo "Warning: Will not deploy this build!"
+	else
+		reprepro \
+			--ignore=wrongdistribution \
+			--outdir $PWD/incoming-apt-repo \
+			--confdir $PWD/incoming-apt-repo/conf \
+			include buster \
+			../${DEB_SOURCE}_${DEB_VERSION}_${DEB_BUILD_ARCH}.changes
 
-	git -C incoming-apt-repo add dists pool
-	git -C incoming-apt-repo commit -m "Add automated CI build of ${DEB_SOURCE}_${DEB_VERSION}"
-	git -C incoming-apt-repo push https://JBBgameich:${GITHUB_TOKEN}@${REPO_URL}
+		git config --global user.email "debian-pm-tools@users.noreply.github.com"
+		git config --global user.name "CI builder"
+
+		git -C incoming-apt-repo add dists pool
+		git -C incoming-apt-repo commit -m "Add automated CI build of ${DEB_SOURCE}_${DEB_VERSION}"
+		git -C incoming-apt-repo push https://JBBgameich:${GITHUB_TOKEN}@${REPO_URL}
+	fi
 }
 
 get_source
