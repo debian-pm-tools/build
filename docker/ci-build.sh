@@ -84,6 +84,8 @@ add_to_repository() {
 get_source
 install_build_deps
 build_binary
-if [ ${CI_COMMIT_REF_NAME} == master ] || [ ${CI_COMMIT_REF_NAME} == Netrunner/mobile ]; then
+if [ ${CI_COMMIT_REF_NAME} == master ] || \
+	[ ${CI_COMMIT_REF_NAME} == Netrunner/mobile ] || \
+	[ ${CI_COMMIT_REF_NAME} == debian ]; then
 	add_to_repository
 fi
