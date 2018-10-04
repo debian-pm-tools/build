@@ -8,3 +8,19 @@ build:amd64:
   stage: build
   script: /usr/bin/ci-build
   image: jbbgameich/build
+  tags:
+    - amd64
+
+build:armhf:
+  stage: build
+  script: /usr/bin/ci-build
+  image: jbbgameich/build
+  tags:
+    - armhf
+
+build:arm64:
+  stage: build
+  script: /usr/bin/ci-build
+  image: jbbgameich/build
+  tags:
+    - arm64
