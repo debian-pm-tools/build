@@ -9,7 +9,7 @@ build:amd64:
   script: /usr/bin/ci-build
   image: jbbgameich/build
   tags:
-    - amd64
+    - gitlab-org
 
 build:armhf:
   stage: build
