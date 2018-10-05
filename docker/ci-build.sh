@@ -59,9 +59,10 @@ build_binary() {
 
 add_to_repository() {
 	REPO_URL=github.com/debian-pm-tools/incoming-apt-repo
+	REPO_BRANCH="${REPO_BRANCH:master}"
 
-	git clone https://${REPO_URL}
-        reprepro \
+	git clone https://${REPO_URL} -b ${REPO_BRANCH}
+		reprepro \
 		--outdir $PWD/incoming-apt-repo \
 		--confdir $PWD/incoming-apt-repo/conf \
 		update
@@ -92,7 +93,7 @@ add_to_repository() {
 
 		git -C incoming-apt-repo add dists pool
 		git -C incoming-apt-repo commit -m "Add automated CI build of ${DEB_SOURCE}_${DEB_VERSION}"
-		git -C incoming-apt-repo push https://JBBgameich:${GITHUB_TOKEN}@${REPO_URL}
+		git -C incoming-apt-repo push --set-upstream origin https://JBBgameich:${GITHUB_TOKEN}@${REPO_URL} ${REPO_BRANCH}
 	fi
 }
 
