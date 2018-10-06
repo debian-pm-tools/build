@@ -93,7 +93,7 @@ add_to_repository() {
 			--outdir $PWD/incoming-apt-repo \
 			--confdir $PWD/incoming-apt-repo/conf \
 			include buster \
-			../${DEB_SOURCE}_${DEB_VERSION}_${DEB_BUILD_ARCH}.changes
+			../${DEB_SOURCE}_${DEB_VERSION}_${REPO_ARCH}.changes
 
 		git config --global user.email "debian-pm-tools@users.noreply.github.com"
 		git config --global user.name "CI builder"
