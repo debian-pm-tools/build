@@ -12,14 +12,14 @@ build:amd64:
   script: /usr/bin/ci-build
   image: jbbgameich/build:latest-amd64
   tags:
-    - gitlab-org
+    - amd64
 
 build:i386:
   stage: build
   script: /usr/bin/ci-build
   image: jbbgameich/build:latest-i386
   tags:
-    - gitlab-org
+    - i386
 
 build:armhf:
   stage: build
