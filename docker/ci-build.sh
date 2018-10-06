@@ -53,8 +53,12 @@ install_build_deps() {
 	sudo apt build-dep . -y
 }
 
+build_source() {
+	dpkg-buildpackage -sa --build=source
+}
+
 build_binary() {
-	dpkg-buildpackage -sa
+	dpkg-buildpackage -sa --build=binary
 }
 
 add_to_repository() {
@@ -99,9 +103,17 @@ add_to_repository() {
 	fi
 }
 
+
 get_source
 install_build_deps
-build_binary
+case $1 in
+        source)
+                build_source
+                ;;
+        binary)
+                build_binary
+                ;;
+esac
 if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "Netrunner/mobile" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "debian" ]]; then
