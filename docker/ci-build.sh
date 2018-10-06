@@ -69,6 +69,7 @@ add_to_repository() {
 		reprepro \
 		--outdir $PWD/incoming-apt-repo \
 		--confdir $PWD/incoming-apt-repo/conf \
+		--export="never" \
 		update
 
 	# Checks
