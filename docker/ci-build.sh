@@ -92,7 +92,7 @@ add_to_repository() {
 		git config --global user.name "CI builder"
 
 		git -C incoming-apt-repo add dists pool
-		git -C incoming-apt-repo commit -m "Add automated CI build of ${DEB_SOURCE}_${DEB_VERSION}"
+		git -C incoming-apt-repo commit -m "${DEB_BUILD_ARCH}: Add CI build of ${DEB_SOURCE} ${DEB_VERSION}"
 		git -C incoming-apt-repo push https://JBBgameich:${GITHUB_TOKEN}@${REPO_URL} ${REPO_BRANCH}
 	fi
 }
