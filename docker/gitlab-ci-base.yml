@@ -7,20 +7,20 @@ before_script:
 build:amd64:
   stage: build
   script: /usr/bin/ci-build
-  image: jbbgameich/build
+  image: jbbgameich/build:latest-amd64
   tags:
     - gitlab-org
 
 build:armhf:
   stage: build
   script: /usr/bin/ci-build
-  image: jbbgameich/build
+  image: jbbgameich/build:latest-armhf
   tags:
     - armhf
 
 build:arm64:
   stage: build
   script: /usr/bin/ci-build
-  image: jbbgameich/build
+  image: jbbgameich/build:latest-arm64
   tags:
     - arm64
