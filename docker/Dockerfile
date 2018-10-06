@@ -18,6 +18,9 @@ RUN apt update && \
         reprepro \
         libwww-perl
 
+# Speed up builds
+RUN apt install eatmydata -y
+
 # Add debian-pm repository
 RUN echo "deb https://debian-pm-tools.github.io/apt-repo buster main" > /etc/apt/sources.list.d/debian-pm.list && \
     echo "deb-src https://debian-pm-tools.github.io/apt-repo buster main" >> /etc/apt/sources.list.d/debian-pm.list && \
@@ -25,3 +28,7 @@ RUN echo "deb https://debian-pm-tools.github.io/apt-repo buster main" > /etc/apt
     apt update
 
 COPY ci-build.sh /usr/bin/ci-build
+COPY ci-config.sh /usr/bin/ci-config
+
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+"$LD_LIBRARY_PATH:"}/usr/lib/libeatmydata \
+    LD_PRELOAD=${LD_PRELOAD:+"$LD_PRELOAD "}libeatmydata.so
