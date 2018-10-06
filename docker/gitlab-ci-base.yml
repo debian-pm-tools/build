@@ -4,6 +4,9 @@
 before_script:
   - apt update
 
+variables:
+  - REPO_BRANCH=master
+
 build:amd64:
   stage: build
   script: /usr/bin/ci-build
