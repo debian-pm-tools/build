@@ -85,6 +85,9 @@ add_to_repository() {
 		echo "Warning: Will not deploy this build!"
 		echo "#########################################"
 	else
+                sleep $[ ( $RANDOM % 20 + 1 ) ]
+                git -C incoming-apt-repo pull
+
 		reprepro \
 			--ignore=wrongdistribution \
 			--outdir $PWD/incoming-apt-repo \
@@ -97,8 +100,6 @@ add_to_repository() {
 
 		git -C incoming-apt-repo add dists pool
 		git -C incoming-apt-repo commit -m "${DEB_BUILD_ARCH}: Add CI build of ${DEB_SOURCE} ${DEB_VERSION}"
-		sleep $[ ( $RANDOM % 20 + 1 ) ]
-		git -C incoming-apt-repo pull
 		git -C incoming-apt-repo push https://JBBgameich:${GITHUB_TOKEN}@${REPO_URL} ${REPO_BRANCH}
 	fi
 }
