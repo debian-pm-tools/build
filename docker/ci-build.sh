@@ -93,7 +93,7 @@ add_to_repository() {
 
 		git -C incoming-apt-repo add dists pool
 		git -C incoming-apt-repo commit -m "Add automated CI build of ${DEB_SOURCE}_${DEB_VERSION}"
-		git -C incoming-apt-repo push --set-upstream origin https://JBBgameich:${GITHUB_TOKEN}@${REPO_URL} ${REPO_BRANCH}
+		git -C incoming-apt-repo push https://JBBgameich:${GITHUB_TOKEN}@${REPO_URL} ${REPO_BRANCH}
 	fi
 }
 
