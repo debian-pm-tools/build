@@ -66,7 +66,8 @@ add_to_repository() {
 	REPO_BRANCH="${REPO_BRANCH:master}"
 
 	git clone https://${REPO_URL} -b ${REPO_BRANCH}
-		reprepro \
+
+	reprepro \
 		--outdir $PWD/incoming-apt-repo \
 		--confdir $PWD/incoming-apt-repo/conf \
 		--export="never" \
@@ -100,7 +101,7 @@ add_to_repository() {
 		git config --global user.name "CI builder"
 
 		git -C incoming-apt-repo add dists pool
-		git -C incoming-apt-repo commit -m "${DEB_BUILD_ARCH}: Add CI build of ${DEB_SOURCE} ${DEB_VERSION}"
+		git -C incoming-apt-repo commit -m "${REPO_ARCH}: Add CI build of ${DEB_SOURCE} ${DEB_VERSION}"
 		git -C incoming-apt-repo push https://JBBgameich:${GITHUB_TOKEN}@${REPO_URL} ${REPO_BRANCH}
 	fi
 }
@@ -120,6 +121,7 @@ case $1 in
 esac
 if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "Netrunner/mobile" ]] || \
-	[[ ${CI_COMMIT_REF_NAME} == "debian" ]]; then
+	[[ ${CI_COMMIT_REF_NAME} == "debian" ]] || \
+	[[ ${CI_COMMIT_REF_NAME} == "halium-7.1" ]]; then
 	add_to_repository
 fi
