@@ -6,10 +6,10 @@ git:
   submodules: false
 
 install:
-  - sudo add-apt-repository ppa:projectatomic/ppa
+  - sudo add-apt-repository ppa:projectatomic/ppa -y
   - sudo apt-get update
-  - sudo wget -O /etc/containers/registries.conf https://gist.githubusercontent.com/JBBgameich/d5d8d683eea994ba7576f0265ce5f4b3/raw/675af53056f80a0f197d3cf608939847a3dcff43/registries.conf
   - sudo apt-get install podman
+  - sudo wget -O /etc/containers/registries.conf https://gist.githubusercontent.com/JBBgameich/d5d8d683eea994ba7576f0265ce5f4b3/raw/675af53056f80a0f197d3cf608939847a3dcff43/registries.conf
 
 script: bash travis_docker.sh build
 
