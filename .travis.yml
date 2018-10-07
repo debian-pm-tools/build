@@ -6,8 +6,7 @@ git:
   submodules: false
 
 install:
-  - sudo apt install qemu-user-static -y
-  - docker run --rm --privileged multiarch/qemu-user-static:register
+  - sudo apt install qemu-user-static binfmt-support -y
 
 script: bash docker/travis_docker.sh build
 
