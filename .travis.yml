@@ -5,6 +5,9 @@ dist: xenial
 git:
   submodules: false
 
+install:
+  - sudo apt install qemu-user-static -y
+
 script: bash docker/travis_docker.sh build
 
 deploy:
