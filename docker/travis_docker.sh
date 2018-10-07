@@ -23,14 +23,13 @@ build() {
 	esac
 
 	sed -i "/FROM/c\FROM ${CONTAINER_BASE}" Dockerfile
-	sudo podman build -t "$DOCKER_USERNAME/build:latest-${ARCH}" .
+	sudo docker build -t "$DOCKER_USERNAME/build:latest-${ARCH}" .
 }
 
 push() {
-	sudo podman push \
-		--creds="$DOCKER_USERNAME" \
-		"localhost/$DOCKER_USERNAME/build:latest-${ARCH}" \
-		"docker://docker.io/$DOCKER_USERNAME/build:latest-${ARCH}"
+	echo "$DOCKER_PASSWORD" | sudo docker login -u "$DOCKER_USERNAME" --password-stdin
+
+	sudo docker push "$DOCKER_USERNAME/build:latest-${ARCH}"
 }
 
 $1
