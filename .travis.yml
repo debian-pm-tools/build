@@ -6,7 +6,10 @@ git:
   submodules: false
 
 install:
-  - sudo apt install qemu-user-static binfmt-support -y
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt update
+  - sudo apt install qemu-user-static binfmt-support docker-ce -y
   - update-binfmts --display
 
 script: bash docker/travis_docker.sh build
