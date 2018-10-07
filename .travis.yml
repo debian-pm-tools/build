@@ -28,3 +28,4 @@ matrix:
     - env: ARCH=amd64
     - env: ARCH=armhf
     - env: ARCH=arm64
+    - env: ARCH=i386
