@@ -17,7 +17,8 @@ RUN apt update && \
         quilt \
         reprepro \
         libwww-perl \
-        libmoo-perl
+        libmoo-perl \
+        libipc-run-perl
 
 # Speed up builds
 RUN apt install eatmydata -y
