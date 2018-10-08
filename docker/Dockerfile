@@ -26,6 +26,7 @@ RUN apt install eatmydata -y
 # Add debian-pm repository
 RUN echo "deb https://debian-pm-tools.github.io/apt-repo buster main" > /etc/apt/sources.list.d/debian-pm.list && \
     echo "deb-src https://debian-pm-tools.github.io/apt-repo buster main" >> /etc/apt/sources.list.d/debian-pm.list && \
+    echo "deb [trusted=yes] https://debian-pm-tools.github.io/incoming-apt-repo buster main" >> /etc/apt/sources.list.d/debian-pm.list && \
     wget -qO - https://gitlab.com/debian-pm/debian-pm-keyring/raw/master/jbb.asc | apt-key add - && \
     apt update
 
