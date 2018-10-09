@@ -8,6 +8,7 @@ build:armhf-caf:
     - armhf
   variables:
     REPO_BRANCH: "caf"
+    DEB_BUILD_PROFILES: "caf"
 
 build:arm64-caf:
   stage: build
@@ -19,4 +20,4 @@ build:arm64-caf:
     - arm64
   variables:
     REPO_BRANCH: "caf"
-
+    DEB_BUILD_PROFILES: "caf"
