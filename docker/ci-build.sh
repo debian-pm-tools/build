@@ -5,6 +5,11 @@ SOURCE_BASE_URL="https://raw.githubusercontent.com/debian-pm-tools/orig-tar-xzs/
 # Set up architecture variables
 export $(dpkg-architecture)
 
+# If needed, append string to version number
+if [ $REPO_BRANCH == "caf" ]; then
+        dch -lcaf "Rebuild against caf headers"
+fi
+
 # Detect variables for use later in this script
 # Adapted from /usr/share/dpkg/*.mk
 DEB_SOURCE=$(dpkg-parsechangelog -SSource)

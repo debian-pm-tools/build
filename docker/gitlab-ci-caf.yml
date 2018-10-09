@@ -1,0 +1,22 @@
+build:armhf-caf:
+  stage: build
+  script:
+    - /usr/bin/ci-conf caf
+    - /usr/bin/ci-build binary
+  image: jbbgameich/build:latest-armhf
+  tags:
+    - armhf
+  variables:
+    REPO_BRANCH: "caf"
+
+build:arm64-caf:
+  stage: build
+  script:
+    - /usr/bin/ci-conf caf
+    - /usr/bin/ci-build binary
+  image: jbbgameich/build:latest-arm64
+  tags:
+    - arm64
+  variables:
+    REPO_BRANCH: "caf"
+
