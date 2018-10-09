@@ -70,7 +70,7 @@ add_to_repository() {
 	REPO_URL=github.com/debian-pm-tools/incoming-apt-repo
 	REPO_BRANCH="${REPO_BRANCH:master}"
 
-	git clone https://${REPO_URL} -b ${REPO_BRANCH}
+	git clone https://${REPO_URL} -b ${REPO_BRANCH} --single-branch
 
 	reprepro \
 		--outdir $PWD/incoming-apt-repo \
