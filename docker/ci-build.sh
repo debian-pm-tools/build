@@ -51,7 +51,7 @@ get_source() {
 		rm "../${ORIG_TAR_NAME}"
 
 	origtargz --clean
-	origtargz --tar-only
+	origtargz --tar-only || (uscan --skip-signature -d --download-current-version && origtargz)
 }
 
 install_build_deps() {
