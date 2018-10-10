@@ -50,11 +50,9 @@ get_source() {
 	wget --continue -O "../${ORIG_TAR_NAME}" "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}" || \
 		rm "../${ORIG_TAR_NAME}"
 
+	uscan -d --download-current-version --skip-signature || echo "Package doesn't seem to use uscan"
 	origtargz --clean
-	rm ../*.asc
-	origtargz --tar-only -u no
-	rm ../*.asc
-	origtargz -u yes
+	origtargz --tar-only
 }
 
 install_build_deps() {
