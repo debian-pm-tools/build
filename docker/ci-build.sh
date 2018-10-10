@@ -50,6 +50,7 @@ get_source() {
 	wget --continue -O "../${ORIG_TAR_NAME}" "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}" || \
 		rm "../${ORIG_TAR_NAME}"
 
+	rm ../*.orig.*.asc || true
 	uscan -d --download-current-version --skip-signature || echo "Package doesn't seem to use uscan"
 	origtargz --clean
 	origtargz --tar-only
