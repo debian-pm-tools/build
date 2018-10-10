@@ -51,6 +51,9 @@ get_source() {
 		rm "../${ORIG_TAR_NAME}"
 
 	origtargz --clean
+	if [ -f "../*.asc" ]; then
+		rm "../*.asc"
+	fi
 	origtargz --tar-only -u no
 	if [ -f "../*.asc" ]; then
 		rm "../*.asc"
