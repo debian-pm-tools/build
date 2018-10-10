@@ -51,7 +51,11 @@ get_source() {
 		rm "../${ORIG_TAR_NAME}"
 
 	origtargz --clean
-	origtargz --tar-only || (uscan --skip-signature -d --download-current-version && origtargz)
+	origtargz --tar-only -u no
+	if [ -f "../*.asc" ]; then
+		rm "../*.asc"
+	fi
+	origtargz -u yes
 }
 
 install_build_deps() {
