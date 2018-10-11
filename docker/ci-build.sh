@@ -105,10 +105,10 @@ add_to_repository() {
 			../${DEB_SOURCE}_${DEB_VERSION_UPSTREAM_REVISION}_${REPO_ARCH}.changes
 
 		# Remove dbgsyms to safe space
-		debug_packages=$(reprepro dumpreferences \
+		debug_packages=$(reprepro \
 		    --confdir $PWD/incoming-apt-repo/conf \
 		    --outdir $PWD/incoming-apt-repo \
-		    | sed 's/.*\///' | sed 's/_.*//' | uniq | grep dbgsym)
+		    dumpreferences | sed 's/.*\///' | sed 's/_.*//' | uniq | grep dbgsym)
 		if ! [ -z $debug_packages ]; then
 			reprepro \
 			    --outdir $PWD/incoming-apt-repo \
