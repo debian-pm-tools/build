@@ -101,8 +101,8 @@ add_to_repository() {
 		echo "Warning: Will not deploy this build!"
 		echo "#########################################"
 	else
-                sleep $[ ( $RANDOM % 20 + 1 ) ]
-                git -C incoming-apt-repo pull
+		sleep $[ ( $RANDOM % 20 + 1 ) ]
+        git -C incoming-apt-repo pull
 
 		reprepro \
 			--ignore=wrongdistribution \
@@ -113,9 +113,9 @@ add_to_repository() {
 
 		# Remove dbgsyms to safe space
 		debug_packages=$(reprepro \
-		    --confdir $PWD/incoming-apt-repo/conf \
-		    --outdir $PWD/incoming-apt-repo \
-		    dumpreferences | sed 's/.*\///' | sed 's/_.*//' | uniq | grep dbgsym)
+						 --confdir $PWD/incoming-apt-repo/conf \
+						 --outdir $PWD/incoming-apt-repo \
+						 dumpreferences | sed 's/.*\///,s/_.*//' | uniq | grep dbgsym)
 		if ! [ -z $debug_packages ]; then
 			reprepro \
 			    --outdir $PWD/incoming-apt-repo \
@@ -137,14 +137,14 @@ get_source
 install_build_deps
 setup_ccache
 case $1 in
-		source)
+	source)
 		REPO_ARCH="source"
-				build_source
-				;;
-		binary)
+		build_source
+		;;
+	binary)
 		REPO_ARCH=${DEB_BUILD_ARCH}
-				build_binary
-				;;
+		build_binary
+		;;
 esac
 if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "Netrunner/mobile" ]] || \
