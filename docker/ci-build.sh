@@ -60,6 +60,13 @@ install_build_deps() {
 	sudo apt build-dep . -y
 }
 
+setup_ccache() {
+	export PATH=/usr/lib/ccache:$PATH
+	export CCACHE_BASEDIR=${PWD}
+	export CCACHE_DIR=${PWD}/ccache
+	mkdir -p ${CCACHE_DIR}
+}
+
 build_source() {
 	dpkg-buildpackage -sa --build=source
 }
@@ -122,6 +129,7 @@ add_to_repository() {
 
 get_source
 install_build_deps
+setup_ccache
 case $1 in
 		source)
 		REPO_ARCH="source"
