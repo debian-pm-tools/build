@@ -24,7 +24,7 @@ GIT_BRANCH=$3
 
 # Check if packaging is in place
 ! [ -d $BUILD_ROOT/packages/${PACKAGE} ] &&
-	echo "ERROR: packaging doesn't exist. Did you forget to run 'make packagelist'?" &&
+	echo "ERROR: packaging doesn't exist. Did you forget to run './packages.sh packagelist'?" &&
 	exit 1
 
 # Extract version information
@@ -68,7 +68,7 @@ git -C "$BUILD_ROOT/sources/$PACKAGE" archive $GIT_BRANCH \
 (
 	cd $BUILD_ROOT/packages/${PACKAGE}
 
-	dch -v $PKG_GIT_VERSION-1
+	dch -v $PKG_GIT_VERSION-1 -b
 
 	origtargz --tar-only --path $BUILD_ROOT/sources/
 )
