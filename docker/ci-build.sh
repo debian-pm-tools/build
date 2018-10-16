@@ -1,5 +1,6 @@
 #!/bin/bash -e
 
+PACKAGE_ROOT="$(dirname "$(readlink -f "${0}")")"
 SOURCE_BASE_URL="https://raw.githubusercontent.com/debian-pm-tools/orig-tar-xzs/master"
 
 # Set up architecture variables
@@ -50,7 +51,7 @@ get_source() {
 	wget --continue -O "../${ORIG_TAR_NAME}" "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}" || \
 		rm "../${ORIG_TAR_NAME}"
 
-	rm ../*.orig.*.asc /dev/null 2>&1 || true
+	rm ../*.orig.*.asc >/dev/null 2>&1 || true
 	uscan -d --download-current-version --skip-signature || echo "Package doesn't seem to use uscan"
 	origtargz --clean
 	origtargz --tar-only
@@ -62,8 +63,7 @@ install_build_deps() {
 
 setup_ccache() {
 	export PATH=/usr/lib/ccache:$PATH
-	export CCACHE_BASEDIR=${PWD}
-	export CCACHE_DIR=${PWD}/ccache
+	export CCACHE_DIR=${PACKAGE_ROOT}/ccache
 	mkdir -p ${CCACHE_DIR}
 }
 
