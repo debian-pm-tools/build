@@ -21,7 +21,10 @@ RUN apt update && \
         libipc-run-perl
 
 # Speed up builds
-RUN apt install eatmydata -y
+RUN apt install eatmydata ccache -y
+
+# Deployment dependencies
+RUN apt install rsync
 
 # Add debian-pm repository
 RUN echo "deb https://debian-pm-tools.github.io/apt-repo buster main" > /etc/apt/sources.list.d/debian-pm.list && \
