@@ -24,7 +24,7 @@ RUN apt update && \
 RUN apt install eatmydata ccache -y
 
 # Deployment dependencies
-RUN apt install rsync
+RUN apt install rsync -y
 
 # Add debian-pm repository
 RUN echo "deb https://debian-pm-tools.github.io/apt-repo buster main" > /etc/apt/sources.list.d/debian-pm.list && \
