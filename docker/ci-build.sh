@@ -82,7 +82,7 @@ add_to_repository() {
 	chmod 400 ~/.ssh/id_rsa
 
 	REPO_BRANCH="${REPO_BRANCH:-main}"
-	ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,xz,gz,tar*,buildinfo,changes} | uniq || true)
+	ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,xz,gz,tar*,buildinfo,changes} 2>/dev/null | uniq || true)
 
 	rsync -avzp -e \
 		"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
