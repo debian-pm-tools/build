@@ -76,60 +76,12 @@ build_binary() {
 }
 
 add_to_repository() {
-	REPO_URL=github.com/debian-pm-tools/incoming-apt-repo
-	REPO_BRANCH="${REPO_BRANCH:master}"
+	REPO_BRANCH="${REPO_BRANCH:main}"
 
-	git clone https://${REPO_URL} -b ${REPO_BRANCH} --single-branch
-
-	reprepro \
-		--outdir $PWD/incoming-apt-repo \
-		--confdir $PWD/incoming-apt-repo/conf \
-		--export="never" \
-		update
-
-	# Checks
-	REPO_VERSION=$(reprepro \
-			--outdir $PWD/incoming-apt-repo \
-			--confdir $PWD/incoming-apt-repo/conf \
-			list buster ${DEB_SOURCE} | grep ${REPO_ARCH} | sed 's/^.*\ //')
-
-	if [[ ${REPO_VERSION} == ${DEB_VERSION} ]]; then
-		echo "##########################################"
-		echo "The version of this package in the repository (${REPO_VERSION})"
-		echo "matches the version of this build."
-		echo "To release a new build, create a new changelog entry."
-		echo "Warning: Will not deploy this build!"
-		echo "#########################################"
-	else
-		sleep $[ ( $RANDOM % 20 + 1 ) ]
-        git -C incoming-apt-repo pull
-
-		reprepro \
-			--ignore=wrongdistribution \
-			--outdir $PWD/incoming-apt-repo \
-			--confdir $PWD/incoming-apt-repo/conf \
-			include buster \
-			../${DEB_SOURCE}_${DEB_VERSION_UPSTREAM_REVISION}_${REPO_ARCH}.changes
-
-		# Remove dbgsyms to safe space
-		debug_packages=$(reprepro \
-		                 --confdir $PWD/incoming-apt-repo/conf \
-		                 --outdir $PWD/incoming-apt-repo \
-		                 dumpreferences | sed 's/.*\///' | sed 's/_.*//' | uniq | grep dbgsym || true)
-		if ! [ -z $debug_packages ]; then
-			reprepro \
-			    --outdir $PWD/incoming-apt-repo \
-			    --confdir $PWD/incoming-apt-repo/conf \
-			    remove buster $debug_packages
-		fi
-
-		git config --global user.email "debian-pm-tools@users.noreply.github.com"
-		git config --global user.name "CI builder"
-
-		git -C incoming-apt-repo add dists pool
-		git -C incoming-apt-repo commit -m "${REPO_ARCH}: Add CI build of ${DEB_SOURCE} (${DEB_VERSION})"
-		git -C incoming-apt-repo push https://JBBgameich:${GITHUB_TOKEN}@${REPO_URL} ${REPO_BRANCH}
-	fi
+	rsync -avzp -e \
+		"ssh -o StrictHostKeyChecking=no -p $DEPLOY_PORT" \
+		"${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,changes}" \
+		"${DEPLOY_ACCOUNT}:/var/opt/repo-debpm-incoming/${REPO_BRANCH}"
 }
 
 
