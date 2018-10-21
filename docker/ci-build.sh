@@ -82,14 +82,12 @@ add_to_repository() {
 	chmod 400 ~/.ssh/id_rsa
 
 	REPO_BRANCH="${REPO_BRANCH:-main}"
-	for file in ${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,xz,gz,tar*,buildinfo,changes}; do
-		if [ -f $file ]; then
-			rsync -avzp -e \
-				"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
-				"${file}" \
-				"${DEPLOY_ACCOUNT}:/var/opt/repo-debpm-incoming/${REPO_BRANCH}"
-		fi
-	done
+	ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,xz,gz,tar*,buildinfo,changes} | uniq)
+
+	rsync -avzp -e \
+		"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
+		"${ARTIFACTS}" \
+		"${DEPLOY_ACCOUNT}:/var/opt/repo-debpm-incoming/${REPO_BRANCH}"
 }
 
 
