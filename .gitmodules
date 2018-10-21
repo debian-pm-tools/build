@@ -8,4 +8,4 @@
 	shallow = true
 [submodule "repo-conf"]
 	path = repo-conf
-	url = https://github.com/debian-pm-tools/apt-repo-conf
+	url = https://gitlab.com/debian-pm/tools/apt-repo-conf
