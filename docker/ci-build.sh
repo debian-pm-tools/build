@@ -76,10 +76,15 @@ build_binary() {
 }
 
 add_to_repository() {
+	mkdir -p ~/.ssh/
+	echo ${DEPLOY_KEY_PRIVATE} | base64 -d | xz -d > ~/.ssh/id_rsa
+	echo ${DEPLOY_KEY_PUBLIC} | base64 -d | xz -d > ~/.ssh/id_rsa.pub
+	chmod 400 ~/.ssh/id_rsa
+
 	REPO_BRANCH="${REPO_BRANCH:main}"
 
 	rsync -avzp -e \
-		"ssh -o StrictHostKeyChecking=no -p $DEPLOY_PORT" \
+		"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
 		"${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,changes}" \
 		"${DEPLOY_ACCOUNT}:/var/opt/repo-debpm-incoming/${REPO_BRANCH}"
 }
