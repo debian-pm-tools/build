@@ -63,7 +63,7 @@ install_build_deps() {
 
 setup_ccache() {
 	export PATH=/usr/lib/ccache:$PATH
-	export CCACHE_DIR=${PACKAGE_ROOT}/ccache
+	export CCACHE_DIR=${PACKAGE_ROOT}/../ccache
 	mkdir -p ${CCACHE_DIR}
 }
 
