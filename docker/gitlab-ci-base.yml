@@ -9,7 +9,7 @@ before_script:
   - apt update
 
 variables:
-  REPO_BRANCH: "master"
+  REPO_BRANCH: "main"
 
 build:source:
   stage: build
