@@ -82,7 +82,7 @@ add_to_repository() {
 	chmod 400 ~/.ssh/id_rsa
 
 	REPO_BRANCH="${REPO_BRANCH:-main}"
-	for file in ${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,buildinfo,changes}; do
+	for file in ${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,xz,gz,buildinfo,changes}; do
 		if [ -f $file ]; then
 			rsync -avzp -e \
 				"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
