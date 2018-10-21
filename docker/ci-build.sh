@@ -81,7 +81,7 @@ add_to_repository() {
 	echo ${DEPLOY_KEY_PUBLIC} | base64 -d | xz -d > ~/.ssh/id_rsa.pub
 	chmod 400 ~/.ssh/id_rsa
 
-	REPO_BRANCH="${REPO_BRANCH:main}"
+	REPO_BRANCH="${REPO_BRANCH:-main}"
 	for file in ${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,changes}; do
 		if [ -f $file ]; then
 			rsync -avzp -e \
