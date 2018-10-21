@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-PACKAGE_ROOT="$(dirname "$(readlink -f "${0}")")"
+PACKAGE_ROOT="${PWD}"
 SOURCE_BASE_URL="https://raw.githubusercontent.com/debian-pm-tools/orig-tar-xzs/master"
 
 # Set up architecture variables
