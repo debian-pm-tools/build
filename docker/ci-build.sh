@@ -86,7 +86,7 @@ add_to_repository() {
 
 	rsync -avzp -e \
 		"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
-		"${ARTIFACTS}" \
+		${ARTIFACTS} \
 		"${DEPLOY_ACCOUNT}:/var/opt/repo-debpm-incoming/${REPO_BRANCH}"
 }
 
