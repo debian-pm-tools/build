@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 CONTAINER_ROOT="$(dirname "$(readlink -f "${0}")")"
-DOCKER_USERNAME="jbbgameich"
+GITLAB_USERNAME="jbbgameich"
 cd $CONTAINER_ROOT
 
 build() {
@@ -23,11 +23,11 @@ build() {
 	esac
 
 	sed -i "/FROM/c\FROM ${CONTAINER_BASE}" Dockerfile
-	sudo docker build -t "$DOCKER_USERNAME/build:latest-${ARCH}" .
+	sudo docker build -t "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}" .
 }
 
 push() {
-	echo "$DOCKER_PASSWORD" | sudo docker login -u "$DOCKER_USERNAME" --password-stdin
+	echo "$GITLAB_TOKEN" | sudo docker login -u "$DOCKER_USERNAME" --password-stdin registry.gitlab.com
 
 	sudo docker push "$DOCKER_USERNAME/build:latest-${ARCH}"
 }
