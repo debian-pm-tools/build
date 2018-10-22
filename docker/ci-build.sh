@@ -8,7 +8,8 @@ export $(dpkg-architecture)
 
 # If needed, append string to version number
 if [ $REPO_BRANCH == "caf" ]; then
-        dch -lcaf "Rebuild against caf headers"
+	dch -lcaf "Rebuild against caf headers"
+	sed -i 's/Section: /Section: caf\//g' debian/control
 fi
 
 # Detect variables for use later in this script
@@ -76,6 +77,7 @@ build_binary() {
 }
 
 add_to_repository() {
+	# Install deploy keys from environment variabless
 	mkdir -p ~/.ssh/
 	echo ${DEPLOY_KEY_PRIVATE} | base64 -d | xz -d > ~/.ssh/id_rsa
 	echo ${DEPLOY_KEY_PUBLIC} | base64 -d | xz -d > ~/.ssh/id_rsa.pub
