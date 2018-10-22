@@ -77,19 +77,42 @@ build_binary() {
 }
 
 add_to_repository() {
-	# Install deploy keys from environment variabless
-	mkdir -p ~/.ssh/
-	echo ${DEPLOY_KEY_PRIVATE} | base64 -d | xz -d > ~/.ssh/id_rsa
-	echo ${DEPLOY_KEY_PUBLIC} | base64 -d | xz -d > ~/.ssh/id_rsa.pub
-	chmod 400 ~/.ssh/id_rsa
+	# Check wether a package with the same version number is already in the repository to prevent failures
+	BINARY_PACKAGES=$(cat debian/control | grep Package | sed -e 's/Package: //')
 
-	REPO_BRANCH="${REPO_BRANCH:-main}"
-	ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,xz,gz,tar*,buildinfo,changes} 2>/dev/null | uniq || true)
+	echo "I: Checking repository version..."
+	sudo apt -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list update >/dev/null
 
-	rsync -avzp -e \
-		"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
-		${ARTIFACTS} \
-		"${DEPLOY_ACCOUNT}:/var/opt/repo-debpm-incoming/${REPO_BRANCH}"
+	for binary_package in ${BINARY_PACKAGES}; do
+		if apt -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list list | grep $binary_package | grep ${DEB_VERSION}; then
+			echo "##########################################"
+			echo "The version of this package in the repository"
+			echo "matches the version of this build. (${DEB_VERSION})"
+			echo "To release a new build, create a new changelog entry."
+			echo "Warning: Will not deploy this build!"
+			echo "#########################################"
+
+			DEPLOY="false"
+		else
+			DEPLOY="true"
+		fi
+	done
+
+	if [ ${DEPLOY} == "true" ]; then
+		# Install deploy keys from environment variabless
+		mkdir -p ~/.ssh/
+		echo ${DEPLOY_KEY_PRIVATE} | base64 -d | xz -d > ~/.ssh/id_rsa
+		echo ${DEPLOY_KEY_PUBLIC} | base64 -d | xz -d > ~/.ssh/id_rsa.pub
+		chmod 400 ~/.ssh/id_rsa
+
+		REPO_BRANCH="${REPO_BRANCH:-main}"
+		ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,xz,gz,tar*,buildinfo,changes} 2>/dev/null | uniq || true)
+
+		rsync -avzp -e \
+			"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
+			${ARTIFACTS} \
+			"${DEPLOY_ACCOUNT}:/var/opt/repo-debpm-incoming/${REPO_BRANCH}"
+	fi
 }
 
 
