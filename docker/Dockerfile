@@ -33,6 +33,11 @@ RUN echo "deb https://repo.kaidan.im/debpm buster main" > /etc/apt/sources.list.
     wget -qO - https://gitlab.com/debian-pm/debian-pm-keyring/raw/master/repo.kaidan.im.asc | apt-key add - && \
     apt update
 
+# Pin debian-pm repository
+RUN Package: * > /etc/apt/preferences && \
+    Pin: origin repo.kaidan.im >> /etc/apt/preferences && \
+    Pin-Priority: 2000 >> /etc/apt/preferences
+
 COPY ci-build.sh /usr/bin/ci-build
 COPY ci-config.sh /usr/bin/ci-config
 
