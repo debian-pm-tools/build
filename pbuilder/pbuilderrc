@@ -2,22 +2,24 @@
 HOOKDIR="hook.d"
 DISTRIBUTION="testing"
 MIRRORSITE="https://deb.debian.org/debian"
+COMPONENTS="main contrib non-free"
 
 # Names and pathes
 NAME="$DISTRIBUTION-$ARCH"
 BASEPATH="/var/cache/pbuilder/$NAME/base.cow/"
-BUILDRESULT="/var/cache/pbuilder/$NAME/result/"
+BUILDRESULT="/var/cache/pbuilder/$NAME/result"
 
 # Speed optimization
 CCACHEDIR=/var/cache/pbuilder/ccache
 EXTRAPACKAGES="eatmydata wget ca-certificates lsb-release apt-utils"
 EATMYDATA=yes
+PBUILDERSATISFYDEPENDSCMD="/usr/lib/pbuilder/pbuilder-satisfydepends-apt"
 
 # local apt repository
 BINDMOUNTS="$BUILDRESULT"
 OTHERMIRROR="
 deb [trusted=yes] file:$BUILDRESULT ./
-deb [trusted=yes] https://debian-pm-tools.github.io/apt-repo buster main"
+deb [trusted=yes] https://repo.kaidan.im/debpm buster main"
 ALLOWUNTRUSTED=yes
 
 # create local repository if it doesn't already exist,

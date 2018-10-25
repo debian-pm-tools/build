@@ -27,16 +27,17 @@ RUN apt install eatmydata ccache -y
 RUN apt install rsync openssh-client -y
 
 # Add debian-pm repository
-RUN echo "deb https://repo.kaidan.im/debpm buster main" > /etc/apt/sources.list.d/debian-pm.list && \
+RUN echo "deb-src https://deb.debian.org/debian testing main" >> /etc/apt/sources.list && \
+    echo "deb https://repo.kaidan.im/debpm buster main" > /etc/apt/sources.list.d/debian-pm.list && \
     echo "deb-src https://repo.kaidan.im/debpm buster main" >> /etc/apt/sources.list.d/debian-pm.list && \
     wget -qO - https://gitlab.com/debian-pm/debian-pm-keyring/raw/master/jbb.asc | apt-key add - && \
     wget -qO - https://gitlab.com/debian-pm/debian-pm-keyring/raw/master/repo.kaidan.im.asc | apt-key add - && \
     apt update
 
 # Pin debian-pm repository
-RUN Package: * > /etc/apt/preferences && \
-    Pin: origin repo.kaidan.im >> /etc/apt/preferences && \
-    Pin-Priority: 2000 >> /etc/apt/preferences
+RUN echo "Package: *" > /etc/apt/preferences && \
+    echo "Pin: origin repo.kaidan.im" >> /etc/apt/preferences && \
+    echo "Pin-Priority: 2000" >> /etc/apt/preferences
 
 COPY ci-build.sh /usr/bin/ci-build
 COPY ci-config.sh /usr/bin/ci-config
