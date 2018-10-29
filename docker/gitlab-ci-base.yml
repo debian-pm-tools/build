@@ -1,6 +1,10 @@
 # To use this in a package, use
 # include: 'https://gitlab.com/debian-pm/tools/build/raw/master/docker/gitlab-ci-base.yml'
 
+cache:
+  paths:
+    - debian/ccache
+
 before_script:
   - apt update
 
