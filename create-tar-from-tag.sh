@@ -14,7 +14,8 @@ error_namenotset() {
 }
 
 # Command line opts
-PACKAGE=$1
+PKG_PATH=$1
+PACKAGE=$(dpkg-parsechangelog -SSource -l packages/${PKG_PATH}/debian/changelog)
 GIT_REPO=$2
 GIT_TAG=$3
 

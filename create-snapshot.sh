@@ -4,7 +4,7 @@ BUILD_ROOT="$(dirname "$(readlink -f "${0}")")"
 
 usage() {
 	echo "This script creates a new snapshot from a git repository"
-	echo "Usage example: ./create-snapshot.sh libhybris https://github.com/libhybris/libhybris master"
+	echo "Usage example: ./create-snapshot.sh halium/libhybris https://github.com/libhybris/libhybris master"
 	exit 1
 }
 
@@ -14,7 +14,8 @@ error_namenotset() {
 }
 
 # Command line opts
-PACKAGE=$1
+PKG_PATH=$1
+PACKAGE=$(dpkg-parsechangelog -SSource -l packages/${PKG_PATH}/debian/changelog)
 GIT_REPO=$2
 GIT_BRANCH=$3
 
