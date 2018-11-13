@@ -89,29 +89,23 @@ add_to_repository() {
 			echo "The version of this package in the repository"
 			echo "matches the version of this build. (${DEB_VERSION})"
 			echo "To release a new build, create a new changelog entry."
-			echo "Warning: Will not deploy this build!"
+			echo "Warning: This build will likely not land in the repository!"
 			echo "#########################################"
-
-			DEPLOY="false"
-		else
-			DEPLOY="true"
 		fi
 	done
 
-	if [ ${DEPLOY} == "true" ]; then
-		# Install deploy keys from environment variabless
-		mkdir -p ~/.ssh/
-		echo ${DEPLOY_KEY_PRIVATE} | base64 -d | xz -d > ~/.ssh/id_rsa
-		echo ${DEPLOY_KEY_PUBLIC} | base64 -d | xz -d > ~/.ssh/id_rsa.pub
-		chmod 400 ~/.ssh/id_rsa
+	# Install deploy keys from environment variabless
+	mkdir -p ~/.ssh/
+	echo ${DEPLOY_KEY_PRIVATE} | base64 -d | xz -d > ~/.ssh/id_rsa
+	echo ${DEPLOY_KEY_PUBLIC} | base64 -d | xz -d > ~/.ssh/id_rsa.pub
+	chmod 400 ~/.ssh/id_rsa
 
-		ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,xz,gz,tar*,buildinfo,changes} 2>/dev/null | uniq || true)
+	ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb,orig*,debian*,xz,gz,tar*,buildinfo,changes} 2>/dev/null | uniq || true)
 
-		rsync -avzp -e \
-			"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
-			${ARTIFACTS} \
-			"${DEPLOY_ACCOUNT}:/var/opt/repo-debpm-incoming/"
-	fi
+	rsync -avzp -e \
+		"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
+		${ARTIFACTS} \
+		"${DEPLOY_ACCOUNT}:/var/opt/repo-debpm-incoming/"
 }
 
 
