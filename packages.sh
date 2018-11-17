@@ -26,6 +26,11 @@ else
     exit 1
 fi
 
+# Perform self-upgrade
+echo "I: Running self upgrade"
+git -C $BUILD_ROOT fetch origin
+git -C $BUILD_ROOT merge origin/master
+
 # Main functions
 function init() {
     echo "I: Initializing packages"
