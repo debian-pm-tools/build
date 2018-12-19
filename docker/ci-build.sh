@@ -12,6 +12,12 @@ if [ $REPO_BRANCH == "caf" ]; then
 	sed -i 's/Section: /Section: caf\//g' debian/control
 fi
 
+# Detect whether a rebuild is wanted
+if [ ! -z $REBUILD ]; then
+	echo "I: Preparing changelog for a no-change rebuild"
+	dch -r "No-change rebuild"
+fi
+
 # Detect variables for use later in this script
 # Adapted from /usr/share/dpkg/*.mk
 DEB_SOURCE=$(dpkg-parsechangelog -SSource)
