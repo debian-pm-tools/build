@@ -24,7 +24,7 @@ GIT_BRANCH=$3
 [ -z $GIT_BRANCH ] && usage
 
 # Check if packaging is in place
-! [ -d $BUILD_ROOT/packages/${PACKAGE} ] &&
+! [ -d $BUILD_ROOT/packages/$PKG_PATH ] &&
 	echo "ERROR: packaging doesn't exist. Did you forget to run './packages.sh packagelist'?" &&
 	exit 1
 
@@ -34,8 +34,8 @@ PKG_VERSION=$(dpkg-parsechangelog -SVersion -l $BUILD_ROOT/packages/$PACKAGE/deb
 PKG_GIT_VERSION="$PKG_VERSION+git$DATE"
 
 # Check if snapshot already exists
-[ -f $BUILD_ROOT/packages/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz ] &&
-	echo "ERROR: $BUILD_ROOT/packages/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz already exists" &&
+[ -f $BUILD_ROOT/packages/$PKG_PATH/../${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz ] &&
+	echo "ERROR: $BUILD_ROOT/packages/$PKG_PATH/../${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz already exists" &&
 	exit 1
 
 # Debug output
@@ -50,14 +50,15 @@ echo "I: git branch: $GIT_BRANCH"
 if [ -d "$BUILD_ROOT/sources/$PACKAGE" ]; then
 	echo "I: fetching from git repository ..."
 
-	git -C "$BUILD_ROOT/sources/$PACKAGE" fetch
-	git -C "$BUILD_ROOT/sources/$PACKAGE" pull
+	git -C "$BUILD_ROOT/sources/$PACKAGE" remote set-url origin $GIT_REPO
+	git -C "$BUILD_ROOT/sources/$PACKAGE" fetch origin
+	git -C "$BUILD_ROOT/sources/$PACKAGE" checkout origin/$GIT_BRANCH
 else
 	git clone --depth 1 $GIT_REPO "$BUILD_ROOT/sources/$PACKAGE" -b $GIT_BRANCH
 fi
 
 # Export repository into tar
-git -C "$BUILD_ROOT/sources/$PACKAGE" archive $GIT_BRANCH \
+git -C "$BUILD_ROOT/sources/$PACKAGE" archive origin/$GIT_BRANCH \
 	--prefix $PACKAGE-$PKG_VERSION/ \
 	--format=tar | xz >"$BUILD_ROOT/sources/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz"
 
@@ -67,7 +68,7 @@ git -C "$BUILD_ROOT/sources/$PACKAGE" archive $GIT_BRANCH \
 
 # Create new changelog entry and unpack tarball
 (
-	cd $BUILD_ROOT/packages/${PACKAGE}
+	cd $BUILD_ROOT/packages/$PKG_PATH
 
 	dch -v $PKG_GIT_VERSION-1 -b
 
