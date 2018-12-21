@@ -6,19 +6,19 @@ cd $CONTAINER_ROOT
 build() {
 	case "$ARCH" in
 		amd64)
-			CONTAINER_BASE="jbbgameich/minideb:testing"
+			CONTAINER_BASE="jbbgameich/minideb:testing-amd64"
 			;;
 		i386)
-			CONTAINER_BASE="i386/debian:testing"
+			CONTAINER_BASE="jbbgameich/minideb:testing-i386"
 			;;
 		armhf)
-			CONTAINER_BASE="arm32v7/debian:testing"
+			CONTAINER_BASE="jbbgameich/minideb:testing-armhf"
 			;;
 		arm64)
-			CONTAINER_BASE="arm64v8/debian:testing"
+			CONTAINER_BASE="jbbgameich/minideb:testing-arm64"
 			;;
 		*)
-			CONTAINER_BASE="jbbgameich/minideb:testing"
+			CONTAINER_BASE="jbbgameich/minideb:testing-amd64"
 			;;
 	esac
 
