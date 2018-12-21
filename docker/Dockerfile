@@ -48,4 +48,5 @@ COPY ci-build.sh /usr/bin/ci-build
 COPY ci-config.sh /usr/bin/ci-config
 
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+"$LD_LIBRARY_PATH:"}/usr/lib/libeatmydata \
-    LD_PRELOAD=${LD_PRELOAD:+"$LD_PRELOAD "}libeatmydata.so
+    LD_PRELOAD=${LD_PRELOAD:+"$LD_PRELOAD "}libeatmydata.so \
+    PATH=/usr/lib/ccache/:$PATH
