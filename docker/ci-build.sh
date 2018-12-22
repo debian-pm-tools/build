@@ -15,7 +15,7 @@ fi
 # Detect whether a rebuild is wanted
 if [ ! -z $REBUILD ]; then
 	echo "I: Preparing changelog for a no-change rebuild"
-	dch -r "No-change rebuild"
+	dch --rebuild "No-change rebuild"
 fi
 
 # Detect variables for use later in this script
