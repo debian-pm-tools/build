@@ -27,6 +27,12 @@ DEB_VERSION_UPSTREAM_REVISION=$(echo "${DEB_VERSION}" | sed -e 's/^[0-9]*://')
 DEB_VERSION_UPSTREAM="${DEB_VERSION_UPSTREAM_REVISION%%-*}"
 DEB_DISTRIBUTION=$(dpkg-parsechangelog -SDistribution)
 
+echo "======================================"
+echo "Package: $DEB_SOURCE"
+echo "Repository: $(git remote get-url origin)"
+echo "Version: $DEB_VERSION"
+echo "======================================"
+
 # From https://stackoverflow.com/questions/296536/how-to-urlencode-data-for-curl-command
 urlencode() {
 	local string="${1}"

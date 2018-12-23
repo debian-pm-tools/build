@@ -15,7 +15,6 @@ RUN apt update && \
         gnupg \
         git \
         quilt \
-        reprepro \
         libwww-perl \
         libmoo-perl \
         libipc-run-perl
