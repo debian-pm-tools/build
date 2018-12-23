@@ -74,12 +74,8 @@ setup_ccache() {
 	mkdir -p ${CCACHE_DIR}
 }
 
-build_source() {
-	dpkg-buildpackage -sa --build=source
-}
-
-build_binary() {
-	dpkg-buildpackage -sa --build=binary
+build() {
+	dpkg-buildpackage -sa --build=$1
 }
 
 add_to_repository() {
@@ -135,16 +131,8 @@ setup_ccache
 
 echo
 echo "========= Build $1 package ==========="
-case $1 in
-	source)
-		REPO_ARCH="source"
-		build_source
-		;;
-	binary)
-		REPO_ARCH=${DEB_BUILD_ARCH}
-		build_binary
-		;;
-esac
+build $1
+
 if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "Netrunner/mobile" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "debian" ]] || \
