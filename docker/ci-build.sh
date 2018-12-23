@@ -27,12 +27,6 @@ DEB_VERSION_UPSTREAM_REVISION=$(echo "${DEB_VERSION}" | sed -e 's/^[0-9]*://')
 DEB_VERSION_UPSTREAM="${DEB_VERSION_UPSTREAM_REVISION%%-*}"
 DEB_DISTRIBUTION=$(dpkg-parsechangelog -SDistribution)
 
-echo "======================================"
-echo "Package: $DEB_SOURCE"
-echo "Repository: $(git remote get-url origin)"
-echo "Version: $DEB_VERSION"
-echo "======================================"
-
 # From https://stackoverflow.com/questions/296536/how-to-urlencode-data-for-curl-command
 urlencode() {
 	local string="${1}"
@@ -120,10 +114,26 @@ add_to_repository() {
 		"${DEPLOY_ACCOUNT}:/var/opt/repo-debpm-incoming/"
 }
 
+echo
+echo "============= Package info ==========="
+echo "Package: $DEB_SOURCE"
+echo "Repository: $(git remote get-url origin)"
+echo "Version: $DEB_VERSION"
 
+echo
+echo "=========== Download sources ========="
 get_source
+
+echo
+echo "===== Install build-dependencies ====="
 install_build_deps
+
+echo
+echo "============ Set up ccache ==========="
 setup_ccache
+
+echo
+echo "========= Build $1 package ==========="
 case $1 in
 	source)
 		REPO_ARCH="source"
@@ -138,5 +148,7 @@ if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "Netrunner/mobile" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "debian" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "halium-7.1" ]]; then
+	echo
+	echo "===== Upload package to repository ======"
 	add_to_repository
 fi
