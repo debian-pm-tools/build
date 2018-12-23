@@ -119,6 +119,7 @@ echo "============= Package info ==========="
 echo "Package: $DEB_SOURCE"
 echo "Repository: $(git remote get-url origin)"
 echo "Version: $DEB_VERSION"
+echo "Author of latest change: $(git log -1 --pretty=format:'%an')"
 
 echo
 echo "=========== Download sources ========="
