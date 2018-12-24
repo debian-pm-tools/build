@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BUILD_ROOT="$(dirname "$(readlink -f "${0}")")"
+
 # Check if list is supplied as argument
 if [ "$#" -lt 1 ]; then
     echo "Required argument: packages list name"
@@ -14,8 +16,9 @@ else
     exit 1
 fi
 
-for package in $(cat ${list}); do
-	cd packages/$package
+for path in $(cat ${list}); do
+        package=$(dpkg-parsechangelog -SSource -l packages/$path/debian/changelog)
+	cd $PWD/packages/$path
 
 	echo "Cleaning packages/$package"
 	origtargz --clean
@@ -28,5 +31,5 @@ for package in $(cat ${list}); do
 		rm ../${source}_${version%%-*}.orig.tar.*
 	fi
 
-	cd ../../
+	cd $BUILD_ROOT
 done
