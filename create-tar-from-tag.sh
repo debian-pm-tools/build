@@ -24,13 +24,13 @@ GIT_TAG=$3
 [ -z $GIT_TAG ] && usage
 
 # Check if packaging is in place
-! [ -d $BUILD_ROOT/packages/${PACKAGE} ] &&
+! [ -d $BUILD_ROOT/packages/${PKG_PATH} ] &&
 	echo "ERROR: packaging doesn't exist. Did you forget to run './packages.sh packagelist'?" &&
 	exit 1
 
 # Extract version information
-if [ -f $BUILD_ROOT/packages/$PACKAGE/debian/changelog ]; then
-    PKG_VERSION=$(dpkg-parsechangelog -SVersion -l $BUILD_ROOT/packages/$PACKAGE/debian/changelog | sed "s/[-].*//")
+if [ -f $BUILD_ROOT/packages/$PKG_PATH/debian/changelog ]; then
+    PKG_VERSION=$(dpkg-parsechangelog -SVersion -l $BUILD_ROOT/packages/$PKG_PATH/debian/changelog | sed "s/[-].*//")
 else
     PKG_VERSION=0
 fi
@@ -38,8 +38,8 @@ fi
 PKG_GIT_VERSION=$(echo $GIT_TAG | sed 's/v//g')
 
 # Check if snapshot does already exists
-[ -f $BUILD_ROOT/packages/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz ] &&
-	echo "ERROR: $BUILD_ROOT/packages/${PACKAGE}_$PKG_VERSION.orig.tar.xz already exists" &&
+[ -f $BUILD_ROOT/sources/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz ] &&
+	echo "ERROR: $BUILD_ROOT/sources/${PACKAGE}_$PKG_VERSION.orig.tar.xz already exists" &&
 	exit 1
 
 # Debug output
@@ -68,7 +68,7 @@ bash "$BUILD_ROOT/git-archive-all.sh" \
 
 # Unpack new tarball
 (
-	cd $BUILD_ROOT/packages/${PACKAGE}
+	cd $BUILD_ROOT/packages/$PKG_PATH
 	origtargz --clean
 	origtargz --path $BUILD_ROOT/sources/
 )
