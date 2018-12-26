@@ -1,5 +1,8 @@
 #!/bin/bash
 
+BUILD_ROOT="$(dirname "$(readlink -f "${0}")")"
+source "$BUILD_ROOT/functions/package-common.sh"
+
 # Check if list is supplied as argument
 if [ "$#" -lt 1 ]; then
     echo "Required argument: packages list name"
@@ -14,8 +17,8 @@ else
     exit 1
 fi
 
-for package in $(cat ${list}); do
-	if ! grep "Vcs" packages/$package/debian/control; then
+for PKG_PATH in $(cat ${list}); do
+	if ! grep "Vcs" packages/$PKG_PATH/debian/control; then
 		echo "$package is missing Vcs urls!"
 	fi
 

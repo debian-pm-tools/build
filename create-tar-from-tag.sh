@@ -15,9 +15,10 @@ error_namenotset() {
 
 # Command line opts
 PKG_PATH=$1
-PACKAGE=$(dpkg-parsechangelog -SSource -l packages/${PKG_PATH}/debian/changelog)
 GIT_REPO=$2
 GIT_TAG=$3
+
+source "$BUILD_ROOT/functions/package-common.sh"
 
 [ -z $PACKAGE ] && usage
 [ -z $GIT_REPO ] && usage
@@ -27,13 +28,6 @@ GIT_TAG=$3
 ! [ -d $BUILD_ROOT/packages/${PKG_PATH} ] &&
 	echo "ERROR: packaging doesn't exist. Did you forget to run './packages.sh packagelist'?" &&
 	exit 1
-
-# Extract version information
-if [ -f $BUILD_ROOT/packages/$PKG_PATH/debian/changelog ]; then
-    PKG_VERSION=$(dpkg-parsechangelog -SVersion -l $BUILD_ROOT/packages/$PKG_PATH/debian/changelog | sed "s/[-].*//")
-else
-    PKG_VERSION=0
-fi
 
 PKG_GIT_VERSION=$(echo $GIT_TAG | sed 's/v//g')
 

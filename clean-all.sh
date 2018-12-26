@@ -16,19 +16,18 @@ else
     exit 1
 fi
 
-for path in $(cat ${list}); do
-        package=$(dpkg-parsechangelog -SSource -l packages/$path/debian/changelog)
-	cd $PWD/packages/$path
+for PKG_PATH in $(cat ${list}); do
+	source "$BUILD_ROOT/functions/package-common.sh"
+	cd $BUILD_ROOT/packages/$PKG_PATH
 
-	echo "Cleaning packages/$package"
+	echo "Cleaning packages/$PKG_PATH"
 	origtargz --clean
 
-	source=$(dpkg-parsechangelog -S Source)
 	version=$(dpkg-parsechangelog -S Version | sed -e 's/^[0-9]*://')
 
-	if [ -f ../${source}_${version%%-*}.orig.tar.* ]; then
-		echo "Deleting ../${source}_${version%%-*}.orig.tar.*"
-		rm ../${source}_${version%%-*}.orig.tar.*
+	if [ -f ../${PACKAGE}_${PKG_VERSION}.orig.tar.* ]; then
+		echo "Deleting ../${PACKAGE}_${PKG_VERSION}.orig.tar.*"
+		rm ../${PACKAGE}_${PKG_VERSION}.orig.tar.*
 	fi
 
 	cd $BUILD_ROOT

@@ -1,6 +1,8 @@
 #!/bin/bash
 
 BUILD_ROOT="$(dirname "$(readlink -f "${0}")")"
+source "$BUILD_ROOT/functions/package-common.sh"
+
 
 usage() {
 	echo "This script creates a new snapshot from a git repository"
@@ -13,11 +15,10 @@ error_namenotset() {
 	exit 1
 }
 
-# Command line opts
 PKG_PATH=$1
-PACKAGE=$(dpkg-parsechangelog -SSource -l packages/${PKG_PATH}/debian/changelog)
 GIT_REPO=$2
 GIT_BRANCH=$3
+PKG_GIT_VERSION="$PKG_VERSION+git$DATE"
 
 [ -z $PACKAGE ] && usage
 [ -z $GIT_REPO ] && usage
@@ -27,11 +28,6 @@ GIT_BRANCH=$3
 ! [ -d $BUILD_ROOT/packages/$PKG_PATH ] &&
 	echo "ERROR: packaging doesn't exist. Did you forget to run './packages.sh packagelist'?" &&
 	exit 1
-
-# Extract version information
-DATE=$(date +%Y%m%d)
-PKG_VERSION=$(dpkg-parsechangelog -SVersion -l $BUILD_ROOT/packages/$PACKAGE/debian/changelog | cut -f1 -d"+" | sed "s/[-].*//")
-PKG_GIT_VERSION="$PKG_VERSION+git$DATE"
 
 # Check if snapshot already exists
 [ -f $BUILD_ROOT/packages/$PKG_PATH/../${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz ] &&
