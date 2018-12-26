@@ -12,6 +12,7 @@ RUN apt update && \
         sudo \
         software-properties-common \
         wget \
+        curl \
         gnupg \
         git \
         quilt \
