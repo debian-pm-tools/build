@@ -22,7 +22,6 @@ build:amd64:
   image: jbbgameich/build:latest-amd64
   tags:
     - amd64
-    - gitlab-org
 
 build:i386:
   stage: build
