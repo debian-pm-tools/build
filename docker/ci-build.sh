@@ -14,7 +14,7 @@ fi
 
 # Detect whether a rebuild is wanted
 if [ ! -z $REBUILD ]; then
-	echo "I: Preparing changelog for a no-change rebuild"
+	echo "Preparing changelog for a no-change rebuild"
 	dch --rebuild "No-change rebuild"
 fi
 
@@ -54,14 +54,19 @@ get_source() {
 	ORIG_TAR_NAME="${DEB_SOURCE}_${DEB_VERSION_UPSTREAM}.orig.tar.xz"
 	ORIG_TAR_NAME_ENCODED=$(urlencode "${ORIG_TAR_NAME}")
 
-	# Try to download source
-	wget --continue -O "../${ORIG_TAR_NAME}" "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}" || \
-		rm "../${ORIG_TAR_NAME}"
+	if curl --head --fail --silent "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}" >/dev/null; then
+		echo "Downloading source from mirror ..."
+		wget --continue -O "../${ORIG_TAR_NAME}" "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}"
+	elif [ -f debian/watch ]; then
+		echo "Downloading source from upstream using uscan"
+		uscan --download-current-version --download
+	else
+		echo "Downloading source using origtargz"
+		origtargz --unpack=no --download-only --tar-only
+	fi
 
-	rm ../*.orig.*.asc >/dev/null 2>&1 || true
-	uscan -d --download-current-version --skip-signature || echo "Package doesn't seem to use uscan"
 	origtargz --clean
-	origtargz --tar-only
+	origtargz --unpack=yes
 }
 
 install_build_deps() {
