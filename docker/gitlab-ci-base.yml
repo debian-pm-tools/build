@@ -16,35 +16,30 @@ build:source:
   script: /usr/bin/ci-build source
   image: jbbgameich/build:latest-amd64
 
-build:all:
-  stage: build
-  script: /usr/bin/ci-build all
-  image: jbbgameich/build:latest-amd64
-
 build:amd64:
   stage: build
-  script: /usr/bin/ci-build any
+  script: /usr/bin/ci-build binary
   image: jbbgameich/build:latest-amd64
   tags:
     - amd64
 
 build:i386:
   stage: build
-  script: /usr/bin/ci-build any
+  script: /usr/bin/ci-build binary
   image: jbbgameich/build:latest-i386
   tags:
     - i386
 
 build:armhf:
   stage: build
-  script: /usr/bin/ci-build any
+  script: /usr/bin/ci-build binary
   image: jbbgameich/build:latest-armhf
   tags:
     - armhf
 
 build:arm64:
   stage: build
-  script: /usr/bin/ci-build any
+  script: /usr/bin/ci-build binary
   image: jbbgameich/build:latest-arm64
   tags:
     - arm64
