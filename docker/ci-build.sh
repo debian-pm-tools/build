@@ -2,6 +2,7 @@
 
 PACKAGE_ROOT="${PWD}"
 SOURCE_BASE_URL="https://raw.githubusercontent.com/debian-pm-tools/orig-tar-xzs/master"
+BUILD_TYPE=$1
 
 # Set up architecture variables
 export $(dpkg-architecture)
@@ -79,12 +80,8 @@ setup_ccache() {
 	mkdir -p ${CCACHE_DIR}
 }
 
-build_source() {
-	dpkg-buildpackage -sa --build=source
-}
-
-build_binary() {
-	dpkg-buildpackage -sa --build=binary
+build() {
+	dpkg-buildpackage -sa --build=$BUILD_TYPE
 }
 
 add_to_repository() {
@@ -134,22 +131,16 @@ echo
 echo "===== Install build-dependencies ====="
 install_build_deps
 
-echo
-echo "============ Set up ccache ==========="
-setup_ccache
+if [ ${BUILD_TYPE} == "binary"]; then
+	echo
+	echo "============ Set up ccache ==========="
+	setup_ccache
+fi
 
 echo
-echo "========= Build $1 package ==========="
-case $1 in
-	source)
-		REPO_ARCH="source"
-		build_source
-		;;
-	binary)
-		REPO_ARCH=${DEB_BUILD_ARCH}
-		build_binary
-		;;
-esac
+echo "===== Build $BUILD_TYPE package ======="
+build $BUILD_TYPE
+
 if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "Netrunner/mobile" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "debian" ]] || \
