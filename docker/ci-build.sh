@@ -131,7 +131,7 @@ echo
 echo "===== Install build-dependencies ====="
 install_build_deps
 
-if [ ${BUILD_TYPE} == "binary"]; then
+if [ ${BUILD_TYPE} == "binary" ]; then
 	echo
 	echo "============ Set up ccache ==========="
 	setup_ccache
