@@ -17,8 +17,8 @@ error_namenotset() {
 PKG_PATH=$1
 GIT_REPO=$2
 GIT_BRANCH=$3
-PKG_GIT_VERSION="$PKG_VERSION+git$DATE"
 source "$BUILD_ROOT/functions/package-common.sh"
+PKG_GIT_VERSION="$PKG_VERSION+git$DATE"
 
 [ -z $PACKAGE ] && usage
 [ -z $GIT_REPO ] && usage
