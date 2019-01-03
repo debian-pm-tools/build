@@ -1,7 +1,6 @@
 #!/bin/bash
 
 BUILD_ROOT="$(dirname "$(readlink -f "${0}")")"
-source "$BUILD_ROOT/functions/package-common.sh"
 
 
 usage() {
@@ -19,6 +18,7 @@ PKG_PATH=$1
 GIT_REPO=$2
 GIT_BRANCH=$3
 PKG_GIT_VERSION="$PKG_VERSION+git$DATE"
+source "$BUILD_ROOT/functions/package-common.sh"
 
 [ -z $PACKAGE ] && usage
 [ -z $GIT_REPO ] && usage
