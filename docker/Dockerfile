@@ -18,7 +18,8 @@ RUN apt update && \
         quilt \
         libwww-perl \
         libmoo-perl \
-        libipc-run-perl
+        libipc-run-perl \
+        python3-xmltodict
 
 # Speed up builds
 RUN apt install eatmydata ccache -y
@@ -46,6 +47,7 @@ RUN for package in $PIN_PACKAGES; do \
 
 COPY ci-build.sh /usr/bin/ci-build
 COPY ci-config.sh /usr/bin/ci-config
+COPY jsonuscan.py /usr/bin/jsonuscan
 
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+"$LD_LIBRARY_PATH:"}/usr/lib/libeatmydata \
     LD_PRELOAD=${LD_PRELOAD:+"$LD_PRELOAD "}libeatmydata.so \
