@@ -22,7 +22,10 @@ args = parser.parse_args()
 uscancommand = ["uscan", "--dehs", "--report"]
 if args.currentversion:
 	uscancommand.append("--download-current-version")
-uscanout = subprocess.check_output(uscancommand).decode()
+try:
+	uscanout = subprocess.check_output(uscancommand).decode()
+except subprocess.CalledProcessError as error:
+	uscanout = error.output
 uscandict = xmltodict.parse(uscanout)
 
 # Print result
