@@ -5,8 +5,10 @@ cache:
   paths:
     - debian/ccache/amd64
     - debian/ccache/arm64
+    - debian/ccache/arm64-caf
     - debian/ccache/i386
     - debian/ccache/armhf
+    - debian/ccache/armhf-caf
 
 before_script:
   - apt update

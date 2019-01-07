@@ -76,7 +76,11 @@ install_build_deps() {
 
 setup_ccache() {
 	export PATH=/usr/lib/ccache/:$PATH
-	export CCACHE_DIR=${PACKAGE_ROOT}/debian/ccache/${DEB_HOST_ARCH}
+	if [ ! -z ${REPO_BRANCH} ]; then
+		export CCACHE_DIR=${PACKAGE_ROOT}/debian/ccache/${DEB_HOST_ARCH}-${REPO_BRANCH}
+	else
+		export CCACHE_DIR=${PACKAGE_ROOT}/debian/ccache/${DEB_HOST_ARCH}
+	fi
 	mkdir -p ${CCACHE_DIR}
 }
 
