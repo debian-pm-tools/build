@@ -12,8 +12,8 @@ if ! [ -d "$BUILD_ROOT/repo" ]; then
     mkdir -p "$BUILD_ROOT/repo"
 fi
 
-if [ -e "$BUILD_ROOT/packages.list".list ]; then
-    export list="$BUILD_ROOT/packages.list".list
+if [ -e "$BUILD_ROOT/packages.list" ]; then
+    export list="$BUILD_ROOT/packages.list"
 else
     echo "Package list packages.list does not exist!"
     exit 1
