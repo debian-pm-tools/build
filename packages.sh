@@ -12,17 +12,10 @@ if ! [ -d "$BUILD_ROOT/repo" ]; then
     mkdir -p "$BUILD_ROOT/repo"
 fi
 
-# Check if list is supplied as argument
-if [ "$#" -lt 1 ]; then
-    echo "Required argument: packages list name"
-    exit 1
-fi
-
-# Set package list from command line argument (if exists)
-if [ -e "$BUILD_ROOT/$1".list ]; then
-    export list="$BUILD_ROOT/$1".list
+if [ -e "$BUILD_ROOT/packages.list".list ]; then
+    export list="$BUILD_ROOT/packages.list".list
 else
-    echo "Package list $1 does not exist!"
+    echo "Package list packages.list does not exist!"
     exit 1
 fi
 
