@@ -29,7 +29,7 @@ build() {
 push() {
 	echo "$GITLAB_TOKEN" | sudo docker login -u "$GITLAB_USERNAME" --password-stdin registry.gitlab.com
 
-	sudo docker push "$GITLAB_USERNAME/build:latest-${ARCH}"
+	sudo docker push "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}"
 }
 
 $1
