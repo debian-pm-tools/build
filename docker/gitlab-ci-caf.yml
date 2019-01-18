@@ -3,7 +3,7 @@ build:armhf-caf:
   script:
     - /usr/bin/ci-config caf
     - /usr/bin/ci-build binary
-  image: $CI_REGISTRY_IMAGE:latest-armhf
+  image: registry.gitlab.com/debian-pm/tools/build:latest-armhf
   tags:
     - armhf
   variables:
@@ -15,7 +15,7 @@ build:arm64-caf:
   script:
     - /usr/bin/ci-config caf
     - /usr/bin/ci-build binary
-  image: $CI_REGISTRY_IMAGE:latest-arm64
+  image: registry.gitlab.com/debian-pm/tools/build:latest-arm64
   tags:
     - arm64
   variables:
