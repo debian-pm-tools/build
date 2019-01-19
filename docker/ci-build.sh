@@ -51,6 +51,13 @@ urlencode() {
 	REPLY="${encoded}" #+or echo the result (EASIER)... or both... :p
 }
 
+print_info() {
+	echo "Package: $DEB_SOURCE"
+	echo "Repository: $(git remote get-url origin)"
+	echo "Version: $DEB_VERSION"
+	echo "Author of latest change: $(git log -1 --pretty=format:'%an')"
+}
+
 get_source() {
 	ORIG_TAR_NAME="${DEB_SOURCE}_${DEB_VERSION_UPSTREAM}.orig.tar.xz"
 	ORIG_TAR_NAME_ENCODED=$(urlencode "${ORIG_TAR_NAME}")
@@ -132,10 +139,7 @@ add_to_repository() {
 
 echo
 echo "============= Package info ==========="
-echo "Package: $DEB_SOURCE"
-echo "Repository: $(git remote get-url origin)"
-echo "Version: $DEB_VERSION"
-echo "Author of latest change: $(git log -1 --pretty=format:'%an')"
+print_info
 
 echo
 echo "=========== Download sources ========="
