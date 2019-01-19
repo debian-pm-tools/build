@@ -89,35 +89,45 @@ build() {
 }
 
 add_to_repository() {
-	# Check wether a package with the same version number is already in the repository to prevent failures
-	BINARY_PACKAGES=$(cat debian/control | grep Package | sed -e 's/Package: //')
+	if # Check wether required variables aren't empty
+		! [ -z ${DEPLOY_KEY_PRIVATE} ] && \
+		! [ -z ${DEPLOY_KEY_PUBLIC} ]  && \
+		! [ -z ${DEPLOY_ACCOUNT} ]     && \
+		! [ -z ${DEPLOY_PORT} ]        && \
+		! [ -z ${DEPLOY_PATH} ];       then
 
-	echo "I: Checking repository version..."
-	sudo apt -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list update >/dev/null
+		# Check wether a package with the same version number is already in the repository to prevent failures
+		BINARY_PACKAGES=$(cat debian/control | grep Package | sed -e 's/Package: //')
 
-	for binary_package in ${BINARY_PACKAGES}; do
-		if apt -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list list | grep $binary_package | grep ${DEB_VERSION}; then
-			echo "##########################################"
-			echo "The version of this package in the repository"
-			echo "matches the version of this build. (${DEB_VERSION})"
-			echo "To release a new build, create a new changelog entry."
-			echo "Warning: This build will likely not land in the repository!"
-			echo "#########################################"
-		fi
-	done
+		echo "Checking repository version..."
+		sudo apt -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list update >/dev/null
 
-	# Install deploy keys from environment variabless
-	mkdir -p ~/.ssh/
-	echo ${DEPLOY_KEY_PRIVATE} | base64 -d | xz -d > ~/.ssh/id_rsa
-	echo ${DEPLOY_KEY_PUBLIC} | base64 -d | xz -d > ~/.ssh/id_rsa.pub
-	chmod 400 ~/.ssh/id_rsa
+		for binary_package in ${BINARY_PACKAGES}; do
+			if apt -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list list | grep $binary_package | grep ${DEB_VERSION}; then
+				echo "##########################################"
+				echo "The version of this package in the repository"
+				echo "matches the version of this build. (${DEB_VERSION})"
+				echo "To release a new build, create a new changelog entry."
+				echo "Warning: This build will likely not land in the repository!"
+				echo "#########################################"
+			fi
+		done
 
-	ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb,orig.*,debian*,xz,gz,tar*,buildinfo,changes} 2>/dev/null | uniq || true)
+		# Install deploy keys from environment variabless
+		mkdir -p ~/.ssh/
+		echo ${DEPLOY_KEY_PRIVATE} | base64 -d | xz -d > ~/.ssh/id_rsa
+		echo ${DEPLOY_KEY_PUBLIC} | base64 -d | xz -d > ~/.ssh/id_rsa.pub
+		chmod 400 ~/.ssh/id_rsa
 
-	rsync -avzp -e \
-		"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
-		${ARTIFACTS} \
-		"${DEPLOY_ACCOUNT}:/var/opt/repo-debpm-incoming/"
+		ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb,orig.*,debian*,xz,gz,tar*,buildinfo,changes} 2>/dev/null | uniq || true)
+
+		rsync -avzp -e \
+			"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
+			${ARTIFACTS} \
+			"${DEPLOY_ACCOUNT}:${DEPLOY_PATH}"
+	else
+		echo "Can't publish package since no credentials were provided."
+	fi
 }
 
 echo
