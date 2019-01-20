@@ -3,31 +3,25 @@
 BUILD_ROOT="$(dirname "$(readlink -f "${0}")")"
 source "$BUILD_ROOT/functions/package-common.sh"
 
-# Check if list is supplied as argument
-if [ "$#" -lt 1 ]; then
-    echo "Required argument: packages list name"
-    exit 1
-fi
-
 # Set package list from command line argument (if exists)
-if [ -e "$1".list ]; then
-    export list="$1".list
+if [ -e "$BUILD_ROOT/packages.list" ]; then
+    export list="$BUILD_ROOT/packages.list"
 else
-    echo "Package list $1 does not exist!"
+    echo "Package list packages.list does not exist!"
     exit 1
 fi
 
 for PKG_PATH in $(cat ${list}); do
-	if ! grep "Vcs" packages/$PKG_PATH/debian/control; then
+	if ! grep "Vcs" packages/${PKG_PATH}/debian/control; then
 		echo "$package is missing Vcs urls!"
 	fi
 
-	GIT="git -C packages/${package}"
+	GIT="git -C packages/${PKG_PATH}"
 
 	VCS_GIT=$(${GIT} remote get-url origin)
 	VCS_BROWSER=${VCS_GIT::-4}
 	sed -i "/Vcs-Git/c\Vcs-Git: $VCS_GIT" \
-		packages/${package}/debian/control
+		packages/${PKG_PATH}/debian/control
         sed -i "/Vcs-Browser/c\Vcs-Browser: $VCS_BROWSER" \
-		packages/$package/debian/control
+		packages/${PKG_PATH}/debian/control
 done
