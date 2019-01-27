@@ -46,7 +46,7 @@ prepare() {
 	fi
 
 	# Check whether we should upload to a non-default component of the repository
-	if [ ! -z "${REPO_COMPONENT}" ] && [ "${REPO_COMPONENT}" !== "main" ]; then
+	if [ ! -z "${REPO_COMPONENT}" ] && [ ! "${REPO_COMPONENT}" == "main" ]; then
 		sed -i "s/Section: /Section: ${REPO_COMPONENT}\//g" debian/control
 	fi
 
