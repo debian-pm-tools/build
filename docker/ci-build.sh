@@ -102,6 +102,10 @@ build() {
 	dpkg-buildpackage -sa --build=$BUILD_TYPE
 }
 
+check() {
+	lintian || echo -e '\033[31mlintian checks failed! Please check the package and fix them!\033[0m'
+}
+
 add_to_repository() {
 	if # Check wether required variables aren't empty
 		! [ -z ${DEPLOY_KEY_PRIVATE} ] && \
@@ -165,6 +169,10 @@ fi
 echo
 echo "===== Build $BUILD_TYPE package ======="
 build $BUILD_TYPE
+
+echo
+echo "==== Check package using lintian ===="
+check
 
 if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "Netrunner/mobile" ]] || \
