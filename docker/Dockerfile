@@ -18,7 +18,8 @@ RUN apt update && \
         quilt \
         libwww-perl \
         libmoo-perl \
-        libipc-run-perl
+        libipc-run-perl \
+        lintian
 
 # Speed up builds
 RUN apt install eatmydata ccache -y
