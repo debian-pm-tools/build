@@ -4,6 +4,10 @@ PACKAGE_ROOT="${PWD}"
 SOURCE_BASE_URL="https://raw.githubusercontent.com/debian-pm-tools/orig-tar-xzs/master"
 BUILD_TYPE=$1
 
+# Set up name and email for dch
+export NAME="GitLab CI"
+export EMAIL="https://gitlab.com/debian-pm/tools/build"
+
 # Set up architecture variables
 export $(dpkg-architecture)
 
