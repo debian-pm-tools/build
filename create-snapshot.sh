@@ -55,7 +55,7 @@ fi
 
 # Export repository into tar
 git -C "$BUILD_ROOT/sources/$PACKAGE" archive origin/$GIT_BRANCH \
-	--prefix $PACKAGE-$PKG_VERSION/ \
+	--prefix $PACKAGE-$PKG_GIT_VERSION/ \
 	--format=tar | xz >"$BUILD_ROOT/sources/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz"
 
 # Check if the variables for dch are set
