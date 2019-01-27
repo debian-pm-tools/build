@@ -7,7 +7,7 @@ build:armhf-caf:
   tags:
     - armhf
   variables:
-    REPO_BRANCH: "caf"
+    REPO_COMPONENT: "caf"
     DEB_BUILD_PROFILES: "caf"
 
 build:arm64-caf:
@@ -19,5 +19,5 @@ build:arm64-caf:
   tags:
     - arm64
   variables:
-    REPO_BRANCH: "caf"
+    REPO_COMPONENT: "caf"
     DEB_BUILD_PROFILES: "caf"

@@ -7,18 +7,6 @@ BUILD_TYPE=$1
 # Set up architecture variables
 export $(dpkg-architecture)
 
-# If needed, append string to version number
-if [ $REPO_BRANCH == "caf" ]; then
-	dch -lcaf "Rebuild against caf headers"
-	sed -i 's/Section: /Section: caf\//g' debian/control
-fi
-
-# Detect whether a rebuild is wanted
-if [ ! -z $REBUILD ]; then
-	echo "Preparing changelog for a no-change rebuild"
-	dch --rebuild "No-change rebuild"
-fi
-
 # Detect variables for use later in this script
 # Adapted from /usr/share/dpkg/*.mk
 DEB_SOURCE=$(dpkg-parsechangelog -SSource)
@@ -49,6 +37,23 @@ urlencode() {
 
 	echo "${encoded}"  # You can either set a return variable (FASTER)
 	REPLY="${encoded}" #+or echo the result (EASIER)... or both... :p
+}
+
+prepare() {
+	# If needed, append string to version number
+	if [ ! -z "${DEB_BUILD_PROFILES}" ]; then
+		dch -l"${DEB_BUILD_PROFILES}" "Rebuild with ${DEB_BUILD_PROFILES} profile"
+	fi
+
+	# Check whether we should upload to a non-default component of the repository
+	if [ ! -z "${REPO_COMPONENT}" ] && [ "${REPO_COMPONENT}" !== "main" ]; then
+		sed -i "s/Section: /Section: ${REPO_COMPONENT}\//g" debian/control
+	fi
+
+	# Detect whether a rebuild is wanted
+	if [ ! -z ${REBUILD} ]; then
+		dch --rebuild "No-change rebuild"
+	fi
 }
 
 print_info() {
@@ -83,8 +88,8 @@ install_build_deps() {
 
 setup_ccache() {
 	export PATH=/usr/lib/ccache/:$PATH
-	if [ ! -z ${REPO_BRANCH} ]; then
-		export CCACHE_DIR=${PACKAGE_ROOT}/debian/ccache/${DEB_HOST_ARCH}-${REPO_BRANCH}
+	if [ ! -z ${DEB_BUILD_PROFILES} ]; then
+		export CCACHE_DIR=${PACKAGE_ROOT}/debian/ccache/${DEB_HOST_ARCH}-${DEB_BUILD_PROFILES}
 	else
 		export CCACHE_DIR=${PACKAGE_ROOT}/debian/ccache/${DEB_HOST_ARCH}
 	fi
@@ -136,6 +141,8 @@ add_to_repository() {
 		echo "Can't publish package since no credentials were provided."
 	fi
 }
+
+prepare
 
 echo
 echo "============= Package info ==========="
