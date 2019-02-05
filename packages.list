@@ -1,4 +1,6 @@
+apps/buho
 apps/glosbit
+apps/gpodder-qml
 apps/index
 apps/kaidan
 apps/koko
@@ -32,11 +34,14 @@ libs/ofono
 libs/ofono-qt
 libs/qmltermwidget
 libs/telepathy-ofono
+mainline/mesa
 mainline/qmic
 mainline/qrtr
 mainline/rmtfs
 mainline/rpmsgexport
 plasma-mobile/kaccounts-mobile
+plasma-mobile/plasma-maliit-framework
+plasma-mobile/plasma-maliit-plugins
 plasma-mobile/plasma-nm
 plasma-mobile/plasma-phone-components
 plasma-mobile/plasma-phone-settings
@@ -46,7 +51,3 @@ qtbase
 qtdeclarative
 qtmultimedia
 qtwebengine
-plasma-mobile/plasma-maliit-plugins
-plasma-mobile/plasma-maliit-framework
-mainline/mesa
-apps/gpodder-qml
