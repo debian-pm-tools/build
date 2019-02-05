@@ -46,3 +46,7 @@ qtbase
 qtdeclarative
 qtmultimedia
 qtwebengine
+plasma-mobile/plasma-maliit-plugins
+plasma-mobile/plasma-maliit-framework
+mainline/mesa
+apps/gpodder-qml
