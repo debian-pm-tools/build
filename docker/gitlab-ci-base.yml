@@ -13,38 +13,45 @@ cache:
 before_script:
   - apt update
 
-variables:
-  REPO_COMPONENT: "main"
-
 build:source:
   stage: build
-  script: /usr/bin/ci-build source
+  script:
+    - /usr/bin/ci-config
+    - /usr/bin/ci-build source
   image: registry.gitlab.com/debian-pm/tools/build:latest-amd64
 
 build:amd64:
   stage: build
-  script: /usr/bin/ci-build binary
+  script:
+    - /usr/bin/ci-config
+    - /usr/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:latest-amd64
   tags:
     - amd64
 
 build:i386:
   stage: build
-  script: /usr/bin/ci-build binary
+  script:
+    - /usr/bin/ci-config
+    - /usr/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:latest-i386
   tags:
     - i386
 
 build:armhf:
   stage: build
-  script: /usr/bin/ci-build binary
+  script:
+    - /usr/bin/ci-config
+    - /usr/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:latest-armhf
   tags:
     - armhf
 
 build:arm64:
   stage: build
-  script: /usr/bin/ci-build binary
+  script:
+    - /usr/bin/ci-config
+    - /usr/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:latest-arm64
   tags:
     - arm64

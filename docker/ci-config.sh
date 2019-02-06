@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-LIBHYBRIS_PLATFORM="$1"
-
-echo "Adding repository for libhybris platform ${LIBHYBRIS_PLATFORM}"
-echo "deb https://repo.kaidan.im/debpm buster ${LIBHYBRIS_PLATFORM}" > \
-	/etc/apt/sources.list.d/debian-pm.list
-
+if ! [ -z $REPO_COMPONENT ]; then
+        echo "Enabling ${REPO_COMPONENT} component"
+        echo "deb https://repo.kaidan.im/debpm buster ${REPO_COMPONENT}" > \
+                /etc/apt/sources.list.d/debian-pm.list
+fi
 apt update
