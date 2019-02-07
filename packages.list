@@ -40,6 +40,7 @@ mainline/qrtr
 mainline/rmtfs
 mainline/rpmsgexport
 plasma-mobile/kaccounts-mobile
+plasma-mobile/kwayland
 plasma-mobile/plasma-maliit-framework
 plasma-mobile/plasma-maliit-plugins
 plasma-mobile/plasma-nm
