@@ -180,7 +180,12 @@ if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "halium-7.1" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "devkit" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "debian-unstable" ]]; then # For mesa
-	echo
-	echo "===== Upload package to repository ======"
-	add_to_repository
+
+	if [ ${DEB_DISTRIBUTION} !== "UNRELEASED" ]; then
+		echo
+		echo "===== Upload package to repository ======"
+		add_to_repository
+	else
+		echo "Package isn't released yet, change UNRELEASED to unstable to add it to the repository"
+	fi
 fi
