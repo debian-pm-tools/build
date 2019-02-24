@@ -181,7 +181,7 @@ if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "devkit" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "debian-unstable" ]]; then # For mesa
 
-	if [ ${DEB_DISTRIBUTION} !== "UNRELEASED" ]; then
+	if ! [ ${DEB_DISTRIBUTION} == "UNRELEASED" ]; then
 		echo
 		echo "===== Upload package to repository ======"
 		add_to_repository
