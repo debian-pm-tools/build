@@ -13,17 +13,18 @@ export $(dpkg-architecture)
 
 # If needed, append string to version number
 if [ ! -z "${DEB_BUILD_PROFILES}" ]; then
-        dch -l"${DEB_BUILD_PROFILES}" "Rebuild with ${DEB_BUILD_PROFILES} profile"
+	DEB_DISTRIBUTION=$(dpkg-parsechangelog -SDistribution)
+	dch -D ${DEB_DISTRIBUTION} --force-distribution -l"${DEB_BUILD_PROFILES}" "Rebuild with ${DEB_BUILD_PROFILES} profile"
 fi
 
 # Check whether we should upload to a non-default component of the repository
 if [ ! -z "${REPO_COMPONENT}" ] && [ ! "${REPO_COMPONENT}" == "main" ]; then
-        sed -i "s/Section: /Section: ${REPO_COMPONENT}\//g" debian/control
+	sed -i "s/Section: /Section: ${REPO_COMPONENT}\//g" debian/control
 fi
 
 # Detect whether a rebuild is wanted
 if [ ! -z ${REBUILD} ]; then
-        dch --rebuild "No-change rebuild"
+	dch --rebuild "No-change rebuild"
 fi
 
 # Detect variables for use later in this script
