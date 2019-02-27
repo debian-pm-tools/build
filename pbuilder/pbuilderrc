@@ -3,6 +3,7 @@ HOOKDIR="hook.d"
 DISTRIBUTION="testing"
 MIRRORSITE="https://deb.debian.org/debian"
 COMPONENTS="main contrib non-free"
+DEBOOTSTRAPOPTS="--include=ca-certificates"
 
 # Names and pathes
 NAME="$DISTRIBUTION-$ARCH"
