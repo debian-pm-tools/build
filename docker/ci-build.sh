@@ -75,7 +75,9 @@ get_source() {
 		wget --continue -O "../${ORIG_TAR_NAME}" "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}"
 	elif [ -f debian/watch ]; then
 		echo "Downloading source from upstream using uscan"
-		uscan --download-current-version --download
+		uscan --download-current-version --download || \ &&
+		echo "Downloading source using origtargz"
+		origtargz --unpack=no --download-only --tar-only
 	else
 		echo "Downloading source using origtargz"
 		origtargz --unpack=no --download-only --tar-only
