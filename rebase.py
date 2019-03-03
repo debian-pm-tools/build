@@ -5,6 +5,9 @@ import json
 import urllib.parse
 import sys
 
+def cleanUp():
+    subprocess.call(["git", "remote", "remove", "salsa"])
+
 #
 # Find out which version of the package is in testing
 #
@@ -14,8 +17,19 @@ package = subprocess.check_output(["dpkg-parsechangelog", "-SSource"]).decode().
 version_local = subprocess.check_output(["dpkg-parsechangelog", "-SVersion"]).decode().replace("\n", "")
 distribution = subprocess.check_output(["dpkg-parsechangelog", "-SDistribution"]).decode().replace("\n", "")
 
-version_debian_request = requests.get("https://api.ftp-master.debian.org/dsc_in_suite/" + suite + "/" + package)
-version_debian = json.loads(version_debian_request.content.decode())[0]["version"]
+version_debian = json.loads(
+	requests.get(
+		"https://api.ftp-master.debian.org/dsc_in_suite/"
+		+ suite + "/"
+		+ package)
+	.content.decode()
+	)[0]["version"]
+
+final_version = version_debian + "dpm1"
+
+if version_debian in version_local:
+    print("Rebase not neccesary")
+    sys.exit()
 
 print("Package: {}".format(package))
 print("Local Version: {}".format(version_local))
@@ -27,7 +41,11 @@ print("Debian Version: {}".format(version_debian))
 #
 
 # Find git repo
-git_repo_salsa = subprocess.check_output("apt source --dry-run {} | grep 'git clone'".format(package), shell=True).decode().replace("git clone", "").strip()
+git_repo_salsa = subprocess.check_output(
+	"apt source --dry-run {} | grep 'git clone'"
+	.format(package), shell=True
+	).decode().replace("git clone", "").strip()
+
 print("Found git repository {}".format(git_repo_salsa))
 
 subprocess.call(["git", "remote", "add", "salsa", git_repo_salsa])
@@ -67,15 +85,13 @@ print("Found changelog messages:\n" + changelog_message)
 subprocess.call(["git", "checkout", git_ref, "--", "debian/changelog"])
 if not subprocess.check_output(["dpkg-parsechangelog", "-SVersion"]).decode().strip() == version_debian:
 	print("The changelog from salsa doesn't contain the required version, exiting")
-	subprocess.call(["git", "remote", "remove", "salsa"])
-	sys.exit(1)
+	cleanUp()
+	sys.exit()
 
 subprocess.call(["git", "add", "debian/changelog"])
 subprocess.call(["git", "commit", "-m", "Reset changelog for rebasing"])
 
 subprocess.call(["git", "merge", git_ref])
-
-final_version = version_debian + "dpm1"
 
 for message in changelog_messages:
 	subprocess.call(["dch", "-v", final_version, message.replace("*", "").strip()])
@@ -88,4 +104,4 @@ subprocess.call(["git", "commit", "--amend", "-m", "Rebase changelog on {}".form
 # Clean up
 #
 
-subprocess.call(["git", "remote", "remove", "salsa"])
+cleanUp()
