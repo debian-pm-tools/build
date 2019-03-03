@@ -2,6 +2,8 @@
 import subprocess
 import requests
 import json
+import urllib.parse
+import sys
 
 #
 # Find out which version of the package is in testing
@@ -26,20 +28,24 @@ print("Debian Version: {}".format(version_debian))
 
 # Find git repo
 git_repo_salsa = subprocess.check_output("apt source --dry-run {} | grep 'git clone'".format(package), shell=True).decode().replace("git clone", "").strip()
+print("Found git repository {}".format(git_repo_salsa))
+
 subprocess.call(["git", "remote", "add", "salsa", git_repo_salsa])
 subprocess.call(["git", "fetch", "salsa", "--quiet"])
-subprocess.call(["git", "remote", "remove", "salsa"])
 
 # Find git tag
 tags = []
 for line in  subprocess.check_output(["git", "tag"]).decode().split("\n"):
-	tags.append(line)
+	tags.append(urllib.parse.unquote(line))
 
 for tag in tags:
 	if version_debian in tag and not "ubuntu" in tag:
 		print("Found tag {}".format(tag))
-		git_tag = tag
+		git_ref = tag
 
+if not "git_ref" in globals():
+	print("No tag found, trying master")
+	git_ref = "salsa/master"
 
 #
 # Extract Changelog message
@@ -58,11 +64,16 @@ print("Found changelog messages:\n" + changelog_message)
 # Merge tag and rebase changelog
 #
 
-subprocess.call(["git", "checkout", git_tag, "--", "debian/changelog"])
+subprocess.call(["git", "checkout", git_ref, "--", "debian/changelog"])
+if not subprocess.check_output(["dpkg-parsechangelog", "-SVersion"]).decode().strip() == version_debian:
+	print("The changelog from salsa doesn't contain the required version, exiting")
+	subprocess.call(["git", "remote", "remove", "salsa"])
+	sys.exit(1)
+
 subprocess.call(["git", "add", "debian/changelog"])
 subprocess.call(["git", "commit", "-m", "Reset changelog for rebasing"])
 
-subprocess.call(["git", "merge", git_tag])
+subprocess.call(["git", "merge", git_ref])
 
 final_version = version_debian + "dpm1"
 
@@ -71,4 +82,10 @@ for message in changelog_messages:
 
 subprocess.call(["dch", "--release", "-D", distribution])
 subprocess.call(["git", "add", "debian/changelog"])
-subprocess.call(["git", "commit", "--amend", "-m", "Rebase changelog on {}".format(git_tag)])
+subprocess.call(["git", "commit", "--amend", "-m", "Rebase changelog on {}".format(git_ref)])
+
+#
+# Clean up
+#
+
+subprocess.call(["git", "remote", "remove", "salsa"])
