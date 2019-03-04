@@ -24,6 +24,7 @@ version_debian = json.loads(
 		+ package)
 	.content.decode()
 	)[0]["version"]
+version_debian_no_revision = version_debian.split(":", 1)[-1]
 
 final_version = version_debian + "dpm1"
 
@@ -57,7 +58,7 @@ for line in  subprocess.check_output(["git", "tag"]).decode().split("\n"):
 	tags.append(urllib.parse.unquote(line))
 
 for tag in tags:
-	if version_debian in tag and not "ubuntu" in tag:
+	if version_debian_no_revision in tag and not "ubuntu" in tag:
 		print("Found tag {}".format(tag))
 		git_ref = tag
 
