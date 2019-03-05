@@ -20,7 +20,7 @@ PBUILDERSATISFYDEPENDSCMD="/usr/lib/pbuilder/pbuilder-satisfydepends-apt"
 BINDMOUNTS="$BUILDRESULT"
 OTHERMIRROR="
 deb [trusted=yes] file:$BUILDRESULT ./
-deb [trusted=yes] https://repo.kaidan.im/debpm buster main"
+deb [trusted=yes] https://repo.kaidan.im/debpm testing main"
 ALLOWUNTRUSTED=yes
 
 # create local repository if it doesn't already exist,

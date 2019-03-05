@@ -12,7 +12,7 @@ def cleanUp():
 # Find out which version of the package is in testing
 #
 
-suite = "buster" # The case for all debian-pm packages
+suite = "testing" # The case for all debian-pm packages
 package = subprocess.check_output(["dpkg-parsechangelog", "-SSource"]).decode().replace("\n", "")
 version_local = subprocess.check_output(["dpkg-parsechangelog", "-SVersion"]).decode().replace("\n", "")
 distribution = subprocess.check_output(["dpkg-parsechangelog", "-SDistribution"]).decode().replace("\n", "")
