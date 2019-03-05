@@ -88,7 +88,7 @@ get_source() {
 }
 
 install_build_deps() {
-	sudo apt build-dep . -y
+	sudo apt-get build-dep . -y
 }
 
 setup_ccache() {
@@ -121,10 +121,10 @@ add_to_repository() {
 		BINARY_PACKAGES=$(cat debian/control | grep Package | sed -e 's/Package: //')
 
 		echo "Checking repository version..."
-		sudo apt -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list update >/dev/null
+		sudo apt-get -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list update >/dev/null
 
 		for binary_package in ${BINARY_PACKAGES}; do
-			if apt -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list list | grep $binary_package | grep ${DEB_VERSION}; then
+			if apt-get -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list list | grep $binary_package | grep ${DEB_VERSION}; then
 				echo "##########################################"
 				echo "The version of this package in the repository"
 				echo "matches the version of this build. (${DEB_VERSION})"
