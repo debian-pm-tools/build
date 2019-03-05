@@ -1,7 +1,6 @@
 #!/bin/bash
 
 BUILD_ROOT="$(dirname "$(readlink -f "${0}")")"
-source "$BUILD_ROOT/functions/package-common.sh"
 
 # Set package list from command line argument (if exists)
 if [ -e "$BUILD_ROOT/packages.list" ]; then
