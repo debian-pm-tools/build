@@ -24,6 +24,7 @@ halium/gst-droid
 halium/hybris-usb
 halium/kwin
 halium/libhybris
+halium/lxc
 halium/lxc-android
 halium/nemo-gst-interfaces
 halium/pulseaudio
@@ -47,6 +48,7 @@ mainline/rpmsgexport
 plasma-mobile/kaccounts-mobile
 plasma-mobile/kwayland
 plasma-mobile/kwin
+plasma-mobile/mtp-server
 plasma-mobile/plasma-maliit-framework
 plasma-mobile/plasma-maliit-plugins
 plasma-mobile/plasma-nm
