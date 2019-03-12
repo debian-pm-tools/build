@@ -24,6 +24,7 @@ fi
 
 # Detect whether a rebuild is wanted
 if [ ! -z ${REBUILD} ]; then
+	DEB_DISTRIBUTION=$(dpkg-parsechangelog -SDistribution)
 	dch -D ${DEB_DISTRIBUTION} --rebuild "No-change rebuild"
 fi
 
