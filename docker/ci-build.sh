@@ -24,7 +24,7 @@ fi
 
 # Detect whether a rebuild is wanted
 if [ ! -z ${REBUILD} ]; then
-	dch --rebuild "No-change rebuild"
+	dch -D ${DEB_DISTRIBUTION} --rebuild "No-change rebuild"
 fi
 
 # Detect variables for use later in this script
