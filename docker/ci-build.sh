@@ -19,7 +19,9 @@ fi
 
 # Check whether we should upload to a non-default component of the repository
 if [ ! -z "${REPO_COMPONENT}" ] && [ ! "${REPO_COMPONENT}" == "main" ]; then
-	sed -i "s/Section: /Section: ${REPO_COMPONENT}\//g" debian/control
+	if ! cat debian/control | grep Section | grep "${REPO_COMPONENT}"; then
+		sed -i "s/Section: /Section: ${REPO_COMPONENT}\//g" debian/control
+	fi
 fi
 
 # Detect whether a rebuild is wanted
