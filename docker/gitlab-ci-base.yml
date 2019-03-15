@@ -10,9 +10,6 @@ cache:
     - debian/ccache/armhf
     - debian/ccache/armhf-caf
 
-before_script:
-  - apt update
-
 build:source:
   stage: build
   script:
