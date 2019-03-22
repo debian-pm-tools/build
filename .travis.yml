@@ -1,6 +1,6 @@
 services:
 - docker
-dist: xenial
+dist: bionic
 
 git:
   submodules: false
