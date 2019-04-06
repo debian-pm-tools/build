@@ -1,5 +1,6 @@
 apps/buho
 apps/glosbit
+apps/calindori
 apps/gpodder-qml
 apps/index
 apps/kaidan
@@ -60,3 +61,4 @@ qtbase
 qtdeclarative
 qtmultimedia
 qtwebengine
+mainline/mali-utgard-driver
