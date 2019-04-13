@@ -2,6 +2,7 @@ FROM debian:testing
 MAINTAINER Jonah Brüchert <jbb@kaidan.im>
 
 # Initial build essentials
+# Speed up builds, install deployment dependencies
 RUN apt update && \
     apt install -y \
         --no-install-recommends \
@@ -19,13 +20,11 @@ RUN apt update && \
         libwww-perl \
         libmoo-perl \
         libipc-run-perl \
-        lintian
-
-# Speed up builds
-RUN apt install eatmydata ccache -y
-
-# Deployment dependencies
-RUN apt install rsync openssh-client -y
+        lintian \
+        eatmydata \
+        ccache \
+        rsync \
+        openssh-client
 
 # Add debian-pm repository
 RUN echo "deb-src https://deb.debian.org/debian testing main" >> /etc/apt/sources.list && \
