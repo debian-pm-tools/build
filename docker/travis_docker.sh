@@ -1,24 +1,25 @@
 #!/usr/bin/env bash
 CONTAINER_ROOT="$(dirname "$(readlink -f "${0}")")"
 GITLAB_USERNAME="jbbgameich"
+BASE_IMAGE="registry.gitlab.com/debian-pm/tools/build/debian"
 cd $CONTAINER_ROOT
 
 build() {
 	case "$ARCH" in
 		amd64)
-			CONTAINER_BASE="jbbgameich/minideb:testing-amd64"
+			CONTAINER_BASE="${BASE_IMAGE}:testing-amd64"
 			;;
 		i386)
-			CONTAINER_BASE="jbbgameich/minideb:testing-i386"
+			CONTAINER_BASE="${BASE_IMAGE}:testing-i386"
 			;;
 		armhf)
-			CONTAINER_BASE="jbbgameich/minideb:testing-armhf"
+			CONTAINER_BASE="${BASE_IMAGE}:testing-armhf"
 			;;
 		arm64)
-			CONTAINER_BASE="jbbgameich/minideb:testing-arm64"
+			CONTAINER_BASE="${BASE_IMAGE}:testing-arm64"
 			;;
 		*)
-			CONTAINER_BASE="jbbgameich/minideb:testing-amd64"
+			CONTAINER_BASE="${BASE_IMAGE}:testing-amd64"
 			;;
 	esac
 
