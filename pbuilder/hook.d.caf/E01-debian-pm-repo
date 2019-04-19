@@ -1,12 +1,12 @@
 #!/bin/sh
 
-if ! grep debian-pm /etc/apt/sources.list; then
+if ! grep debpm /etc/apt/sources.list; then
         # Add sourceline
-        echo "deb https://debian-pm-tools.github.io/apt-repo buster main" >> /etc/apt/sources.list
+        echo "deb https://repo.kaidan.im/debpm buster main caf" >> /etc/apt/sources.list
 
 	# Download and install packaged keyring
 	TEMP_DEB="$(mktemp)" &&
-	wget -O "$TEMP_DEB" 'https://github.com/debian-pm-tools/apt-repo/raw/master/pool/main/d/debian-pm-keyring/debian-pm-archive-keyring_20180408_all.deb' &&
+	wget -O "$TEMP_DEB" 'https://github.com/debian-pm-tools/apt-repo/raw/master/pool/main/d/debian-pm-keyring/debian-pm-archive-keyring_20181021_all.deb' &&
 	dpkg -i "$TEMP_DEB"
 	rm -f "$TEMP_DEB"
 
