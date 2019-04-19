@@ -2,7 +2,7 @@
 
 Create the basepaths for the architectures you need:
 ```
-sudo mkdir /var/cache/pbuilder/testing-$ARCH
+sudo mkdir /var/cache/pbuilder/testing-$ARCH /var/cache/pbuilder/testing-$ARCH/aptcache -p
 ```
 
 Then create the build environment using the custom pbuilderrc:

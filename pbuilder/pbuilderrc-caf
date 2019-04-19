@@ -1,12 +1,12 @@
 # Mirror and release
-HOOKDIR="hook.d"
+HOOKDIR="hook.d.caf"
 DISTRIBUTION="testing"
 MIRRORSITE="https://deb.debian.org/debian"
 COMPONENTS="main contrib non-free"
 DEBOOTSTRAPOPTS="--include=ca-certificates"
 
 # Names and pathes
-NAME="$DISTRIBUTION-$ARCH"
+NAME="$DISTRIBUTION-$ARCH-caf"
 BASEPATH="/var/cache/pbuilder/$NAME/base.cow/"
 BUILDRESULT="/var/cache/pbuilder/$NAME/result"
 
@@ -29,8 +29,7 @@ PBUILDERSATISFYDEPENDSCMD="/usr/lib/pbuilder/pbuilder-satisfydepends-apt"
 # local apt repository
 BINDMOUNTS="$BUILDRESULT"
 OTHERMIRROR="
-deb [trusted=yes] file:$BUILDRESULT ./
-deb [trusted=yes] https://repo.kaidan.im/debpm testing main caf"
+deb [trusted=yes] file:$BUILDRESULT ./"
 ALLOWUNTRUSTED=yes
 
 # create local repository if it doesn't already exist,
