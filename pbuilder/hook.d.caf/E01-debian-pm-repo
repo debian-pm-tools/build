@@ -1,8 +1,8 @@
 #!/bin/sh
 
 if ! grep debpm /etc/apt/sources.list; then
-        # Add sourceline
-        echo "deb https://repo.kaidan.im/debpm buster main caf" >> /etc/apt/sources.list
+	# Add sourceline
+	echo "deb https://repo.kaidan.im/debpm buster main caf" >> /etc/apt/sources.list
 
 	# Download and install packaged keyring
 	TEMP_DEB="$(mktemp)" &&
