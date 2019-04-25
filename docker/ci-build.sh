@@ -127,8 +127,8 @@ add_to_repository() {
 		sudo apt-get -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list update >/dev/null
 
 		for binary_package in ${BINARY_PACKAGES}; do
-			if apt-cache -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list show ${binary_package} | grep "Version: ${DEB_VERSION}"; then
-				echo "##########################################"
+			if apt-cache -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list show ${binary_package} | grep "Version: ${DEB_VERSION}" >/dev/null; then
+				echo "#### ${binary_package} ###"
 				echo "The version of this package in the repository"
 				echo "matches the version of this build. (${DEB_VERSION})"
 				echo "To release a new build, create a new changelog entry."
