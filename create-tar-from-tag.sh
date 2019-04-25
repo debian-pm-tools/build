@@ -33,7 +33,7 @@ PKG_GIT_VERSION=$(echo $GIT_TAG | sed 's/v//g')
 
 # Check if snapshot does already exists
 [ -f $BUILD_ROOT/sources/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz ] &&
-	echo "ERROR: $BUILD_ROOT/sources/${PACKAGE}_$PKG_VERSION.orig.tar.xz already exists" &&
+	echo "ERROR: $BUILD_ROOT/sources/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz already exists" &&
 	exit 1
 
 # Debug output
@@ -56,7 +56,7 @@ git -C "$BUILD_ROOT/sources/$PACKAGE" checkout tags/$GIT_TAG
 (
 cd "$BUILD_ROOT/sources/$PACKAGE"
 bash "$BUILD_ROOT/git-archive-all.sh" \
-	--prefix $PACKAGE-$PKG_VERSION/ \
+	--prefix $PACKAGE-$PKG_GIT_VERSION/ \
 	--format tar -- - | xz >"$BUILD_ROOT/sources/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz"
 )
 
@@ -65,4 +65,17 @@ bash "$BUILD_ROOT/git-archive-all.sh" \
 	cd $BUILD_ROOT/packages/$PKG_PATH
 	origtargz --clean
 	origtargz --path $BUILD_ROOT/sources/
+)
+
+# Check if the variables for dch are set
+[ -z "$NAME" ] && error_namenotset
+[ -z "$EMAIL" ] && error_namenotset
+
+# Create new changelog entry and unpack tarball
+(
+	cd $BUILD_ROOT/packages/$PKG_PATH
+
+	dch -v $PKG_GIT_VERSION-1 -b
+
+	origtargz --tar-only --path $BUILD_ROOT/sources/
 )
