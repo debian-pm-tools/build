@@ -1,5 +1,11 @@
 # Set up cowbuilder
 
+Make sure you have cowbuilder and mmdebstrap installed:
+
+```
+sudo apt install cowbuilder mmdebstrap
+```
+
 Create the basepaths for the architectures you need:
 ```
 sudo mkdir /var/cache/pbuilder/testing-$ARCH /var/cache/pbuilder/testing-$ARCH/aptcache -p

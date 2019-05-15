@@ -2,8 +2,10 @@
 HOOKDIR="hook.d.caf"
 DISTRIBUTION="testing"
 MIRRORSITE="https://deb.debian.org/debian"
+DEBOOTSTRAP=mmdebstrap
 COMPONENTS="main contrib non-free"
-DEBOOTSTRAPOPTS="--include=ca-certificates"
+unset DEBOOTSTRAPOPTS
+DEBOOTSTRAPOPTS=(--variant=buildd --include=ca-certificates)
 
 # Names and pathes
 NAME="$DISTRIBUTION-$ARCH-caf"
