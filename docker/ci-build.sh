@@ -73,7 +73,7 @@ get_source() {
 	ORIG_TAR_NAME="${DEB_SOURCE}_${DEB_VERSION_UPSTREAM}.orig.tar.xz"
 	ORIG_TAR_NAME_ENCODED=$(urlencode "${ORIG_TAR_NAME}")
 
-	if curl --head --fail --silent "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}" >/dev/null; then
+	if [[ $(wget -S --spider "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}" 2>&1 | grep 'HTTP/1.1 200 OK') ]] >/dev/null; then
 		echo "Downloading source from mirror ..."
 		wget --continue -O "../${ORIG_TAR_NAME}" "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}"
 	elif [ -f debian/watch ]; then
