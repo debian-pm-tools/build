@@ -1,0 +1,33 @@
+image: debian:buster
+before_script:
+ - apt update
+ - apt install gnupg2 software-properties-common -y --no-install-recommends
+ - echo "deb http://ppa.launchpad.net/projectatomic/ppa/ubuntu bionic main" >> /etc/apt/sources.list
+ - apt-key adv --recv 8BECF1637AD8C79D
+ - apt update
+ - apt install podman qemu-user-static iptables -y
+
+container:amd64:
+  script:
+   - bash docker/travis_podman.sh build
+  variables:
+    ARCH: amd64
+
+container:i386:
+  script: 
+   - bash docker/travis_podman.sh build
+  variables:
+    ARCH: i386
+
+container:arm64:
+  script:
+   - bash docker/travis_podman.sh build
+  variables:
+    ARCH: arm64
+
+container:armhf:
+  script:
+   - bash docker/travis_podman.sh build
+  variables:
+    ARCH: armhf
+

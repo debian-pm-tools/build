@@ -24,11 +24,11 @@ build() {
 		esac
 
 	sed -i "/FROM/c\FROM ${CONTAINER_BASE}" Dockerfile
-	podman build -t "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}" .
+	podman build --storage-driver vfs -t "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}" .
 }
 
 push() {
-	podman push \
+	podman push --storage-driver vfs \
 		--creds="$GITLAB_USERNAME" \
 		"registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}" \
 		"docker://registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}"
