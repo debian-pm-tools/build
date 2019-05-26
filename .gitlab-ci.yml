@@ -10,28 +10,24 @@ before_script:
 container:amd64:
   script:
    - bash docker/travis_podman.sh build
-   - bash docker/travis_podman.sh push
   variables:
     ARCH: amd64
 
 container:i386:
   script: 
    - bash docker/travis_podman.sh build
-   - bash docker/travis_podman.sh push
   variables:
     ARCH: i386
 
 container:arm64:
   script:
    - bash docker/travis_podman.sh build
-   - bash docker/travis_podman.sh push
   variables:
     ARCH: arm64
 
 container:armhf:
   script:
    - bash docker/travis_podman.sh build
-   - bash docker/travis_podman.sh push
   variables:
     ARCH: armhf
 
