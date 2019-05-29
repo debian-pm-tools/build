@@ -13,20 +13,28 @@ parser = argparse.ArgumentParser(description="json wrapper for uscan")
 parser.add_argument("-f", "--field",
                     help="Field to output. All are printed as json if empty"
                     )
-parser.add_argument("-c", "--currentversion", action="store_true", default=False,
-                    help="Show information about the current, not the latest version",
+parser.add_argument("-d", "--download", action="store_true", default=False,
+                    help="Download the new upstream release, not only show information about it"
                     )
-args = parser.parse_args()
+args, pass_args = parser.parse_known_args()
 
 # Run uscan subprocess
-uscancommand = ["uscan", "--dehs", "--report"]
-if args.currentversion:
-	uscancommand.append("--download-current-version")
+uscancommand = ["uscan", "--dehs"] + pass_args
+
+if not args.download:
+	uscancommand.append("--report")
+
 try:
 	uscanout = subprocess.check_output(uscancommand).decode()
 except subprocess.CalledProcessError as error:
 	uscanout = error.output
-uscandict = xmltodict.parse(uscanout)
+
+try:
+	uscandict = xmltodict.parse(uscanout)
+except:
+	print("Could not parse uscan output:")
+	for line in uscanout.split("\n"):
+		print("#" + " " * 4 + line)
 
 # Print result
 if args.field:
