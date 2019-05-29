@@ -1,5 +1,6 @@
 image: debian:buster
 before_script:
+ - rm /etc/apt/apt.conf.d/docker-clean
  - apt update
  - apt install gnupg2 software-properties-common -y --no-install-recommends
  - echo "deb http://ppa.launchpad.net/projectatomic/ppa/ubuntu bionic main" >> /etc/apt/sources.list
