@@ -7,6 +7,10 @@ before_script:
  - apt update
  - apt install podman qemu-user-static iptables -y
 
+cache:
+  paths:
+    - /var/cache/apt/archives/
+
 container:amd64:
   script:
    - bash docker/travis_podman.sh build
