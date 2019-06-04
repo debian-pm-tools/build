@@ -48,13 +48,19 @@ if [ -d "$BUILD_ROOT/sources/$PACKAGE" ]; then
 
 	git -C "$BUILD_ROOT/sources/$PACKAGE" remote set-url origin $GIT_REPO
 	git -C "$BUILD_ROOT/sources/$PACKAGE" fetch origin
-	git -C "$BUILD_ROOT/sources/$PACKAGE" checkout origin/$GIT_BRANCH
+	git -C "$BUILD_ROOT/sources/$PACKAGE" checkout $GIT_BRANCH
+	git -C "$BUILD_ROOT/sources/$PACKAGE" reset origin/$GIT_BRANCH --hard
 else
 	git clone --depth 1 $GIT_REPO "$BUILD_ROOT/sources/$PACKAGE" -b $GIT_BRANCH
 fi
 
+# Try to fetch translations
+"$BUILD_ROOT/kde-fetch-i18n.py" "$BUILD_ROOT/sources/$PACKAGE"
+git -C "$BUILD_ROOT/sources/$PACKAGE" add po CMakeLists.txt
+git -C "$BUILD_ROOT/sources/$PACKAGE" commit -m "Inject translations"
+
 # Export repository into tar
-git -C "$BUILD_ROOT/sources/$PACKAGE" archive origin/$GIT_BRANCH \
+git -C "$BUILD_ROOT/sources/$PACKAGE" archive $GIT_BRANCH \
 	--prefix $PACKAGE-$PKG_GIT_VERSION/ \
 	--format=tar | xz >"$BUILD_ROOT/sources/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz"
 
