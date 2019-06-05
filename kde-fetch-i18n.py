@@ -82,7 +82,7 @@ def main():
 
 	if len(message_files) == 0:
 		print("No Messages.sh files found, cannot continue")
-		return
+		sys.exit(1)
 
 	for file in message_files:
 		# Make sure path returned from find is not empty
@@ -109,7 +109,7 @@ def main():
 
 			for lang in LANGUAGES:
 				mkdir_if_neccesary(PODIR + "/" + lang)
-				
+
 				for file in files:
 					request = get("https://websvn.kde.org/*checkout*/trunk/l10n-kf5/{}/messages/{}/{}".format(lang, component, file))
 

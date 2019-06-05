@@ -53,9 +53,9 @@ fi
 git -C "$BUILD_ROOT/sources/$PACKAGE" checkout tags/$GIT_TAG
 
 # Try to fetch translations
-"$BUILD_ROOT/kde-fetch-i18n.py" "$BUILD_ROOT/sources/$PACKAGE"
-git -C "$BUILD_ROOT/sources/$PACKAGE" add po CMakeLists.txt
-git -C "$BUILD_ROOT/sources/$PACKAGE" commit -m "Inject translations"
+"$BUILD_ROOT/kde-fetch-i18n.py" "$BUILD_ROOT/sources/$PACKAGE" && \
+       git -C "$BUILD_ROOT/sources/$PACKAGE" add po CMakeLists.txt && \
+       git -C "$BUILD_ROOT/sources/$PACKAGE" commit -m "Inject translations"
 
 # Export repository into tar
 (
