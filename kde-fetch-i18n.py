@@ -25,15 +25,15 @@ def detect_component(languages, module):
 					print("Got component", item["name"], "in", lang)
 					return item["name"]
 
-def detect_files(languages, component, module):
+def detect_files(component, module):
+	lang = "es" # Files seem to be the same in all languages, only check one language
 	files = []
 
-	for lang in languages:
-		soup = BeautifulSoup(get("https://websvn.kde.org/trunk/l10n-kf5/{}/messages/{}".format(lang, component)).text, features="lxml")
+	soup = BeautifulSoup(get("https://websvn.kde.org/trunk/l10n-kf5/{}/messages/{}".format(lang, component)).text, features="lxml")
 
-		for a in soup.findAll("a", {"title": "View file revision log"}):
-			if module in a["name"]:
-				files.append(a["name"])
+	for a in soup.findAll("a", {"title": "View file revision log"}):
+		if module in a["name"]:
+			files.append(a["name"])
 
 	print("Got files", set(files))
 	return set(files)
@@ -105,7 +105,7 @@ def main():
 			component = detect_component(["de", "es"] + LANGUAGES, module) # Prefer most common languages to speed up search
 
 			print("Detecting files to download ...")
-			files = detect_files(LANGUAGES, component, module)
+			files = detect_files(component, module)
 
 			for lang in LANGUAGES:
 				mkdir_if_neccesary(PODIR + "/" + lang)
