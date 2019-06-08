@@ -93,7 +93,7 @@ def main():
 
 		for line in messagessh:
 			# Skip lines not writing to a message catalog
-			if not "-o" in line:
+			if not "-o $podir" in line:
 				continue
 
 			# Extract module name
