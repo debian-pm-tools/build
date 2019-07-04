@@ -154,6 +154,15 @@ add_to_repository() {
 	fi
 }
 
+upload_cache() {
+	if [ ! -z ${CCACHE_DIR} ] && [ ! -z ${CCACHE_DEPLOY_PATH} ]; then
+		rsync -avzpr -e \
+			"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
+			${CCACHE_DIR} \
+			"${DEPLOY_ACCOUNT}:${CCACHE_DEPLOY_PATH}"
+	fi
+}
+
 echo
 echo "============= Package info ==========="
 print_info
@@ -196,3 +205,7 @@ if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 		echo "Package isn't released yet, change UNRELEASED to unstable to add it to the repository"
 	fi
 fi
+
+echo
+echo "=========== Upload cache ==========="
+upload_cache
