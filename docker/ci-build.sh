@@ -143,6 +143,9 @@ add_to_repository() {
 		echo ${DEPLOY_KEY_PUBLIC} | base64 -d | xz -d > ~/.ssh/id_rsa.pub
 		chmod 400 ~/.ssh/id_rsa
 
+		# Start proxy (TODO remove)
+		service tor start
+
 		ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb,orig.*,debian*,xz,gz,tar*,buildinfo,changes} 2>/dev/null | uniq || true)
 
 		rsync -avzp -e \
