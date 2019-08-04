@@ -94,14 +94,22 @@ install_build_deps() {
 	sudo apt-get build-dep . -y
 }
 
-setup_ccache() {
-	export PATH=/usr/lib/ccache/:$PATH
-	if [ ! -z ${DEB_BUILD_PROFILES} ]; then
-		export CCACHE_DIR=${PACKAGE_ROOT}/debian/ccache/${DEB_HOST_ARCH}-${DEB_BUILD_PROFILES}
-	else
-		export CCACHE_DIR=${PACKAGE_ROOT}/debian/ccache/${DEB_HOST_ARCH}
-	fi
-	mkdir -p ${CCACHE_DIR}
+setup_distcc() {
+	COMPILERS_TO_REPLACE=$(ls /usr/lib/distcc/ | grep -v ${DEB_HOST_MULTIARCH} | grep -v distccwrapper)
+	for bin in ${COMPILERS_TO_REPLACE}; do
+		rm /usr/lib/distcc/${bin};
+	done
+
+	# Create distcc wrapper
+	echo '#!/usr/bin/env bash' > /usr/lib/distcc/distccwrapper
+	echo "/usr/lib/distcc/${DEB_HOST_MULTIARCH}-g"'${0:$[-2]} "$@"' >> /usr/lib/distcc/distccwrapper
+	chmod +x /usr/lib/distcc/distccwrapper
+
+	for bin in ${COMPILERS_TO_REPLACE}; do
+		ln -s /usr/lib/distcc/distccwrapper /usr/lib/distcc/${bin}
+	done
+
+	export PATH="/usr/lib/distcc/:$PATH"
 }
 
 build() {
@@ -177,12 +185,6 @@ get_source
 echo
 echo "===== Install build-dependencies ====="
 install_build_deps
-
-if [ ${BUILD_TYPE} == "binary" ]; then
-	echo
-	echo "============ Set up ccache ==========="
-	setup_ccache
-fi
 
 echo
 echo "===== Build $BUILD_TYPE package ======="
