@@ -24,7 +24,8 @@ RUN apt update && \
         eatmydata \
         ccache \
         rsync \
-        openssh-client
+        openssh-client \
+        distcc
 
 # configure apt
 RUN echo "deb-src https://deb.debian.org/debian testing main" >> /etc/apt/sources.list && \
@@ -39,4 +40,3 @@ COPY ci-config.sh /usr/bin/ci-config
 
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+"$LD_LIBRARY_PATH:"}/usr/lib/libeatmydata \
     LD_PRELOAD=${LD_PRELOAD:+"$LD_PRELOAD "}libeatmydata.so \
-    PATH=/usr/lib/ccache/:$PATH

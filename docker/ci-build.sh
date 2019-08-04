@@ -187,6 +187,10 @@ echo "===== Install build-dependencies ====="
 install_build_deps
 
 echo
+echo "============ Set up distcc ==========="
+setup_distcc
+
+echo
 echo "===== Build $BUILD_TYPE package ======="
 build $BUILD_TYPE
 
@@ -210,7 +214,3 @@ if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 		echo "Package isn't released yet, change UNRELEASED to unstable to add it to the repository"
 	fi
 fi
-
-echo
-echo "=========== Upload cache ==========="
-upload_cache
