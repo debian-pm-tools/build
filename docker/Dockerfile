@@ -24,9 +24,7 @@ RUN apt update && \
         eatmydata \
         ccache \
         rsync \
-        openssh-client \
-        tor \
-        netcat-openbsd
+        openssh-client
 
 # configure apt
 RUN echo "deb-src https://deb.debian.org/debian testing main" >> /etc/apt/sources.list && \
@@ -42,7 +40,3 @@ COPY ci-config.sh /usr/bin/ci-config
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+"$LD_LIBRARY_PATH:"}/usr/lib/libeatmydata \
     LD_PRELOAD=${LD_PRELOAD:+"$LD_PRELOAD "}libeatmydata.so \
     PATH=/usr/lib/ccache/:$PATH
-
-# WORKAROUND to get package upload working behind blocked networks
-RUN mkdir -p ~/.ssh/ && echo "ProxyCommand /bin/nc.openbsd -X 5 -x 127.0.0.1:9050 %h %p" > ~/.ssh/config
-CMD service tor start && bash
