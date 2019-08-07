@@ -94,6 +94,17 @@ install_build_deps() {
 	sudo apt-get build-dep . -y
 }
 
+# Currently unused, there is no place were we can store the cache right now.
+setup_ccache() {
+	export PATH=/usr/lib/ccache/:$PATH
+	if [ ! -z ${DEB_BUILD_PROFILES} ]; then
+			export CCACHE_DIR=${PACKAGE_ROOT}/debian/ccache/${DEB_HOST_ARCH}-${DEB_BUILD_PROFILES}
+	else
+			export CCACHE_DIR=${PACKAGE_ROOT}/debian/ccache/${DEB_HOST_ARCH}
+	fi
+	mkdir -p ${CCACHE_DIR}
+}
+
 setup_distcc() {
 	COMPILERS_TO_REPLACE=$(ls /usr/lib/distcc/ | grep -v ${DEB_HOST_MULTIARCH} | grep -v distccwrapper)
 	for bin in ${COMPILERS_TO_REPLACE}; do
@@ -111,6 +122,8 @@ setup_distcc() {
 
 	export DISTCC_HOSTS="$(/sbin/ip route|awk '/default/ { print $3 }') +zeroconf"
 	export PATH="/usr/lib/distcc/:$PATH"
+	export DISTCC_VERBOSE=1
+	distcc --show-hosts
 }
 
 build() {
@@ -166,6 +179,7 @@ add_to_repository() {
 	fi
 }
 
+# Currently unused, there is no place were we can store the cache right now.
 upload_cache() {
 	if [ ! -z ${CCACHE_DIR} ] && [ ! -z ${CCACHE_DEPLOY_PATH} ]; then
 		rsync -avzpr -e \
