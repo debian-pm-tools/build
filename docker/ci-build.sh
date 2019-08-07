@@ -113,7 +113,7 @@ setup_distcc() {
 
 	# Create distcc wrapper
 	echo '#!/usr/bin/env bash' > /usr/lib/distcc/distccwrapper
-	echo "/usr/lib/distcc/${DEB_HOST_MULTIARCH}-g"'${0:$[-2]} "$@"' >> /usr/lib/distcc/distccwrapper
+	echo "/usr/lib/distcc/${DEB_HOST_GNU_TYPE}-g"'${0:$[-2]} "$@"' >> /usr/lib/distcc/distccwrapper
 	chmod +x /usr/lib/distcc/distccwrapper
 
 	for bin in ${COMPILERS_TO_REPLACE}; do
