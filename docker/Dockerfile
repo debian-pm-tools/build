@@ -22,10 +22,13 @@ RUN apt update && \
         libipc-run-perl \
         lintian \
         eatmydata \
-        ccache \
         rsync \
         openssh-client \
-        distcc
+        distcc \
+        # For distcc
+        avahi-daemon \
+        avahi-discover \
+        libnss-mdns
 
 # configure apt
 RUN echo "deb-src https://deb.debian.org/debian testing main" >> /etc/apt/sources.list && \

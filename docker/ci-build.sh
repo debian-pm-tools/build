@@ -109,6 +109,7 @@ setup_distcc() {
 		ln -s /usr/lib/distcc/distccwrapper /usr/lib/distcc/${bin}
 	done
 
+	export DISTCC_HOSTS="$(/sbin/ip route|awk '/default/ { print $3 }') +zeroconf"
 	export PATH="/usr/lib/distcc/:$PATH"
 }
 
