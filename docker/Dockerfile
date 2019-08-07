@@ -28,7 +28,8 @@ RUN apt update && \
         # For distcc
         avahi-daemon \
         avahi-discover \
-        libnss-mdns
+        libnss-mdns \
+        iproute2
 
 # configure apt
 RUN echo "deb-src https://deb.debian.org/debian testing main" >> /etc/apt/sources.list && \
