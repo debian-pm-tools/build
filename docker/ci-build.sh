@@ -131,7 +131,8 @@ build() {
 }
 
 check() {
-	lintian || echo -e '\033[31mlintian checks failed! Please check the package and fix them!\033[0m'
+	echo "Skipping lintian checks (used to cause huge deployment delays recently) #FIXME"
+	#lintian || echo -e '\033[31mlintian checks failed! Please check the package and fix them!\033[0m'
 }
 
 add_to_repository() {
