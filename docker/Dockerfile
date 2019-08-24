@@ -29,7 +29,8 @@ RUN apt update && \
         avahi-daemon \
         avahi-discover \
         libnss-mdns \
-        iproute2
+        iproute2 \
+        iputils-ping
 
 # configure apt
 RUN echo "deb-src https://deb.debian.org/debian testing main" >> /etc/apt/sources.list && \
@@ -38,6 +39,11 @@ RUN echo "deb-src https://deb.debian.org/debian testing main" >> /etc/apt/source
     wget -qO - https://gitlab.com/debian-pm/debian-pm-keyring/raw/master/repo.kaidan.im.asc | apt-key add - && \
     apt update && \
     apt install debian-pm-archive-keyring
+
+# Build distcc
+RUN apt build-dep distcc -y && git clone https://github.com/distcc/distcc && \
+    cd distcc && ./autogen.sh && ./configure --prefix=/usr/ && \
+    make install
 
 COPY ci-build.sh /usr/bin/ci-build
 COPY ci-config.sh /usr/bin/ci-config
