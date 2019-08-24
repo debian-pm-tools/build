@@ -120,7 +120,18 @@ setup_distcc() {
 		ln -s /usr/lib/distcc/distccwrapper /usr/lib/distcc/${bin}
 	done
 
-	export DISTCC_HOSTS="$(/sbin/ip route|awk '/default/ { print $3 }') +zeroconf localhost"
+	distcc_ips="$(/sbin/ip route|awk '/default/ { print $3 }') 192.168.178.33 192.168.178.20"
+
+        # Append actually available hosts to DISTCC_HOSTS
+	for ip in $distcc_ips; do
+		if ping -c 1 $ip; then
+			export DISTCC_HOSTS="$DISTCC_HOSTS $ip"
+		fi
+	done
+
+	# Append generic addresses
+	export DISTCC_HOSTS="$DISTCC_HOSTS +zeroconf localhost"
+
 	export PATH="/usr/lib/distcc/:$PATH"
 	export DISTCC_VERBOSE=1
 	distcc --show-hosts
