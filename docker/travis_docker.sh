@@ -13,21 +13,13 @@ build() {
 
 	sed -i "/FROM/c\FROM ${CONTAINER_BASE}" Dockerfile
 
-	if [ $DIST = "testing" ]; then
-		sudo docker build -t "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}" .
-	else
-		sudo docker build -t "registry.gitlab.com/debian-pm/tools/build:${DIST}-${ARCH}" .
-	fi
+	sudo docker build -t "registry.gitlab.com/debian-pm/tools/build:${DIST}-${ARCH}" .
 }
 
 push() {
 	echo "$GITLAB_TOKEN" | sudo docker login -u "$GITLAB_USERNAME" --password-stdin registry.gitlab.com
 
-	if [ $DIST = "testing" ]; then
-		sudo docker push "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}"
-	else
-		sudo docker push "registry.gitlab.com/debian-pm/tools/build:${DIST}-${ARCH}"
-	fi
+	sudo docker push "registry.gitlab.com/debian-pm/tools/build:${DIST}-${ARCH}"
 }
 
 $1
