@@ -11,7 +11,12 @@ build() {
 	CONTAINER_BASE="${BASE_IMAGE}:${DIST}-${ARCH}"
 
 	sed -i "/FROM/c\FROM ${CONTAINER_BASE}" Dockerfile
-	podman build --storage-driver vfs -t "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}" .
+
+	if [ $DIST = "testing" ]; then
+		podman build --storage-driver vfs -t "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}" .
+	else
+		podman build --storage-driver vfs -t "registry.gitlab.com/debian-pm/tools/build:${DIST}-${ARCH}" .
+	fi
 }
 
 push() {

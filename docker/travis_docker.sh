@@ -12,7 +12,12 @@ build() {
 	CONTAINER_BASE="${BASE_IMAGE}:${DIST}-${ARCH}"
 
 	sed -i "/FROM/c\FROM ${CONTAINER_BASE}" Dockerfile
-	sudo docker build -t "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}" .
+
+	if [ $DIST = "testing" ]; then
+		sudo docker build -t "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}" .
+	else
+		sudo docker build -t "registry.gitlab.com/debian-pm/tools/build:${DIST}-${ARCH}" .
+	fi
 }
 
 push() {
