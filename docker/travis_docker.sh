@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 CONTAINER_ROOT="$(dirname "$(readlink -f "${0}")")"
 GITLAB_USERNAME="jbbgameich"
 BASE_IMAGE="registry.gitlab.com/debian-pm/tools/build/debian"
@@ -17,7 +18,11 @@ build() {
 push() {
 	echo "$GITLAB_TOKEN" | sudo docker login -u "$GITLAB_USERNAME" --password-stdin registry.gitlab.com
 
-	sudo docker push "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}"
+	if [ $DIST = "testing" ]; then
+		sudo docker push "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}"
+	else
+		sudo docker push "registry.gitlab.com/debian-pm/tools/build:${DIST}-${ARCH}"
+	fi
 }
 
 $1
