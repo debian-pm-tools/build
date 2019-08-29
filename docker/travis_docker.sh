@@ -2,26 +2,13 @@
 CONTAINER_ROOT="$(dirname "$(readlink -f "${0}")")"
 GITLAB_USERNAME="jbbgameich"
 BASE_IMAGE="registry.gitlab.com/debian-pm/tools/build/debian"
+DIST="${DIST:-testing}"
+ARCH="${ARCH:-amd64}"
+
 cd $CONTAINER_ROOT
 
 build() {
-	case "$ARCH" in
-		amd64)
-			CONTAINER_BASE="${BASE_IMAGE}:testing-amd64"
-			;;
-		i386)
-			CONTAINER_BASE="${BASE_IMAGE}:testing-i386"
-			;;
-		armhf)
-			CONTAINER_BASE="${BASE_IMAGE}:testing-armhf"
-			;;
-		arm64)
-			CONTAINER_BASE="${BASE_IMAGE}:testing-arm64"
-			;;
-		*)
-			CONTAINER_BASE="${BASE_IMAGE}:testing-amd64"
-			;;
-	esac
+	CONTAINER_BASE="${BASE_IMAGE}:${DIST}-${ARCH}"
 
 	sed -i "/FROM/c\FROM ${CONTAINER_BASE}" Dockerfile
 	sudo docker build -t "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}" .
