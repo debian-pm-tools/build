@@ -17,10 +17,6 @@ build() {
 push() {
 	echo $GITLAB_TOKEN | podman login registry.gitlab.com --password-stdin -u $GITLAB_USERNAME
 
-	podman push --storage-driver vfs \
-		"registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}" \
-		"docker://registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}"
-
        if [ $DIST = "testing" ]; then
 		podman push --storage-driver vfs \
 		        "registry.gitlab.com/debian-pm/tools/build:latest-${ARCH}" \
