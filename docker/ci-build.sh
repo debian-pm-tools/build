@@ -228,6 +228,8 @@ if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "halium-7.1" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "devkit" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "pinephone" ]] || \
+	[[ ${CI_COMMIT_REF_NAME} == "buster" ]] || \
+	[[ ${CI_COMMIT_REF_NAME} == "gemian" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "debian-unstable" ]]; then # For mesa
 
 	if ! [ ${DEB_DISTRIBUTION} == "UNRELEASED" ]; then
