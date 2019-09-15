@@ -106,35 +106,37 @@ setup_ccache() {
 }
 
 setup_distcc() {
-	COMPILERS_TO_REPLACE=$(ls /usr/lib/distcc/ | grep -v ${DEB_HOST_GNU_TYPE} | grep -v distccwrapper)
-	for bin in ${COMPILERS_TO_REPLACE}; do
-		rm /usr/lib/distcc/${bin};
-	done
+	if [ ! find . -name "configure.ac" ]; then
+		COMPILERS_TO_REPLACE=$(ls /usr/lib/distcc/ | grep -v ${DEB_HOST_GNU_TYPE} | grep -v distccwrapper)
+		for bin in ${COMPILERS_TO_REPLACE}; do
+			rm /usr/lib/distcc/${bin};
+		done
 
-	# Create distcc wrapper
-	echo '#!/usr/bin/env bash' > /usr/lib/distcc/distccwrapper
-	echo "/usr/lib/distcc/${DEB_HOST_GNU_TYPE}-g"'${0:$[-2]} "$@"' >> /usr/lib/distcc/distccwrapper
-	chmod +x /usr/lib/distcc/distccwrapper
+		# Create distcc wrapper
+		echo '#!/usr/bin/env bash' > /usr/lib/distcc/distccwrapper
+		echo "/usr/lib/distcc/${DEB_HOST_GNU_TYPE}-g"'${0:$[-2]} "$@"' >> /usr/lib/distcc/distccwrapper
+		chmod +x /usr/lib/distcc/distccwrapper
 
-	for bin in ${COMPILERS_TO_REPLACE}; do
-		ln -s /usr/lib/distcc/distccwrapper /usr/lib/distcc/${bin}
-	done
+		for bin in ${COMPILERS_TO_REPLACE}; do
+			ln -s /usr/lib/distcc/distccwrapper /usr/lib/distcc/${bin}
+		done
 
-	distcc_ips="$(/sbin/ip route|awk '/default/ { print $3 }') 192.168.178.33 192.168.178.20"
+		distcc_ips="$(/sbin/ip route|awk '/default/ { print $3 }') 192.168.178.33 192.168.178.20"
 
-        # Append actually available hosts to DISTCC_HOSTS
-	for ip in $distcc_ips; do
-		if ping -c 1 $ip; then
-			export DISTCC_HOSTS="$DISTCC_HOSTS $ip"
-		fi
-	done
+			# Append actually available hosts to DISTCC_HOSTS
+		for ip in $distcc_ips; do
+			if ping -c 1 $ip; then
+				export DISTCC_HOSTS="$DISTCC_HOSTS $ip"
+			fi
+		done
 
-	# Append generic addresses
-	export DISTCC_HOSTS="$DISTCC_HOSTS +zeroconf localhost"
+		# Append generic addresses
+		export DISTCC_HOSTS="$DISTCC_HOSTS +zeroconf localhost"
 
-	export PATH="/usr/lib/distcc/:$PATH"
-	export DISTCC_VERBOSE=1
-	distcc --show-hosts
+		export PATH="/usr/lib/distcc/:$PATH"
+		export DISTCC_VERBOSE=1
+		distcc --show-hosts
+	fi
 }
 
 build() {
