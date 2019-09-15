@@ -40,11 +40,6 @@ RUN echo "deb-src https://deb.debian.org/debian $(lsb_release -cs) main" >> /etc
     apt update && \
     apt install debian-pm-archive-keyring
 
-# Build distcc
-RUN apt build-dep distcc -y && git clone https://github.com/distcc/distcc && \
-    cd distcc && ./autogen.sh && ./configure --prefix=/usr/ && \
-    make install
-
 COPY ci-build.sh /usr/bin/ci-build
 COPY ci-config.sh /usr/bin/ci-config
 
