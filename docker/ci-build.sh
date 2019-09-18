@@ -140,7 +140,7 @@ setup_distcc() {
 }
 
 build() {
-	dpkg-buildpackage -sa -S
+	dpkg-buildpackage -S --no-sign
 	dpkg-buildpackage -sa --build=$BUILD_TYPE
 }
 
