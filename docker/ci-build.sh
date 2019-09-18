@@ -140,6 +140,7 @@ setup_distcc() {
 }
 
 build() {
+	dpkg-buildpackage -sa -S
 	dpkg-buildpackage -sa --build=$BUILD_TYPE
 }
 
@@ -179,7 +180,11 @@ add_to_repository() {
 		echo ${DEPLOY_KEY_PUBLIC} | base64 -d | xz -d > ~/.ssh/id_rsa.pub
 		chmod 400 ~/.ssh/id_rsa
 
-		ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb,orig.*,debian*,xz,gz,tar*,buildinfo,changes} 2>/dev/null | uniq || true)
+		if [ ${BUILD_TYPE} == "binary" ]; then
+			ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{deb,buildinfo,changes} 2>/dev/null | uniq || true)
+		else
+			ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb,orig.*,debian*,xz,gz,tar*,buildinfo,changes} 2>/dev/null | uniq || true)
+		fi
 
 		rsync -avzp -e \
 			"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
