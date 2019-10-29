@@ -36,4 +36,4 @@ matrix:
     - env: ARCH=i386
 
     # For gemian
-    - env: DIST=buster ARCH=arm64
+    #- env: DIST=buster ARCH=arm64
