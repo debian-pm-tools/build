@@ -1,4 +1,4 @@
-FROM debian:testing
+FROM registry.gitlab.com/debian-pm/tools/build/debian:testing-amd64
 MAINTAINER Jonah Brüchert <jbb@kaidan.im>
 
 # Initial build essentials
@@ -26,8 +26,6 @@ RUN apt update && \
         openssh-client \
         distcc \
         # For distcc
-        avahi-daemon \
-        avahi-discover \
         libnss-mdns \
         iproute2 \
         iputils-ping

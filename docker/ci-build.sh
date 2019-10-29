@@ -131,7 +131,7 @@ setup_distcc() {
 		done
 
 		# Append generic addresses
-		export DISTCC_HOSTS="$DISTCC_HOSTS +zeroconf localhost"
+		export DISTCC_HOSTS="$DISTCC_HOSTS localhost"
 
 		export PATH="/usr/lib/distcc/:$PATH"
 		export DISTCC_VERBOSE=1
