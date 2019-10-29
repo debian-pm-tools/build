@@ -106,7 +106,7 @@ setup_ccache() {
 }
 
 setup_distcc() {
-	if ! find . -name "configure.ac"; then
+	if [ -z $(find . -name "configure.ac") ]; then
 		COMPILERS_TO_REPLACE=$(ls /usr/lib/distcc/ | grep -v ${DEB_HOST_GNU_TYPE} | grep -v distccwrapper)
 		for bin in ${COMPILERS_TO_REPLACE}; do
 			rm /usr/lib/distcc/${bin};
@@ -123,7 +123,7 @@ setup_distcc() {
 
 		distcc_ips="$(/sbin/ip route|awk '/default/ { print $3 }') 192.168.178.33 192.168.178.20"
 
-			# Append actually available hosts to DISTCC_HOSTS
+		# Append actually available hosts to DISTCC_HOSTS
 		for ip in $distcc_ips; do
 			if ping -c 1 $ip; then
 				export DISTCC_HOSTS="$DISTCC_HOSTS $ip"
