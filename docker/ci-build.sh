@@ -106,7 +106,7 @@ setup_ccache() {
 }
 
 setup_distcc() {
-	if [ -z $(find . -name "configure.ac") ]; then
+	if [ -z $(find . -maxdepth 1 -name "configure.ac") ]; then
 		dpkg-reconfigure distcc
 
 		COMPILERS_TO_REPLACE=$(ls /usr/lib/distcc/ | grep -v ${DEB_HOST_GNU_TYPE} | grep -v distccwrapper)
