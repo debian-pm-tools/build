@@ -29,7 +29,7 @@ RUN apt update && \
         libnss-mdns \
         iproute2 \
         iputils-ping && \
-    rm /usr/share/doc -r
+    rm /usr/share/{doc,man,pixmaps} -r
 
 # configure apt
 RUN echo "deb-src https://deb.debian.org/debian $(lsb_release -cs) main" >> /etc/apt/sources.list && \
