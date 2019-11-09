@@ -88,8 +88,8 @@ get_source() {
 
 	origtargz --clean
 	# Delete asc files after they have been verified
-	if [ -f "../*.asc" ]; then
-		rm "../*.asc"
+	if [ -f $(ls ../*.asc) ]; then
+		rm ../*.asc
 	fi
 	origtargz --unpack=yes
 }
