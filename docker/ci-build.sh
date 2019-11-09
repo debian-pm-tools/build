@@ -88,7 +88,7 @@ get_source() {
 
 	origtargz --clean
 	# Delete asc files after they have been verified
-	if [ -f $(ls ../*.asc) ]; then
+	if [ -f ../*.asc ]; then
 		rm ../*.asc
 	fi
 	origtargz --unpack=yes
@@ -213,10 +213,10 @@ print_info
 echo
 echo "=========== Download sources ========="
 get_source
-
+#
 echo
 echo "===== Install build-dependencies ====="
-install_build_deps
+#install_build_deps
 
 echo
 echo "============ Set up distcc ==========="
