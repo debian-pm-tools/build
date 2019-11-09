@@ -87,6 +87,8 @@ get_source() {
 	fi
 
 	origtargz --clean
+	# Delete asc files after they have been verified
+	rm "../*.asc"
 	origtargz --unpack=yes
 }
 
