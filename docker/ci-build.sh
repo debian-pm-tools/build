@@ -213,10 +213,10 @@ print_info
 echo
 echo "=========== Download sources ========="
 get_source
-#
+
 echo
 echo "===== Install build-dependencies ====="
-#install_build_deps
+install_build_deps
 
 echo
 echo "============ Set up distcc ==========="
