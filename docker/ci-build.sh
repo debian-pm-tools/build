@@ -146,7 +146,7 @@ setup_distcc() {
 }
 
 build() {
-	dpkg-buildpackage -sa --build=$BUILD_TYPE
+	dpkg-buildpackage -sa --build=$BUILD_TYPE --jobs-try=$(distcc -j)
 }
 
 check() {
