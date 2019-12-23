@@ -1,3 +1,4 @@
+plasma-mobile/kwayland
 apps/buho
 apps/glosbit
 apps/calindori
@@ -14,6 +15,8 @@ apps/plasma-camera
 apps/qmlkonsole
 apps/qmlplane
 apps/vvave
+apps/spacebar
+apps/plasma-phonebook
 debian-pm-keyring
 halium/android-headers
 halium/audioflingerglue
@@ -33,6 +36,7 @@ halium/pulseaudio
 halium/pulseaudio-modules-droid
 halium/pulseaudio-modules-droid-glue
 halium/xserver-xorg-video-hwcomposer
+halium/sensorfw
 libs/accounts-qml-module
 libs/kpeoplevcard
 libs/libqofono
@@ -42,6 +46,7 @@ libs/ofono-qt
 libs/qml-box2d
 libs/qmltermwidget
 libs/telepathy-ofono
+libs/zxing-cpp
 mainline/mesa
 mainline/qmic
 mainline/qrtr
