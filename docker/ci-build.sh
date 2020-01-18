@@ -140,7 +140,6 @@ setup_distcc() {
 		export DISTCC_HOSTS="$DISTCC_HOSTS localhost"
 
 		export PATH="/usr/lib/distcc/:$PATH"
-		export DISTCC_VERBOSE=1
 		distcc --show-hosts
 	fi
 }
