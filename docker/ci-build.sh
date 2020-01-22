@@ -233,6 +233,7 @@ if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "Netrunner/mobile" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "debian" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "halium-7.1" ]] || \
+	[[ ${CI_COMMIT_REF_NAME} == "halium-8.1" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "devkit" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "pinephone" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "buster" ]] || \
