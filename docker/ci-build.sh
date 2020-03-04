@@ -136,9 +136,6 @@ setup_distcc() {
 			fi
 		done
 
-		# Append generic addresses
-		export DISTCC_HOSTS="$DISTCC_HOSTS localhost"
-
 		export PATH="/usr/lib/distcc/:$PATH"
 		distcc --show-hosts
 	fi
