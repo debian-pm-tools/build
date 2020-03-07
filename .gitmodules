@@ -5,3 +5,6 @@
 [submodule "repo-conf"]
 	path = repo-conf
 	url = https://gitlab.com/debian-pm/tools/apt-repo-conf.git/
+[submodule "recipes"]
+	path = recipes
+	url = https://gitlab.com/debian-pm/tools/rootfs-builder-debos
