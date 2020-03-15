@@ -28,8 +28,7 @@ RUN apt update && \
         # For distcc
         libnss-mdns \
         iproute2 \
-        iputils-ping \
-        squid-deb-proxy-client && \
+        iputils-ping && \
     rm /usr/share/doc /usr/share/man /usr/share/pixmaps -r
 
 # configure apt
