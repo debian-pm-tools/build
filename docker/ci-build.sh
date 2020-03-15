@@ -142,7 +142,7 @@ setup_distcc() {
 }
 
 build() {
-	dpkg-buildpackage -sa --build=$BUILD_TYPE --jobs=$(distcc -j)
+	dpkg-buildpackage -sa --build=source,$BUILD_TYPE --jobs=$(distcc -j)
 }
 
 check() {
