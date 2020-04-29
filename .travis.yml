@@ -1,5 +1,7 @@
 services:
 - docker
+os: linux
+language: shell
 dist: bionic
 
 git:
@@ -28,7 +30,7 @@ deploy:
   on:
     branch: master
 
-matrix:
+jobs:
   include:
     - env: ARCH=amd64
     - env: ARCH=armhf
