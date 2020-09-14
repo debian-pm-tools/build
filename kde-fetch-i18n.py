@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from typing import Set
 import requests
 import os
 import subprocess
@@ -7,12 +8,12 @@ from bs4 import BeautifulSoup
 import sys
 import pathlib
 
-def get(url: str):
+def get(url: str) -> requests.Response:
 	# Spam detection seems to block non-real browsers quickly
 	headers = {"user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:69.0) Gecko/20100101 Firefox/69.0"}
 	return requests.get(url, headers=headers)
 
-def detect_files(component: str, module: str):
+def detect_files(component: str, module: str) -> Set[str]:
 	lang = "es" # Files seem to be the same in all languages, only check one language
 	files = []
 
@@ -25,11 +26,11 @@ def detect_files(component: str, module: str):
 	print("Got files", set(files))
 	return set(files)
 
-def add_i18n_to_cmake(srcdir: str, podir: str):
+def add_i18n_to_cmake(srcdir: str, podir: str) -> None:
 	existing_lines = [line.strip() for line in open(srcdir + "/CMakeLists.txt", "r").readlines()]
 	file = open(srcdir + "/CMakeLists.txt", "a")
 
-	def write_line_if_not_exists(line: str):
+	def write_line_if_not_exists(line: str) -> None:
 		if line in existing_lines:
 			return
 
@@ -41,11 +42,11 @@ def add_i18n_to_cmake(srcdir: str, podir: str):
 	write_line_if_not_exists("ki18n_install({})".format(relative_podir))
 	file.close()
 
-def mkdir_if_neccesary(path: str):
+def mkdir_if_neccesary(path: str) -> None:
 	if not os.path.isdir(path):
 		os.mkdir(path)
 
-def main():
+def main() -> None:
 	print("Fetching list of available languages ...")
 	request = get("https://websvn.kde.org/*checkout*/trunk/l10n-kf5/subdirs")
 
