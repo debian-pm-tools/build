@@ -62,6 +62,18 @@ urlencode() {
 	REPLY="${encoded}" #+or echo the result (EASIER)... or both... :p
 }
 
+setup_environment() {
+	# Disable tests on architectures that we use qemu-user-static on
+	# The xserver doesn't work there, so many tests would fail
+	if [ ${DEB_HOST_ARCH} == "armhf" ] || [ ${DEB_HOST_ARCH} == "arm64" ]; then
+		export DEB_BUILD_OPTIONS="${DEB_BUILD_OPTIONS} nocheck"
+	fi
+
+	# Prefer to call compiler by its full name
+	export CXX=${DEB_HOST_GNU_TYPE}-g++
+	export CC=${DEB_HOST_GNU_TYPE}-gcc
+}
+
 print_info() {
 	echo "Package: $DEB_SOURCE"
 	echo "Repository: $(git remote get-url origin)"
@@ -110,10 +122,6 @@ setup_ccache() {
 }
 
 setup_distcc() {
-	# Prefer to call compiler by its full name
-	export CXX=$(dpkg-architecture -a $(dpkg --print-architecture) -q DEB_HOST_GNU_TYPE)-g++
-	export CC=$(dpkg-architecture -a $(dpkg --print-architecture) -q DEB_HOST_GNU_TYPE)-gcc
-
 	if [ -z $(find . -maxdepth 1 -name "configure.ac") ]; then
 		dpkg-reconfigure distcc
 
@@ -205,6 +213,8 @@ upload_cache() {
 			"${DEPLOY_ACCOUNT}:${CCACHE_DEPLOY_PATH}"
 	fi
 }
+
+setup_environment
 
 echo
 echo "============= Package info ==========="
