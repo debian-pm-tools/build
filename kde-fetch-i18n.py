@@ -5,25 +5,12 @@ import os
 import subprocess
 from bs4 import BeautifulSoup
 import sys
+import pathlib
 
 def get(url):
 	# Spam detection seems to block non-real browsers quickly
 	headers = {"user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:69.0) Gecko/20100101 Firefox/69.0"}
 	return requests.get(url, headers=headers)
-
-def detect_component(languages, module):
-	for lang in languages:
-		# Extract all directories (components)
-		soup = BeautifulSoup(get("https://websvn.kde.org/trunk/l10n-kf5/{}/messages/".format(lang)).text, features="lxml")
-		for item in soup.findAll("a", {"title": "View directory contents"}):
-			# Soup extracted urls
-			componentSoup = BeautifulSoup(get("https://websvn.kde.org/" + item["href"]).text, features="lxml")
-
-			# check whether the wanted module exists in the component
-			for a in componentSoup.findAll("a", {"title": "View file revision log"}):
-				if module in a["name"]:
-					print("Got component", item["name"], "in", lang)
-					return item["name"]
 
 def detect_files(component, module):
 	lang = "es" # Files seem to be the same in all languages, only check one language
@@ -102,7 +89,7 @@ def main():
 
 			# detect KDE component
 			print("Detecting component ...")
-			component = detect_component(["de", "es"] + LANGUAGES, module) # Prefer most common languages to speed up search
+			component = pathlib.Path(os.getcwd()).name
 
 			print("Detecting files to download ...")
 			files = detect_files(component, module)
@@ -111,8 +98,12 @@ def main():
 				mkdir_if_neccesary(PODIR + "/" + lang)
 
 				for file in files:
+					if "_desktop_" in file or ".appdata." in file:
+						continue
+
 					request = get("https://websvn.kde.org/*checkout*/trunk/l10n-kf5/{}/messages/{}/{}".format(lang, component, file))
 
+					# Check if file is available in that language
 					if request.status_code == requests.codes.ok:
 						print("Downloading", file, "for", lang)
 						pofile = open(PODIR + "/" + lang + "/" + file, "w")
