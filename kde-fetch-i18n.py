@@ -25,16 +25,21 @@ def detect_files(component, module):
 	print("Got files", set(files))
 	return set(files)
 
-def add_i18n_to_cmake(podir):
-	file = open("CMakeLists.txt", "a")
-	file.write(
-		"\n".join(
-			[
-			"find_package(KF5I18n CONFIG REQUIRED)",
-			"ki18n_install({})".format(podir)
-			]
-		)
-	)
+def add_i18n_to_cmake(srcdir: str, podir: str):
+	existing_lines = [line.strip() for line in open(srcdir + "/CMakeLists.txt", "r").readlines()]
+	file = open(srcdir + "/CMakeLists.txt", "a")
+
+	def write_line_if_not_exists(line: str):
+		if line in existing_lines:
+			return
+
+		file.write(line + "\n")
+
+	write_line_if_not_exists("find_package(KF5I18n CONFIG REQUIRED)")
+
+	relative_podir = podir.replace(srcdir, "").strip("/")
+	write_line_if_not_exists("ki18n_install({})".format(relative_podir))
+	file.close()
 
 def mkdir_if_neccesary(path):
 	if not os.path.isdir(path):
@@ -45,7 +50,6 @@ def main():
 	request = get("https://websvn.kde.org/*checkout*/trunk/l10n-kf5/subdirs")
 
 	LANGUAGES = request.text.split("\n")
-	PODIR = "po"
 
 	# Use source dir from command line arg as source dir
 	try:
@@ -53,7 +57,7 @@ def main():
 	except:
 		SOURCE_DIR = os.getcwd()
 
-	os.chdir(SOURCE_DIR)
+	PODIR = SOURCE_DIR + "/po"
 
 	# Create po folder
 	mkdir_if_neccesary(PODIR)
@@ -87,9 +91,7 @@ def main():
 			module = line.split("-o")[-1].split("/")[1].replace(".pot", "").strip()
 			print("Fetching translations for", module, "...")
 
-			# detect KDE component
-			print("Detecting component ...")
-			component = pathlib.Path(os.getcwd()).name
+			component = pathlib.Path(SOURCE_DIR).name
 
 			print("Detecting files to download ...")
 			files = detect_files(component, module)
@@ -110,7 +112,7 @@ def main():
 						pofile.write(request.text)
 						pofile.close
 
-	add_i18n_to_cmake(PODIR)
+	add_i18n_to_cmake(SOURCE_DIR, PODIR)
 
 if __name__ == "__main__":
 	main()
