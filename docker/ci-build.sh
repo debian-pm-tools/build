@@ -110,6 +110,10 @@ setup_ccache() {
 }
 
 setup_distcc() {
+	# Prefer to call compiler by its full name
+	export CXX=$(dpkg-architecture -a $(dpkg --print-architecture) -q DEB_HOST_GNU_TYPE)-g++
+	export CC=$(dpkg-architecture -a $(dpkg --print-architecture) -q DEB_HOST_GNU_TYPE)-gcc
+
 	if [ -z $(find . -maxdepth 1 -name "configure.ac") ]; then
 		dpkg-reconfigure distcc
 
