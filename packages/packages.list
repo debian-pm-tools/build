@@ -1,7 +1,6 @@
-plasma-mobile/kwayland
 apps/buho
-apps/glosbit
 apps/calindori
+apps/glosbit
 apps/gpodder-qml
 apps/index
 apps/kaidan
@@ -12,11 +11,11 @@ apps/okular
 apps/pix
 apps/plasma-angelfish
 apps/plasma-camera
+apps/plasma-phonebook
 apps/qmlkonsole
 apps/qmlplane
-apps/vvave
 apps/spacebar
-apps/plasma-phonebook
+apps/vvave
 debian-pm-keyring
 halium/android-headers
 halium/audioflingerglue
@@ -35,8 +34,8 @@ halium/nemo-gst-interfaces
 halium/pulseaudio
 halium/pulseaudio-modules-droid
 halium/pulseaudio-modules-droid-glue
-halium/xserver-xorg-video-hwcomposer
 halium/sensorfw
+halium/xserver-xorg-video-hwcomposer
 libs/accounts-qml-module
 libs/kpeoplevcard
 libs/libqofono
@@ -47,6 +46,7 @@ libs/qml-box2d
 libs/qmltermwidget
 libs/telepathy-ofono
 libs/zxing-cpp
+mainline/mali-utgard-driver
 mainline/mesa
 mainline/qmic
 mainline/qrtr
@@ -54,10 +54,14 @@ mainline/rmtfs
 mainline/rpmsgexport
 plasma-mobile/kaccounts-mobile
 plasma-mobile/kwayland
+plasma-mobile/kwayland
 plasma-mobile/kwin
+plasma-mobile/maliit-framework
+plasma-mobile/maliit-keyboard
 plasma-mobile/mtp-server
 plasma-mobile/plasma-maliit-framework
 plasma-mobile/plasma-maliit-plugins
+plasma-mobile/plasma-nano
 plasma-mobile/plasma-nm
 plasma-mobile/plasma-phone-components
 plasma-mobile/plasma-phone-settings
@@ -67,4 +71,3 @@ qtbase
 qtdeclarative
 qtmultimedia
 qtwebengine
-mainline/mali-utgard-driver
