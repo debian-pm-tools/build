@@ -36,6 +36,7 @@ def add_i18n_to_cmake(srcdir: str, podir: str) -> None:
 
 		file.write(line + "\n")
 
+	file.write("\n")
 	write_line_if_not_exists("find_package(KF5I18n CONFIG REQUIRED)")
 
 	relative_podir = podir.replace(srcdir, "").strip("/")
