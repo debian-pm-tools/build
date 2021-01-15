@@ -37,6 +37,7 @@ halium/pulseaudio-modules-droid-glue
 halium/sensorfw
 halium/xserver-xorg-video-hwcomposer
 libs/accounts-qml-module
+libs/gpodder-core
 libs/kpeoplevcard
 libs/libqofono
 libs/mauikit
@@ -53,7 +54,6 @@ mainline/qrtr
 mainline/rmtfs
 mainline/rpmsgexport
 plasma-mobile/kaccounts-mobile
-plasma-mobile/kwayland
 plasma-mobile/kwayland
 plasma-mobile/kwin
 plasma-mobile/maliit-framework
