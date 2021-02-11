@@ -47,6 +47,7 @@ libs/qml-box2d
 libs/qmltermwidget
 libs/telepathy-ofono
 libs/zxing-cpp
+libs/kquickimageeditor
 mainline/mali-utgard-driver
 mainline/mesa
 mainline/qmic
@@ -54,7 +55,6 @@ mainline/qrtr
 mainline/rmtfs
 mainline/rpmsgexport
 plasma-mobile/kaccounts-mobile
-plasma-mobile/kwayland
 plasma-mobile/kwin
 plasma-mobile/maliit-framework
 plasma-mobile/maliit-keyboard
