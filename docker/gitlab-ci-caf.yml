@@ -1,8 +1,8 @@
 build:armhf-caf:
   stage: build
   script:
-    - /usr/bin/ci-config
-    - /usr/bin/ci-build binary
+    - /usr/local/bin/ci-config
+    - /usr/local/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:testing-armhf
   tags:
     - armhf
@@ -13,8 +13,8 @@ build:armhf-caf:
 build:arm64-caf:
   stage: build
   script:
-    - /usr/bin/ci-config
-    - /usr/bin/ci-build binary
+    - /usr/local/bin/ci-config
+    - /usr/local/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:testing-arm64
   tags:
     - arm64

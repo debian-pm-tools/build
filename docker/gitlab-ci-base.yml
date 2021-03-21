@@ -13,15 +13,15 @@ cache:
 build:source:
   stage: build
   script:
-    - /usr/bin/ci-config
-    - /usr/bin/ci-build source
+    - /usr/local/bin/ci-config
+    - /usr/local/bin/ci-build source
   image: registry.gitlab.com/debian-pm/tools/build:testing-amd64
 
 build:amd64:
   stage: build
   script:
-    - /usr/bin/ci-config
-    - /usr/bin/ci-build binary
+    - /usr/local/bin/ci-config
+    - /usr/local/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:testing-amd64
   tags:
     - amd64
@@ -29,8 +29,8 @@ build:amd64:
 build:i386:
   stage: build
   script:
-    - /usr/bin/ci-config
-    - /usr/bin/ci-build binary
+    - /usr/local/bin/ci-config
+    - /usr/local/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:testing-i386
   tags:
     - i386
@@ -38,8 +38,8 @@ build:i386:
 build:armhf:
   stage: build
   script:
-    - /usr/bin/ci-config
-    - /usr/bin/ci-build binary
+    - /usr/local/bin/ci-config
+    - /usr/local/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:testing-armhf
   tags:
     - armhf
@@ -47,8 +47,8 @@ build:armhf:
 build:arm64:
   stage: build
   script:
-    - /usr/bin/ci-config
-    - /usr/bin/ci-build binary
+    - /usr/local/bin/ci-config
+    - /usr/local/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:testing-arm64
   tags:
     - arm64

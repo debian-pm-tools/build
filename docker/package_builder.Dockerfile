@@ -40,8 +40,8 @@ RUN echo "deb-src https://deb.debian.org/debian $(lsb_release -cs) main" >> /etc
     apt install debian-pm-archive-keyring
 
 # Add CI tooling
-COPY ci-build.sh /usr/bin/ci-build
-COPY ci-config.sh /usr/bin/ci-config
+COPY ci-build.sh /usr/local/bin/ci-build
+COPY ci-config.sh /usr/local/bin/ci-config
 ADD https://gitlab.com/debian-pm/tools/debian-pm-cli-tools/-/jobs/artifacts/master/raw/target/release/dpmput?job=build /usr/local/bin/dpmput
 RUN chmod +x /usr/local/bin/dpmput
 
