@@ -164,11 +164,9 @@ check() {
 
 add_to_repository() {
 	if # Check wether required variables aren't empty
-		! [ -z ${DEPLOY_KEY_PRIVATE} ] && \
-		! [ -z ${DEPLOY_KEY_PUBLIC} ]  && \
-		! [ -z ${DEPLOY_ACCOUNT} ]     && \
-		! [ -z ${DEPLOY_PORT} ]        && \
-		! [ -z ${DEPLOY_PATH} ];       then
+		! [ -z ${DEPLOY_HOST} ] && \
+		! [ -z ${DEPLOY_USER} ]  && \
+		! [ -z ${DEPLOY_PASSWORD} ]; then
 
 		# Check wether a package with the same version number is already in the repository to prevent failures
 		BINARY_PACKAGES=$(cat debian/control | grep Package | sed -e 's/Package: //')

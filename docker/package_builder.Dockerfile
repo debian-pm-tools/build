@@ -42,8 +42,7 @@ RUN echo "deb-src https://deb.debian.org/debian $(lsb_release -cs) main" >> /etc
 # Add CI tooling
 COPY ci-build.sh /usr/local/bin/ci-build
 COPY ci-config.sh /usr/local/bin/ci-config
-ADD https://gitlab.com/debian-pm/tools/debian-pm-cli-tools/-/jobs/artifacts/master/raw/target/release/dpmput?job=build /usr/local/bin/dpmput
-RUN chmod +x /usr/local/bin/dpmput
+COPY dpmput.py /usr/local/bin/dpmput
 
 # Add eatmydata
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+"$LD_LIBRARY_PATH:"}/usr/lib/libeatmydata \
