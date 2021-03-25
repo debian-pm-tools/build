@@ -23,8 +23,6 @@ build:amd64:
     - /usr/local/bin/ci-config
     - /usr/local/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:testing-amd64
-  tags:
-    - amd64
 
 build:i386:
   stage: build
@@ -32,8 +30,6 @@ build:i386:
     - /usr/local/bin/ci-config
     - /usr/local/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:testing-i386
-  tags:
-    - i386
 
 build:armhf:
   stage: build
