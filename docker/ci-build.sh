@@ -171,6 +171,9 @@ add_to_repository() {
 		# Check wether a package with the same version number is already in the repository to prevent failures
 		BINARY_PACKAGES=$(cat debian/control | grep Package | sed -e 's/Package: //')
 
+		# Detect codename, will be overriden by next command
+		LSB_CODENAME=$(lsb_release -cs)
+
 		echo "Checking repository version..."
 		sudo apt-get -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list update >/dev/null
 
@@ -185,14 +188,9 @@ add_to_repository() {
 			fi
 		done
 
-		# Install deploy keys from environment variabless
-		mkdir -p ~/.ssh/
-		echo ${DEPLOY_KEY_PRIVATE} | base64 -d | xz -d > ~/.ssh/id_rsa
-		echo ${DEPLOY_KEY_PUBLIC} | base64 -d | xz -d > ~/.ssh/id_rsa.pub
-		chmod 400 ~/.ssh/id_rsa
-
 		ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb} 2>/dev/null | uniq || true)
-		dpmput --host ${DEPLOY_HOST} --distribution $(lsb_release -cs) --user ${DEPLOY_USER} --password ${DEPLOY_PASSWORD} --files ${ARTIFACTS}
+		export DEPLOY_PASSWORD=$(echo ${DEPLOY_PASSWORD} | base64 -d)
+		dpmput --host ${DEPLOY_HOST} --distribution ${LSB_CODENAME} --user ${DEPLOY_USER} --password ${DEPLOY_PASSWORD} --files ${ARTIFACTS}
 	else
 		echo "Can't publish package since no credentials were provided."
 	fi

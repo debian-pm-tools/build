@@ -13,6 +13,8 @@ import os
 
 from typing import List, Set, Tuple
 
+from requests.auth import HTTPBasicAuth
+
 def handle_response(resp: Response):
     print(resp.content.decode())
 
@@ -23,7 +25,7 @@ def handle_response(resp: Response):
 def put_deb_package(host: str, user: str, password: str, dist: str, file: str) -> Response:
     return requests.put(f"{host}/includedeb/{dist}/",
                  data = open(file, "rb"),
-                 auth=HTTPDigestAuth(user, password))
+                 auth = HTTPBasicAuth(user, password))
 
 def put_changes_file(host: str, user: str, password: str, dist: str, file: str) -> Response:
     with open(file) as fh:
@@ -36,7 +38,7 @@ def put_changes_file(host: str, user: str, password: str, dist: str, file: str) 
 
         return requests.post(f"{host}/include/{dist}/",
                       files = attachments,
-                      auth=HTTPDigestAuth(user, password))
+                      auth = HTTPBasicAuth(user, password))
 
 def put_dsc_package(host: str, user: str, password: str, dist: str, file: str) -> Response:
     with open(file) as fh:
@@ -49,7 +51,7 @@ def put_dsc_package(host: str, user: str, password: str, dist: str, file: str) -
 
         return requests.post(f"{host}/includedsc/{dist}",
                                      files = attachments,
-                                     auth=HTTPDigestAuth(user, password))
+                                     auth = HTTPBasicAuth(user, password))
 
 def upload_file(file: str) -> Response:
     print(f"-- Uploading {file}")
