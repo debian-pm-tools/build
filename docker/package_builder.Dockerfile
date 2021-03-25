@@ -28,7 +28,9 @@ RUN apt update && \
         # For distcc
         libnss-mdns \
         iproute2 \
-        iputils-ping && \
+        iputils-ping \
+        python3-requests \
+        python3-debian && \
     rm /usr/share/doc /usr/share/man /usr/share/pixmaps -r
 
 # configure apt
