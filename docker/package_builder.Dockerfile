@@ -37,7 +37,7 @@ RUN apt update && \
 RUN echo "deb-src https://deb.debian.org/debian $(lsb_release -cs) main" >> /etc/apt/sources.list && \
     echo "deb https://repo.kaidan.im/debpm $(lsb_release -cs) main" > /etc/apt/sources.list.d/debian-pm.list && \
     echo "deb-src https://repo.kaidan.im/debpm $(lsb_release -cs) main" >> /etc/apt/sources.list.d/debian-pm.list && \
-    wget -qO - https://gitlab.com/debian-pm/debian-pm-keyring/raw/master/repo.kaidan.im.asc | apt-key add - && \
+    wget -qO - https://gitlab.com/debian-pm/debian-pm-repository/-/raw/master/keys/repo.kaidan.im.asc | apt-key add - && \
     apt update && \
     apt install debian-pm-archive-keyring
 
