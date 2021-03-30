@@ -6,12 +6,10 @@ from debian.deb822 import Dsc, Changes
 
 import os
 
-from typing import List, Tuple, Dict
+from typing import List
 
 import aiohttp
 import asyncio
-
-from requests.api import put
 
 async def handle_response(resp: aiohttp.ClientResponse):
     output = await resp.content.read()
