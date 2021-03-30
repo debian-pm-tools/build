@@ -1,69 +1,74 @@
 #!/usr/bin/env python3
 
 import argparse
-from io import BufferedReader
-import requests
-
-from requests import Response
-from requests.auth import HTTPDigestAuth
 
 from debian.deb822 import Dsc, Changes
 
 import os
 
-from typing import List, Set, Tuple
+from typing import List, Tuple, Dict
 
-from requests.auth import HTTPBasicAuth
+import aiohttp
+import asyncio
 
-def handle_response(resp: Response):
-    print(resp.content.decode())
+from requests.api import put
 
-    if resp.status_code != 200:
+async def handle_response(resp: aiohttp.ClientResponse):
+    output = await resp.content.read()
+    print(output.decode())
+
+    if resp.status != 200:
         exit(1)
 
 
-def put_deb_package(host: str, user: str, password: str, dist: str, file: str) -> Response:
-    return requests.put(f"{host}/includedeb/{dist}/",
-                 data = open(file, "rb"),
-                 auth = HTTPBasicAuth(user, password))
+async def put_deb_package(host: str, user: str, password: str, dist: str, file: str):
+    async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(login=user, password=password)) as session:
+        await handle_response(await session.put(f"{host}/includedeb/{dist}/", data = open(file, "rb")))
 
-def put_changes_file(host: str, user: str, password: str, dist: str, file: str) -> Response:
+async def post_package_multipart(url: str, upload_type: str, meta: str, attachments: List[str], user: str, password: str):
+        async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(user, password)) as session:
+            form_data = aiohttp.FormData([])
+            for file in attachments:
+                form_data.add_field("attachments", open(file, "rb"))
+
+            form_data.add_field(upload_type, open(meta, "rb"))
+
+            async with session.post(url, data=form_data) as response:
+                await handle_response(response)
+
+async def put_changes_file(host: str, user: str, password: str, dist: str, file: str):
     with open(file) as fh:
         changes = Changes(fh)
 
-        files: List[str] = [file["name"] for file in changes["files"]]
         dir: str = os.path.dirname(file)
-        attachments: List[Tuple[str, BufferedReader]] = [("attachments", open(dir + "/" + file, "rb")) for file in files]
-        attachments.append(("changes", open(file, "rb")))
+        files: List[str] = [dir + "/" + file["name"] for file in changes["files"]]
 
-        return requests.post(f"{host}/include/{dist}/",
-                      files = attachments,
-                      auth = HTTPBasicAuth(user, password))
+        await post_package_multipart(f"{host}/include/{dist}", "changes", file, files, user, password)
 
-def put_dsc_package(host: str, user: str, password: str, dist: str, file: str) -> Response:
+async def put_dsc_package(host: str, user: str, password: str, dist: str, file: str):
     with open(file) as fh:
         dsc = Dsc(fh)
 
-        files: List[str] = [file["name"] for file in dsc["files"]]
         dir: str = os.path.dirname(file)
-        attachments: List[Tuple[str, BufferedReader]] = [("attachments", open(dir + "/" + file, "rb")) for file in files]
-        attachments.append(("dsc", open(file, "rb")))
+        files: List[str] = [dir + "/" + file["name"] for file in dsc["files"]]
 
-        return requests.post(f"{host}/includedsc/{dist}",
-                                     files = attachments,
-                                     auth = HTTPBasicAuth(user, password))
+        await post_package_multipart(f"{host}/includedsc/{dist}", "dsc", file, files, user, password)
 
-def upload_file(file: str) -> Response:
+async def upload_file(file: str):
     print(f"-- Uploading {file}")
     if file.endswith(".deb"):
-        return put_deb_package(args.host, args.user, args.password, args.distribution, file)
+        await put_deb_package(args.host, args.user, args.password, args.distribution, file)
     elif file.endswith(".dsc"):
-       return put_dsc_package(args.host, args.user, args.password, args.distribution, file)
+       await put_dsc_package(args.host, args.user, args.password, args.distribution, file)
     elif file.endswith(".changes"):
-        return put_changes_file(args.host, args.user, args.password, args.distribution, file)
+        await put_changes_file(args.host, args.user, args.password, args.distribution, file)
     else:
         print("Unsupported file passed")
         exit(1)
+
+async def main():
+    for file in args.files:
+        await upload_file(file)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Upload packages")
@@ -75,5 +80,5 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    for file in args.files:
-        handle_response(upload_file(file))
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())

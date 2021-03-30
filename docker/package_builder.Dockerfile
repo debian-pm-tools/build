@@ -29,7 +29,7 @@ RUN apt update && \
         libnss-mdns \
         iproute2 \
         iputils-ping \
-        python3-requests \
+        python3-aiohttp \
         python3-debian && \
     rm /usr/share/doc /usr/share/man /usr/share/pixmaps -r
 
