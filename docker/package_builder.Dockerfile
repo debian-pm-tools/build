@@ -22,7 +22,6 @@ RUN apt update && \
         libipc-run-perl \
         lintian \
         eatmydata \
-        rsync \
         openssh-client \
         distcc \
         # For distcc
