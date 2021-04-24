@@ -57,14 +57,14 @@ async def upload_file(file: str):
     if file.endswith(".deb"):
         await put_deb_package(args.host, args.user, args.password, args.distribution, file)
     elif file.endswith(".dsc"):
-       await put_dsc_package(args.host, args.user, args.password, args.distribution, file)
+        await put_dsc_package(args.host, args.user, args.password, args.distribution, file)
     elif file.endswith(".changes"):
         await put_changes_file(args.host, args.user, args.password, args.distribution, file)
     else:
         print("Unsupported file passed")
         exit(1)
 
-async def main():
+async def main(args: argparse.Namespace):
     for file in args.files:
         await upload_file(file)
 
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     parser.add_argument("--password", type=str, required=True)
     parser.add_argument("--distribution", type=str, required=True)
 
-    args = parser.parse_args()
+    args: argparse.Namespace = parser.parse_args()
 
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    loop.run_until_complete(main(args))
