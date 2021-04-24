@@ -3,6 +3,7 @@
 CONTAINER_ROOT="$(dirname "$(readlink -f "${0}")")"
 GITLAB_USERNAME="jbbgameich"
 ARCH="${ARCH:-amd64}"
+DOCKERFILE="package_builder.Dockerfile"
 
 cd $CONTAINER_ROOT
 
@@ -25,15 +26,15 @@ build() {
 			;;
 	esac
 
-	sed -i "/FROM/c\FROM ${CONTAINER_BASE}" Dockerfile
+	sed -i "/FROM/c\FROM ${CONTAINER_BASE}" "${DOCKERFILE}"
 
-	sudo docker build -t "registry.gitlab.com/debian-pm/tools/build:testing-${ARCH}" .
+	docker build -t "registry.gitlab.com/debian-pm/tools/build:testing-${ARCH}" . -f "${DOCKERFILE}"
 }
 
 push() {
-	echo "$GITLAB_TOKEN" | sudo docker login -u "$GITLAB_USERNAME" --password-stdin registry.gitlab.com
+	echo "$GITLAB_TOKEN" | docker login -u "$GITLAB_USERNAME" --password-stdin registry.gitlab.com
 
-	sudo docker push "registry.gitlab.com/debian-pm/tools/build:testing-${ARCH}"
+	docker push "registry.gitlab.com/debian-pm/tools/build:testing-${ARCH}"
 }
 
 $1
