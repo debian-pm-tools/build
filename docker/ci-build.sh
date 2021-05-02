@@ -110,17 +110,6 @@ install_build_deps() {
 	sudo apt-get build-dep . -y
 }
 
-# Currently unused, there is no place were we can store the cache right now.
-setup_ccache() {
-	export PATH=/usr/lib/ccache/:$PATH
-	if [ ! -z ${DEB_BUILD_PROFILES} ]; then
-		export CCACHE_DIR=${PACKAGE_ROOT}/debian/ccache/${DEB_HOST_ARCH}-${DEB_BUILD_PROFILES}
-	else
-		export CCACHE_DIR=${PACKAGE_ROOT}/debian/ccache/${DEB_HOST_ARCH}
-	fi
-	mkdir -p ${CCACHE_DIR}
-}
-
 setup_distcc() {
 	if [ -z $(find . -maxdepth 1 -name "configure.ac") ]; then
 		dpkg-reconfigure distcc
@@ -157,11 +146,6 @@ build() {
 	dpkg-buildpackage -sa --build=source,$BUILD_TYPE --jobs=$(distcc -j)
 }
 
-check() {
-	echo "Skipping lintian checks (used to cause huge deployment delays recently) #FIXME"
-	#lintian || echo -e '\033[31mlintian checks failed! Please check the package and fix them!\033[0m'
-}
-
 add_to_repository() {
 	if # Check wether required variables aren't empty
 		! [ -z ${DEPLOY_HOST} ] && \
@@ -196,16 +180,6 @@ add_to_repository() {
 	fi
 }
 
-# Currently unused, there is no place were we can store the cache right now.
-upload_cache() {
-	if [ ! -z ${CCACHE_DIR} ] && [ ! -z ${CCACHE_DEPLOY_PATH} ]; then
-		rsync -avzpr -e \
-			"ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" \
-			${CCACHE_DIR} \
-			"${DEPLOY_ACCOUNT}:${CCACHE_DEPLOY_PATH}"
-	fi
-}
-
 setup_environment
 
 echo
@@ -227,10 +201,6 @@ setup_distcc
 echo
 echo "===== Build $BUILD_TYPE package ======="
 build $BUILD_TYPE
-
-echo
-echo "==== Check package using lintian ===="
-check
 
 if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 	[[ ${CI_COMMIT_REF_NAME} == "Netrunner/mobile" ]] || \
