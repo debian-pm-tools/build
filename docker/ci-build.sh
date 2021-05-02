@@ -13,7 +13,7 @@ export $(dpkg-architecture)
 
 # If needed, append string to version number
 if [ ! -z "${DEB_BUILD_PROFILES}" ]; then
-	DEB_DISTRIBUTION=$(dpkg-parsechangelog -SDistribution)
+	DEB_DISTRIBUTION="$(lsb_release -cs)"
 	dch -D ${DEB_DISTRIBUTION} --force-distribution -l"${DEB_BUILD_PROFILES}" "Rebuild with ${DEB_BUILD_PROFILES} profile"
 fi
 
@@ -26,7 +26,7 @@ fi
 
 # Detect whether a rebuild is wanted
 if [ ! -z ${REBUILD} ]; then
-	DEB_DISTRIBUTION=$(dpkg-parsechangelog -SDistribution)
+	DEB_DISTRIBUTION="$(lsb_release -cs)"
 	dch -D ${DEB_DISTRIBUTION} --rebuild "No-change rebuild"
 fi
 
