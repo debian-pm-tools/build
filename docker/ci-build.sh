@@ -130,7 +130,10 @@ setup_distcc() {
 			ln -s /usr/lib/distcc/distccwrapper /usr/lib/distcc/${bin}
 		done
 
-		distcc_ips="$(/sbin/ip route|awk '/default/ { print $3 }') 192.168.178.33 192.168.178.20"
+		# For distccd on the docker host, use $(/sbin/ip route|awk '/default/ { print $3 }') 
+		distcc_ips="192.168.178.31"
+
+		export DISTCC_HOSTS="localhost/$(nproc)"
 
 		# Append actually available hosts to DISTCC_HOSTS
 		for ip in $distcc_ips; do
