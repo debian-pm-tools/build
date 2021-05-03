@@ -183,13 +183,13 @@ add_to_repository() {
 }
 
 create_changelog_entry() {
-	if [ "$(git log -1 --pretty=%B)" == "${NEW_CHANGELOG_ENTRY_MESSGE}" ]; then
-		return
-	fi
-
 	# Try to clean up the working directory
 	git pull -f origin "${CI_COMMIT_BRANCH}"
 	git checkout .
+
+	if [ "$(git log -1 --pretty=%B)" == "${NEW_CHANGELOG_ENTRY_MESSGE}" ]; then
+		return
+	fi
 
 	dch "New changelog entry"
 	git config --global user.name "${NAME}"
