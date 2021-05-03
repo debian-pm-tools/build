@@ -109,7 +109,7 @@ get_source() {
 }
 
 install_build_deps() {
-	sudo apt-get build-dep . -y
+	apt-get build-dep . -y
 }
 
 setup_distcc() {
@@ -161,7 +161,7 @@ add_to_repository() {
 		LSB_CODENAME=$(lsb_release -cs)
 
 		echo "Checking repository version..."
-		sudo apt-get -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list update >/dev/null
+		apt-get -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list update >/dev/null
 
 		for binary_package in ${BINARY_PACKAGES}; do
 			if apt-cache -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list show ${binary_package} | grep "Version: ${DEB_VERSION}" >/dev/null; then
