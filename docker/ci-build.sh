@@ -177,7 +177,12 @@ add_to_repository() {
 			fi
 		done
 
-		ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.{dsc,deb} 2>/dev/null | uniq || true)
+		if [ ${BUILD_TYPE} == "source" ]; then
+			ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.dsc 2>/dev/null | uniq || true)
+		else
+			ARTIFACTS=$(ls ${PACKAGE_ROOT}/../*.deb 2>/dev/null | uniq || true)
+		fi
+
 		export DEPLOY_PASSWORD=$(echo ${DEPLOY_PASSWORD} | base64 -d)
 		dpmput --host ${DEPLOY_HOST} --distribution ${LSB_CODENAME} --user ${DEPLOY_USER} --password ${DEPLOY_PASSWORD} --files ${ARTIFACTS}
 	else
