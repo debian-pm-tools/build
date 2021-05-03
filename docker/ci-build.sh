@@ -39,7 +39,7 @@ DEB_VERSION_UPSTREAM_REVISION=$(echo "${DEB_VERSION}" | sed -e 's/^[0-9]*://')
 DEB_VERSION_UPSTREAM="${DEB_VERSION_UPSTREAM_REVISION%%-*}"
 DEB_DISTRIBUTION=$(dpkg-parsechangelog -SDistribution)
 
-NEW_CHANGELOG_ENTRY_MESSGE="Start new changelog entry after publishing"
+NEW_CHANGELOG_ENTRY_MESSGE="[ci skip] Start new changelog entry after publishing"
 
 # From https://stackoverflow.com/questions/296536/how-to-urlencode-data-for-curl-command
 urlencode() {
@@ -188,7 +188,7 @@ create_changelog_entry() {
 	fi
 
 	# Try to clean up the working directory
-	git pull -f
+	git pull -f origin "${CI_COMMIT_BRANCH}"
 	git checkout .
 
 	dch "New changelog entry"
@@ -197,7 +197,7 @@ create_changelog_entry() {
 	git add debian/changelog
 	git commit -m "${NEW_CHANGELOG_ENTRY_MESSGE}"
 
-	git push "https://jbbgameich:${GIT_PUSH_TOKEN}" "HEAD:${CI_COMMIT_BRANCH}"
+	git push "https://jbbgameich:${GIT_PUSH_TOKEN}@${CI_REPOSITORY_URL#*@}" "HEAD:${CI_COMMIT_BRANCH}"
 }
 
 setup_environment
