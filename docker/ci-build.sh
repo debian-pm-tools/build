@@ -192,6 +192,7 @@ add_to_repository() {
 
 create_changelog_entry() {
 	# Try to clean up the working directory
+	git config pull.ff only
 	git pull -f origin "${CI_COMMIT_BRANCH}"
 	git checkout .
 
