@@ -130,8 +130,8 @@ setup_distcc() {
 			ln -s /usr/lib/distcc/distccwrapper /usr/lib/distcc/${bin}
 		done
 
-		# For distccd on the docker host, use $(/sbin/ip route|awk '/default/ { print $3 }') 
-		distcc_ips="192.168.178.31"
+		# For distccd on the docker host, use $(/sbin/ip route|awk '/default/ { print $3 }')
+		distcc_ips="192.168.178.31 192.168.178.27"
 
 		export DISTCC_HOSTS="localhost/$(nproc)"
 
@@ -200,7 +200,7 @@ create_changelog_entry() {
 		return
 	fi
 
-	dch "New changelog entry"
+	dch --no-auto-nmu "New changelog entry"
 	git config --global user.name "${NAME}"
 	git config --global user.email "${EMAIL}"
 	git add debian/changelog
