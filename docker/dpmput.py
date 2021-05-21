@@ -11,11 +11,13 @@ from typing import List
 import aiohttp
 import asyncio
 
+ALREADY_INCLUDED_ERRROR_MESSAGE: str = "Already existing files can only be included again, if they are the same"
+
 async def handle_response(resp: aiohttp.ClientResponse):
     output = await resp.content.read()
     print(output.decode())
 
-    if resp.status != 200:
+    if resp.status != 200 and not ALREADY_INCLUDED_ERRROR_MESSAGE in output.decode():
         exit(1)
 
 
