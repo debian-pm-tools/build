@@ -25,6 +25,13 @@ async def put_deb_package(host: str, user: str, password: str, dist: str, file: 
     async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(login=user, password=password)) as session:
         await handle_response(await session.put(f"{host}/includedeb/{dist}/", data = open(file, "rb")))
 
+
+async def export(host: str, user: str, password: str):
+    print("-- Exporting metadata")
+    async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(login=user, password=password)) as session:
+        await handle_response(await session.post(f"{host}/export"))
+
+
 async def post_package_multipart(url: str, upload_type: str, meta: str, attachments: List[str], user: str, password: str):
         async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(user, password)) as session:
             form_data = aiohttp.FormData([])
@@ -36,6 +43,7 @@ async def post_package_multipart(url: str, upload_type: str, meta: str, attachme
             async with session.post(url, data=form_data) as response:
                 await handle_response(response)
 
+
 async def put_changes_file(host: str, user: str, password: str, dist: str, file: str):
     with open(file) as fh:
         changes = Changes(fh)
@@ -44,6 +52,7 @@ async def put_changes_file(host: str, user: str, password: str, dist: str, file:
         files: List[str] = [dir + "/" + file["name"] for file in changes["files"]]
 
         await post_package_multipart(f"{host}/include/{dist}", "changes", file, files, user, password)
+
 
 async def put_dsc_package(host: str, user: str, password: str, dist: str, file: str):
     with open(file) as fh:
@@ -54,21 +63,25 @@ async def put_dsc_package(host: str, user: str, password: str, dist: str, file: 
 
         await post_package_multipart(f"{host}/includedsc/{dist}", "dsc", file, files, user, password)
 
-async def upload_file(file: str):
+
+async def upload_file(host: str, user: str, password: str, dist: str, file: str):
     print(f"-- Uploading {file}")
     if file.endswith(".deb"):
-        await put_deb_package(args.host, args.user, args.password, args.distribution, file)
+        await put_deb_package(host, user, password, dist, file)
     elif file.endswith(".dsc"):
-        await put_dsc_package(args.host, args.user, args.password, args.distribution, file)
+        await put_dsc_package(host, user, password, dist, file)
     elif file.endswith(".changes"):
-        await put_changes_file(args.host, args.user, args.password, args.distribution, file)
+        await put_changes_file(host, user, password, dist, file)
     else:
         print("Unsupported file passed")
         exit(1)
 
+
 async def main(args: argparse.Namespace):
     for file in args.files:
-        await upload_file(file)
+        await upload_file(args.host, args.user, args.password, args.distribution, file)
+
+    await export(args.host, args.user, args.password)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Upload packages")
