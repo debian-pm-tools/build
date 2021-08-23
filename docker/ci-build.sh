@@ -11,13 +11,9 @@ export EMAIL="https://gitlab.com/debian-pm/tools/build"
 # Set up architecture variables
 export $(dpkg-architecture)
 
-distribution_name() {
-	cat /etc/debian_version | cut -d $'/' -f 1 | tr -d '\n'
-}
-
 # If needed, append string to version number
 if [ ! -z "${DEB_BUILD_PROFILES}" ]; then
-	DEB_DISTRIBUTION="$(distribution_name)"
+	DEB_DISTRIBUTION="$(lsb_release -cs)"
 	dch -D ${DEB_DISTRIBUTION} --force-distribution -l"${DEB_BUILD_PROFILES}" "Rebuild with ${DEB_BUILD_PROFILES} profile"
 fi
 
@@ -30,7 +26,7 @@ fi
 
 # Detect whether a rebuild is wanted
 if [ ! -z ${REBUILD} ]; then
-	DEB_DISTRIBUTION="$(distribution_name)"
+	DEB_DISTRIBUTION="$(lsb_release -cs)"
 	dch -D ${DEB_DISTRIBUTION} --rebuild "No-change rebuild"
 fi
 
@@ -165,7 +161,7 @@ add_to_repository() {
 		BINARY_PACKAGES=$(cat debian/control | grep Package | sed -e 's/Package: //')
 
 		# Detect codename, will be overriden by next command
-		LSB_CODENAME=$(distribution_name)
+		LSB_CODENAME=$(lsb_release -cs)
 
 		echo "Checking repository version..."
 		apt-get -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-pm.list update >/dev/null
