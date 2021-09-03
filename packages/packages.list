@@ -16,6 +16,14 @@ apps/qmlkonsole
 apps/qmlplane
 apps/spacebar
 apps/vvave
+apps/kclock
+apps/alligator
+apps/audiotube
+apps/ktrip
+apps/kasts
+apps/kalk
+apps/kweather
+apps/plasma-dialer
 debian-pm-keyring
 halium/android-headers
 halium/audioflingerglue
@@ -48,8 +56,10 @@ libs/qmltermwidget
 libs/telepathy-ofono
 libs/zxing-cpp
 libs/kquickimageeditor
+libs/kweathercore
+libs/ytmusicapi
 mainline/mali-utgard-driver
-mainline/mesa
+#mainline/mesa
 mainline/qmic
 mainline/qrtr
 mainline/rmtfs
