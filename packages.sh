@@ -24,11 +24,14 @@ echo "I: Running self upgrade"
 git -C $BUILD_ROOT fetch origin
 git -C $BUILD_ROOT merge origin/master
 
+function get_packages() {
+	cat ${list} | grep -v "#"
+}
 # Main functions
 function init() {
     echo "I: Initializing packages"
 
-    for name in $(cat ${list}); do
+    for name in $(get_packages); do
         # Print status
         echo -n $name
 
@@ -50,7 +53,7 @@ function sync() {
     echo "* Updating tarball submodule ..."
     git submodule update --recursive --remote --init --checkout | sed "s/^/* /"
 
-    for name in $(cat ${list}); do
+    for name in $(get_packages); do
         # Print status
         echo $name
 
@@ -83,7 +86,7 @@ function sync() {
 function gendsc() {
     echo "I: Generating debian source packages"
 
-    for name in $(cat ${list}); do
+    for name in $(get_packages); do
         if [ -d "$PACKAGES_ROOT/$name" ]; then
             cd "$PACKAGES_ROOT/$name"
 
