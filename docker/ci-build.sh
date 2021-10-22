@@ -131,13 +131,13 @@ setup_distcc() {
 		done
 
 		# For distccd on the docker host, use $(/sbin/ip route|awk '/default/ { print $3 }')
-		distcc_ips="192.168.178.31 192.168.178.27 192.168.178.98"
+		distcc_ips="192.168.178.31 192.168.178.27 192.168.178.98/12"
 
 		export DISTCC_HOSTS="localhost/$(nproc)"
 
 		# Append actually available hosts to DISTCC_HOSTS
 		for ip in $distcc_ips; do
-			if ping -c 1 $ip; then
+			if ping -c 1 $(echo $ip | sed 's/\/.*//'); then
 				export DISTCC_HOSTS="$DISTCC_HOSTS $ip"
 			fi
 		done
