@@ -88,8 +88,12 @@ get_source() {
 	ORIG_TAR_NAME_ENCODED=$(urlencode "${ORIG_TAR_NAME}")
 
 	if [[ $(wget -S --spider "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}" 2>&1 | grep 'HTTP/1.1 200 OK') ]] >/dev/null; then
-		echo "Downloading source from mirror ..."
-		wget --continue -O "../${ORIG_TAR_NAME}" "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}"
+		if grep "https://debian-pm-tools.github.io/orig-tar-xzs" debian/watch; then
+			origtargz --unpack=no --download-only --tar-only
+		else
+			echo "Downloading source from mirror ..."
+			wget --continue -O "../${ORIG_TAR_NAME}" "${SOURCE_BASE_URL}/${ORIG_TAR_NAME}"
+		fi
 	elif [ -f debian/watch ]; then
 		echo "Downloading source from upstream using uscan"
 		uscan --download-current-version --download || \
