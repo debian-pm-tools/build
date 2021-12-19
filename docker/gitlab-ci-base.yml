@@ -24,12 +24,12 @@ build:amd64:
     - /usr/local/bin/ci-build binary
   image: registry.gitlab.com/debian-pm/tools/build:testing-amd64
 
-#build:i386:
-#  stage: build
-#  script:
-#    - /usr/local/bin/ci-config
-#    - /usr/local/bin/ci-build binary
-#  image: registry.gitlab.com/debian-pm/tools/build:testing-i386
+build:i386:
+  stage: build
+  script:
+    - /usr/local/bin/ci-config
+    - /usr/local/bin/ci-build binary
+  image: registry.gitlab.com/debian-pm/tools/build:testing-i386
 
 #build:armhf:
 #  stage: build
