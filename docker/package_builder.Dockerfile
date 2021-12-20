@@ -28,9 +28,10 @@ RUN apt update && \
         libnss-mdns \
         iproute2 \
         iputils-ping \
-        python3-aiohttp \
+        python3-pip \
         python3-debian && \
-    rm /usr/share/doc /usr/share/man /usr/share/pixmaps -r
+    rm /usr/share/doc /usr/share/man /usr/share/pixmaps -r && \
+    pip3 install aiohttp
 
 # configure apt
 RUN echo "deb-src https://deb.debian.org/debian $(lsb_release -cs) main" >> /etc/apt/sources.list && \
