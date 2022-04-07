@@ -34,6 +34,10 @@ PKG_GIT_VERSION="$PKG_VERSION+git$DATE"
 	echo "ERROR: $BUILD_ROOT/packages/$PKG_PATH/../${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz already exists" &&
 	exit 1
 
+# Check if the variables for dch are set
+[ -z "$NAME" ] && error_namenotset
+[ -z "$EMAIL" ] && error_namenotset
+
 # Debug output
 echo "I: date: $DATE"
 echo "I: package: $PACKAGE"
@@ -63,10 +67,6 @@ fi
 git -C "$BUILD_ROOT/sources/$PACKAGE" archive $GIT_BRANCH \
 	--prefix $PACKAGE-$PKG_GIT_VERSION/ \
 	--format=tar | xz >"$BUILD_ROOT/sources/${PACKAGE}_$PKG_GIT_VERSION.orig.tar.xz"
-
-# Check if the variables for dch are set
-[ -z "$NAME" ] && error_namenotset
-[ -z "$EMAIL" ] && error_namenotset
 
 # Create new changelog entry and unpack tarball
 (
