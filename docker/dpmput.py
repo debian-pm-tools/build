@@ -93,5 +93,4 @@ if __name__ == "__main__":
 
     args: argparse.Namespace = parser.parse_args()
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(args))
+    asyncio.run(main(args))
