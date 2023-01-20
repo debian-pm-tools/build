@@ -24,6 +24,9 @@ apps/kasts
 apps/kalk
 apps/kweather
 apps/plasma-dialer
+apps/tokodon
+apps/audiotube
+apps/plasmatube
 debian-pm-keyring
 halium/android-headers
 halium/audioflingerglue
@@ -58,6 +61,8 @@ libs/zxing-cpp
 libs/kquickimageeditor
 libs/kweathercore
 libs/ytmusicapi
+libs/kirigami-addons
+libs/corrosion
 mainline/mali-utgard-driver
 #mainline/mesa
 mainline/qmic
