@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-for arch in armhf arm64 i386 amd64; do
+for arch in arm64 i386 amd64; do
 	export ARCH=$arch
-	./travis_docker.sh build
-	./travis_docker.sh push
-	yes | docker system prune -a
+	./travis_podman.sh build
+	./travis_podman.sh push
 done
