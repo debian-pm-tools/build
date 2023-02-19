@@ -30,7 +30,6 @@ apps/alligator
 apps/kclock
 apps/koko
 apps/spacebar
-apps/tokodon
 apps/plasma-phonebook
 apps/audiotube
 apps/kalk
@@ -54,9 +53,12 @@ function update() {
             continue
         fi
 
+        mkdir -p "debian/upstream/"
+        cp "${BUILD_ROOT}/packages/apps/plasma-angelfish/debian/upstream/signing-key.asc" "debian/upstream/signing-key.asc"
+
         dch -v "${VERSION}-1" "New upstream release"
         origtargz
-        git add debian/changelog
+        git add debian/changelog debian/upstream/signing-key.asc
         git commit -m "New upstream release ${VERSION}"
         git show HEAD
         echo "I'm going to push this commit, press Ctrl + C to abort or enter to continue"
@@ -77,12 +79,13 @@ function release() {
 
         if dpkg-parsechangelog -SDistribution | grep -v UNRELEASED >/dev/null; then
             echo "Skipping ${app}, as the current changelog entry is already released"
+            continue
         fi
 
         dch --release
 
         git add debian/changelog
-        git commit -m "Release ${VERSION}"
+        git commit -m "Release ${VERSION}-1"
         git show HEAD
         echo "I'm going to push this commit, press Ctrl+C to abort or enter to continue"
         read
