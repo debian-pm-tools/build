@@ -113,6 +113,7 @@ get_source() {
 }
 
 install_build_deps() {
+	apt-get install build-essential -y
 	apt-get build-dep . -y
 }
 

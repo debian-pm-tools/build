@@ -1,17 +1,16 @@
-FROM registry.gitlab.com/debian-pm/tools/build/debian:testing-amd64
+FROM docker.io/debian:testing
 MAINTAINER Jonah Brüchert <jbb@kaidan.im>
 
 # Initial build essentials
 # Speed up builds, install deployment dependencies
 RUN apt update && \
+    apt full-upgrade -y && \
     apt install -y \
         --no-install-recommends \
         ca-certificates \
         devscripts \
-        build-essential \
         debhelper \
         sudo \
-        software-properties-common \
         wget \
         curl \
         gnupg \
@@ -22,24 +21,30 @@ RUN apt update && \
         libipc-run-perl \
         lintian \
         eatmydata \
-        openssh-client \
         distcc \
         # For distcc
         libnss-mdns \
         iproute2 \
         iputils-ping \
         python3-pip \
-        python3-debian && \
+        python3-debian \
+        # For pip to work with modules that compile stuff
+        python3-dev \
+        # for ci-build
+        lsb-release && \
     rm /usr/share/doc /usr/share/man /usr/share/pixmaps -r && \
-    pip3 install aiohttp
-
-# configure apt
-RUN echo "deb-src https://deb.debian.org/debian $(lsb_release -cs) main" >> /etc/apt/sources.list && \
+    pip3 install aiohttp && \
+    # configure apt
+    echo "deb-src https://deb.debian.org/debian $(lsb_release -cs) main" >> /etc/apt/sources.list && \
     echo "deb https://jbb.ghsq.ga/debpm $(lsb_release -cs) main" > /etc/apt/sources.list.d/debian-pm.list && \
     echo "deb-src https://jbb.ghsq.ga/debpm $(lsb_release -cs) main" >> /etc/apt/sources.list.d/debian-pm.list && \
-    wget -qO - https://gitlab.com/debian-pm/debian-pm-repository/-/raw/master/keys/repo.kaidan.im.asc | apt-key add - && \
-    apt update && \
-    apt install debian-pm-archive-keyring
+    wget https://jbb.ghsq.ga/debpm/pool/main/d/debian-pm-repository/debian-pm-archive-keyring_20210819_all.deb && \
+    sudo dpkg -i debian-pm-archive-keyring_20210819_all.deb && \
+    rm debian-pm-archive-keyring_20210819_all.deb && \
+    apt-get update && \
+    apt-get install debian-pm-archive-keyring && \
+    # Clean up to slim down the image
+    apt-get purge python3-dev gcc g++ --auto-remove -y
 
 # Add CI tooling
 COPY ci-build.sh /usr/local/bin/ci-build
