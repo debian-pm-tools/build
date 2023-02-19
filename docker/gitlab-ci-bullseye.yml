@@ -1,0 +1,31 @@
+build-stable:armhf:
+  stage: build
+  script:
+    - /usr/local/bin/ci-config
+    - /usr/local/bin/ci-build binary
+  image: registry.gitlab.com/debian-pm/tools/build:bullseye-armhf
+  tags:
+    - arm64
+
+build-stable:arm64:
+  stage: build
+  script:
+    - /usr/local/bin/ci-config
+    - /usr/local/bin/ci-build binary
+  image: registry.gitlab.com/debian-pm/tools/build:bullseye-arm64
+  tags:
+    - arm64
+
+build-stable:i386:
+  stage: build
+  script:
+    - /usr/local/bin/ci-config
+    - /usr/local/bin/ci-build binary
+  image: registry.gitlab.com/debian-pm/tools/build:bullseye-i386
+
+build-stable:amd64:
+  stage: build
+  script:
+    - /usr/local/bin/ci-config
+    - /usr/local/bin/ci-build binary
+  image: registry.gitlab.com/debian-pm/tools/build:bullseye-amd64
