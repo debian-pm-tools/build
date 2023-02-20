@@ -1,3 +1,6 @@
+variables:
+  DEB_BUILD_PROFILES: bullseye
+
 build-stable:armhf:
   stage: build
   script:
