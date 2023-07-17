@@ -3,37 +3,37 @@ build-stable:armhf:
   script:
     - /usr/local/bin/ci-config
     - /usr/local/bin/ci-build binary
-  image: registry.gitlab.com/debian-pm/tools/build:bullseye-armhf
+  image: registry.gitlab.com/debian-pm/tools/build:bookworm-armhf
   tags:
     - arm64
   variables:
-    DEB_BUILD_PROFILES: bullseye
+    DEB_BUILD_PROFILES: bookworm
 
 build-stable:arm64:
   stage: build
   script:
     - /usr/local/bin/ci-config
     - /usr/local/bin/ci-build binary
-  image: registry.gitlab.com/debian-pm/tools/build:bullseye-arm64
+  image: registry.gitlab.com/debian-pm/tools/build:bookworm-arm64
   tags:
     - arm64
   variables:
-    DEB_BUILD_PROFILES: bullseye
+    DEB_BUILD_PROFILES: bookworm
 
 build-stable:i386:
   stage: build
   script:
     - /usr/local/bin/ci-config
     - /usr/local/bin/ci-build binary
-  image: registry.gitlab.com/debian-pm/tools/build:bullseye-i386
+  image: registry.gitlab.com/debian-pm/tools/build:bookworm-i386
   variables:
-    DEB_BUILD_PROFILES: bullseye
+    DEB_BUILD_PROFILES: bookworm
 
 build-stable:amd64:
   stage: build
   script:
     - /usr/local/bin/ci-config
     - /usr/local/bin/ci-build binary
-  image: registry.gitlab.com/debian-pm/tools/build:bullseye-amd64
+  image: registry.gitlab.com/debian-pm/tools/build:bookworm-amd64
   variables:
-    DEB_BUILD_PROFILES: bullseye
+    DEB_BUILD_PROFILES: bookworm
