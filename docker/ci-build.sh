@@ -13,7 +13,7 @@ export $(dpkg-architecture)
 
 # If needed, append string to version number
 if [ ! -z "${DEB_BUILD_PROFILES}" ]; then
-	DEB_DISTRIBUTION="$(lsb_release -cs)"
+	DEB_DISTRIBUTION=$(dpkg-parsechangelog -SDistribution)
 	dch -D ${DEB_DISTRIBUTION} --force-distribution -l"${DEB_BUILD_PROFILES}" "Rebuild with ${DEB_BUILD_PROFILES} profile"
 fi
 
@@ -195,25 +195,6 @@ add_to_repository() {
 	fi
 }
 
-create_changelog_entry() {
-	# Try to clean up the working directory
-	git config pull.ff only
-	git pull -f origin "${CI_COMMIT_BRANCH}"
-	git checkout .
-
-	if [ "$(git log -1 --pretty=%B)" == "${NEW_CHANGELOG_ENTRY_MESSGE}" ]; then
-		return
-	fi
-
-	dch --no-auto-nmu "New changelog entry"
-	git config --global user.name "${NAME}"
-	git config --global user.email "${EMAIL}"
-	git add debian/changelog
-	git commit -m "${NEW_CHANGELOG_ENTRY_MESSGE}"
-
-	git push "https://jbbgameich:${GIT_PUSH_TOKEN}@${CI_REPOSITORY_URL#*@}" "HEAD:${CI_COMMIT_BRANCH}"
-}
-
 setup_environment
 
 echo
@@ -251,8 +232,6 @@ if [[ ${CI_COMMIT_REF_NAME} == "master" ]] || \
 		echo
 		echo "===== Upload package to repository ======"
 		add_to_repository
-		echo "===== Beginning new changelog entry ====="
-		create_changelog_entry
 	else
 		echo "Package isn't released yet, change UNRELEASED to unstable to add it to the repository"
 	fi

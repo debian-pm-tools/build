@@ -31,20 +31,21 @@ RUN apt update && \
         # For pip to work with modules that compile stuff
         python3-dev \
         # for ci-build
+        libdistro-info-perl \
         lsb-release && \
     rm /usr/share/doc /usr/share/man /usr/share/pixmaps -r && \
-    pip3 install aiohttp && \
+    pip3 install --break-system-packages aiohttp && \
     # configure apt
     echo "deb-src https://deb.debian.org/debian $(lsb_release -cs) main" >> /etc/apt/sources.list && \
-    echo "deb https://jbb.ghsq.ga/debpm $(lsb_release -cs) main" > /etc/apt/sources.list.d/debian-pm.list && \
-    echo "deb-src https://jbb.ghsq.ga/debpm $(lsb_release -cs) main" >> /etc/apt/sources.list.d/debian-pm.list && \
-    wget https://jbb.ghsq.ga/debpm/pool/main/d/debian-pm-repository/debian-pm-archive-keyring_20210819_all.deb && \
+    echo "deb https://jbb.ghsq.de/debpm $(lsb_release -cs) main" > /etc/apt/sources.list.d/debian-pm.list && \
+    echo "deb-src https://jbb.ghsq.de/debpm $(lsb_release -cs) main" >> /etc/apt/sources.list.d/debian-pm.list && \
+    wget https://jbb.ghsq.de/debpm/pool/main/d/debian-pm-repository/debian-pm-archive-keyring_20210819_all.deb && \
     sudo dpkg -i debian-pm-archive-keyring_20210819_all.deb && \
     rm debian-pm-archive-keyring_20210819_all.deb && \
     apt-get update && \
     apt-get install debian-pm-archive-keyring && \
     # Clean up to slim down the image
-    apt-get purge python3-dev gcc g++ --auto-remove -y
+    apt-get purge python3-dev g++ libgcc*-dev gcc --auto-remove -y
 
 # Add CI tooling
 COPY ci-build.sh /usr/local/bin/ci-build

@@ -27,13 +27,15 @@ build() {
 			;;
 	esac
 
-	sed -i "/FROM/c\FROM ${CONTAINER_BASE}" "${DOCKERFILE}"
+	export SPECIFIC_DOCKERFILE="${DOCKERFILE}.${DISTRIBUTION}.${ARCH}"
+	sed "/FROM/c\FROM ${CONTAINER_BASE}" "${DOCKERFILE}" > "${SPECIFIC_DOCKERFILE}"
 
-	podman build -t "registry.gitlab.com/debian-pm/tools/build:${DISTRIBUTION}-${ARCH}" . -f "${DOCKERFILE}"
+	podman build -t "registry.gitlab.com/debian-pm/tools/build:${DISTRIBUTION}-${ARCH}" . -f "${SPECIFIC_DOCKERFILE}"
 }
 
 push() {
 	podman push "registry.gitlab.com/debian-pm/tools/build:${DISTRIBUTION}-${ARCH}"
 }
 
+echo "BUILDING FOR $ARCH and $DISTRIBUTION"
 $1
