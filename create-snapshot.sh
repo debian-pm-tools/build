@@ -58,11 +58,6 @@ else
 	git clone --depth 1 $GIT_REPO "$BUILD_ROOT/sources/$PACKAGE" -b $GIT_BRANCH
 fi
 
-# Try to fetch translations
-"$BUILD_ROOT/kde-fetch-i18n.py" "$BUILD_ROOT/sources/$PACKAGE" && \
-	git -C "$BUILD_ROOT/sources/$PACKAGE" add po CMakeLists.txt && \
-	git -C "$BUILD_ROOT/sources/$PACKAGE" commit -m "Inject translations"
-
 # Export repository into tar
 git -C "$BUILD_ROOT/sources/$PACKAGE" archive $GIT_BRANCH \
 	--prefix $PACKAGE-$PKG_GIT_VERSION/ \
